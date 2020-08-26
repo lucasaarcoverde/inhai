@@ -14,10 +14,10 @@ declare global {
 export const Map = ({ location }: MapProps) => {
   // Create a reference to the HTML element we want to put the map on
   const mapRef = React.useRef(null);
-  const [currentLocation, setCurrentLocation] = React.useState({
-    lat: 50,
-    lng: 50,
-  });
+  // const [currentLocation, setCurrentLocation] = React.useState({
+  //   lat: 50,
+  //   lng: 50,
+  // });
 
   /**
    * Create the map instance
@@ -25,14 +25,15 @@ export const Map = ({ location }: MapProps) => {
    * the map sooner
    */
   React.useLayoutEffect(() => {
-    getLocation((position: Position) => {
-      setCurrentLocation({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      });
-    });
     // `mapRef.current` will be `undefined` when this hook first runs; edge case that
     if (!mapRef.current) return;
+    let currentLocation = { lat: -7.223895099999999, lng: -35.8825037 };
+    getLocation((position: Position) => {
+      currentLocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      };
+    });
     const H = window.H;
     const platform = new H.service.Platform({
       apikey: process.env.REACT_APP_HERE_API_KEY,
@@ -51,26 +52,28 @@ export const Map = ({ location }: MapProps) => {
     // Call the geocode method with the geocoding parameters,
     // the callback and an error callback function (called if a
     // communication error occurs):
-    service.geocode(
-      {
-        q: `${location}, Campina Grande`,
-      },
-      (result: any) => {
-        if (!location) return;
-        // Add a marker for each location found
-        result.items.forEach((item: any) => {
-          hMap.addObject(new H.map.Marker(item.position));
-          hMap.setCenter(item.position);
-        });
-      },
-      alert
-    );
+    if (location) {
+      service.geocode(
+        {
+          q: `${location}, Campina Grande`,
+        },
+        (result: any) => {
+          console.log(result);
+          // Add a marker for each location found
+          result.items.forEach((item: any) => {
+            hMap.addObject(new H.map.Marker(item.position));
+            hMap.setCenter(item.position);
+          });
+        },
+        alert
+      );
+    }
     // This will act as a cleanup to run once this hook runs again.
     // This includes when the component un-mounts
     return () => {
       hMap.dispose();
     };
-  }, [currentLocation, location, mapRef]); // This will run this hook every time this ref is updated
+  }, [location, mapRef]); // This will run this hook every time this ref is updated
 
   return <div ref={mapRef} style={{ height: "500px", width: "500px" }} />;
 };
