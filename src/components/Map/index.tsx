@@ -14,10 +14,6 @@ declare global {
 export const Map = ({ location }: MapProps) => {
   // Create a reference to the HTML element we want to put the map on
   const mapRef = React.useRef(null);
-  // const [currentLocation, setCurrentLocation] = React.useState({
-  //   lat: 50,
-  //   lng: 50,
-  // });
 
   /**
    * Create the map instance
