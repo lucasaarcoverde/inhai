@@ -1,5 +1,5 @@
 import React from "react";
-import { getLocation } from "./utils";
+import { getPosition, getMarkerIcon } from "./utils";
 
 interface MapProps {
   location: string;
@@ -12,37 +12,38 @@ declare global {
 }
 
 export const Map = ({ location }: MapProps) => {
-  // Create a reference to the HTML element we want to put the map on
   const mapRef = React.useRef(null);
 
-  /**
-   * Create the map instance
-   * While `useEffect` could also be used here, `useLayoutEffect` will render
-   * the map sooner
-   */
-  React.useLayoutEffect(() => {
-    // `mapRef.current` will be `undefined` when this hook first runs; edge case that
+  const defaultLocation = {
+    lat: -7.223895099999999,
+    lng: -35.8825037,
+  };
+  const currentLocation = getPosition() ?? defaultLocation;
+
+  React.useEffect(() => {
     if (!mapRef.current) return;
-    let currentLocation = { lat: -7.223895099999999, lng: -35.8825037 };
-    getLocation((position: Position) => {
-      currentLocation = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
-    });
     const H = window.H;
     const platform = new H.service.Platform({
       apikey: process.env.REACT_APP_HERE_API_KEY,
     });
+
     const defaultLayers = platform.createDefaultLayers();
-    const hMap = new H.Map(mapRef.current, defaultLayers.vector.normal.map, {
+
+    const map = new H.Map(mapRef.current, defaultLayers.vector.normal.map, {
       center: currentLocation,
       zoom: 16,
       pixelRatio: window.devicePixelRatio || 1,
     });
-    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(hMap));
 
-    const ui = H.ui.UI.createDefault(hMap, defaultLayers);
+    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+    var ui = H.ui.UI.createDefault(map, defaultLayers, "pt-BR");
+
+    const marker = new H.map.Marker(currentLocation, {
+      icon: new H.map.Icon(getMarkerIcon()),
+    });
+
+    map.addObject(marker);
 
     var service = platform.getSearchService();
     // Call the geocode method with the geocoding parameters,
@@ -57,8 +58,14 @@ export const Map = ({ location }: MapProps) => {
           console.log(result);
           // Add a marker for each location found
           result.items.forEach((item: any) => {
-            hMap.addObject(new H.map.Marker(item.position));
-            hMap.setCenter(item.position);
+            console.log(item.position);
+
+            const marker = new H.map.Marker(item.position, {
+              icon: new H.map.Icon(getMarkerIcon()),
+            });
+
+            map.addObject(marker);
+            map.setCenter(item.position);
           });
         },
         alert
@@ -67,9 +74,9 @@ export const Map = ({ location }: MapProps) => {
     // This will act as a cleanup to run once this hook runs again.
     // This includes when the component un-mounts
     return () => {
-      hMap.dispose();
+      map.dispose();
     };
-  }, [location, mapRef]); // This will run this hook every time this ref is updated
+  }, [currentLocation, location, mapRef]); // This will run this hook every time this ref is updated
 
-  return <div ref={mapRef} style={{ height: "500px", width: "500px" }} />;
+  return <div ref={mapRef} className="w-60" style={{ height: 500 }} />;
 };
