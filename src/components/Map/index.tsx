@@ -78,5 +78,5 @@ export const Map = ({ location }: MapProps) => {
     };
   }, [currentLocation, location, mapRef]); // This will run this hook every time this ref is updated
 
-  return <div ref={mapRef} className="w-60" style={{ height: 500 }} />;
+  return <div ref={mapRef} style={{ width: "60%", height: 500 }} />;
 };

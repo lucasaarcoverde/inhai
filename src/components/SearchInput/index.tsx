@@ -8,13 +8,12 @@ const { Search } = Input;
 
 export function SearchInput({ setSearch }: SearchInputProps) {
   return (
-    <span className="w-60 mb3">
-      <Search
-        placeholder="Search a place in Campina Grande..."
-        onSearch={(value: string) => setSearch(value)}
-        size="large"
-        enterButton
-      />
-    </span>
+    <Search
+      style={{ width: "60%", marginBottom: "1em" }}
+      placeholder="Search a place in Campina Grande..."
+      onSearch={(value: string) => setSearch(value)}
+      size="large"
+      enterButton
+    />
   );
 }
