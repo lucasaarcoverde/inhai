@@ -2,7 +2,7 @@ import React from "react";
 import { getPosition, getMarkerIcon } from "./utils";
 
 interface MapProps {
-  location: string;
+  location?: string;
 }
 
 declare global {
@@ -11,7 +11,10 @@ declare global {
   }
 }
 
-/** @todo improve search. Now is static in campina grande */
+/** @todo
+ * improve search. Now is static in campina grande
+ * Maybe this component could turn into SearchMap, adding the search input here.
+ * */
 export const Map = React.memo(({ location }: MapProps) => {
   const mapRef = React.useRef(null);
 
