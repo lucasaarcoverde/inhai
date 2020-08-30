@@ -1,8 +1,10 @@
 import React from "react";
 import { getPosition, getMarkerIcon } from "./utils";
+import { Input } from "antd";
 
-interface MapProps {
-  location?: string;
+interface SearchMapProps {
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
 }
 
 declare global {
@@ -11,11 +13,12 @@ declare global {
   }
 }
 
+const { Search } = Input;
+
 /** @todo
  * improve search. Now is static in campina grande
- * Maybe this component could turn into SearchMap, adding the search input here.
  * */
-export const Map = React.memo(({ location }: MapProps) => {
+export const SearchMap = React.memo(({ search, setSearch }: SearchMapProps) => {
   const mapRef = React.useRef(null);
 
   const defaultLocation = {
@@ -54,10 +57,10 @@ export const Map = React.memo(({ location }: MapProps) => {
     // Call the geocode method with the geocoding parameters,
     // the callback and an error callback function (called if a
     // communication error occurs):
-    if (location) {
+    if (search) {
       service.geocode(
         {
-          q: `${location}, city=Campina Grande`,
+          q: `${search}, city=Campina Grande`,
           lang: "pt-BR",
           limit: 1,
           in: "countryCode:BRA",
@@ -84,12 +87,35 @@ export const Map = React.memo(({ location }: MapProps) => {
     return () => {
       map.dispose();
     };
-  }, [currentLocation, location]); // This will run this hook every time this ref is updated
+  }, [currentLocation, search]); // This will run this hook every time this ref is updated
 
   return (
-    <div
-      ref={mapRef}
-      style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
-    />
+    <>
+      <span
+        style={{
+          display: "flex",
+          position: "absolute",
+          width: "100%",
+          top: 20,
+          zIndex: 99,
+          justifyContent: "center",
+        }}
+      >
+        <Search
+          placeholder="Search..."
+          onSearch={(value: string) => setSearch(value)}
+          style={{
+            width: "80%",
+            maxWidth: 600,
+          }}
+        />
+      </span>
+      <div>
+        <div
+          ref={mapRef}
+          style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
+        />
+      </div>
+    </>
   );
 });

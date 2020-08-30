@@ -1,11 +1,13 @@
 import React from "react";
 import { Form, Input, Button, Rate } from "antd";
 
-import { Map } from "../components/Map";
+import { SearchMap } from "../components/SearchMap";
 
 export function RatingPage() {
   const desc = ["horrível", "ruim", "normal", "bom", "condragulations"];
   const [rate, setRate] = React.useState(0);
+  const [search, setSearch] = React.useState("");
+
   const onFinish = (values: any) => {
     console.log(values);
   };
@@ -27,7 +29,7 @@ export function RatingPage() {
           position: "relative",
         }}
       >
-        <Map />
+        <SearchMap search={search} setSearch={setSearch} />
       </div>
       <div
         style={{
@@ -66,7 +68,7 @@ export function RatingPage() {
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Submit
+              Enviar
             </Button>
           </Form.Item>
         </Form>
