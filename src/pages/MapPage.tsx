@@ -1,7 +1,41 @@
 import React from "react";
 import { Map } from "../components/index";
+import { Input } from "antd";
 
-/** @todo Improve map page with the search input within the map */
-export function MapPage({ location }: { location: string }) {
-  return <Map location={location} />;
+const { Search } = Input;
+
+export function MapPage() {
+  const [search, setSearch] = React.useState("");
+
+  return (
+    <div
+      style={{
+        height: "100%",
+        position: "relative",
+      }}
+    >
+      <span
+        style={{
+          display: "flex",
+          position: "absolute",
+          width: "100%",
+          top: 20,
+          zIndex: 99,
+          justifyContent: "center",
+        }}
+      >
+        <Search
+          placeholder="Search..."
+          onSearch={(value: string) => setSearch(value)}
+          style={{
+            width: "80%",
+            maxWidth: 600,
+          }}
+        />
+      </span>
+      <div>
+        <Map location={search} />
+      </div>
+    </div>
+  );
 }

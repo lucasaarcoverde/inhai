@@ -11,6 +11,7 @@ declare global {
   }
 }
 
+/** @todo improve search. Now is static in campina grande */
 export const Map = React.memo(({ location }: MapProps) => {
   const mapRef = React.useRef(null);
 

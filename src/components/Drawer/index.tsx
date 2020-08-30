@@ -7,10 +7,11 @@ import {
   BellOutlined,
   LogoutOutlined,
   StarOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 
 const { Text } = Typography;
-
+/** @todo turn it accessible (focusable) */
 export function Drawer({ onClose, visible }: Props) {
   return (
     <AntDrawer
@@ -30,16 +31,19 @@ export function Drawer({ onClose, visible }: Props) {
         <Menu.Item key="1" icon={<ProfileOutlined />}>
           Perfil
         </Menu.Item>
-        <Menu.Item key="2" icon={<StarOutlined />}>
-          Avaliar
+        <Menu.Item key="2" icon={<SearchOutlined />}>
+          Mapa LGBT-Friendly
         </Menu.Item>
-        <Menu.Item key="3" icon={<BellOutlined />}>
+        <Menu.Item key="3" icon={<StarOutlined />}>
+          Recomendar Local
+        </Menu.Item>
+        <Menu.Item key="4" icon={<BellOutlined />}>
           Notificações
         </Menu.Item>
-        <Menu.Item key="4" icon={<SettingOutlined />}>
+        <Menu.Item key="5" icon={<SettingOutlined />}>
           Configurações
         </Menu.Item>
-        <Menu.Item key="5" icon={<LogoutOutlined />}>
+        <Menu.Item key="6" icon={<LogoutOutlined />}>
           Sair
         </Menu.Item>
       </Menu>
