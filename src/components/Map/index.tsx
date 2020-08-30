@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-export const Map = ({ location }: MapProps) => {
+export const Map = React.memo(({ location }: MapProps) => {
   const mapRef = React.useRef(null);
 
   const defaultLocation = {
@@ -34,13 +34,14 @@ export const Map = ({ location }: MapProps) => {
       zoom: 16,
       pixelRatio: window.devicePixelRatio || 1,
     });
-
+    /* eslint-disable-next-line */
     const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
-
+    /* eslint-disable-next-line */
     var ui = H.ui.UI.createDefault(map, defaultLayers, "pt-BR");
 
+    const markerIcon = new H.map.Icon(getMarkerIcon());
     const marker = new H.map.Marker(currentLocation, {
-      icon: new H.map.Icon(getMarkerIcon()),
+      icon: markerIcon,
     });
 
     map.addObject(marker);
@@ -52,7 +53,10 @@ export const Map = ({ location }: MapProps) => {
     if (location) {
       service.geocode(
         {
-          q: `${location}, Campina Grande`,
+          q: `${location}, city=Campina Grande`,
+          lang: "pt-BR",
+          limit: 1,
+          in: "countryCode:BRA",
         },
         (result: any) => {
           console.log(result);
@@ -61,7 +65,7 @@ export const Map = ({ location }: MapProps) => {
             console.log(item.position);
 
             const marker = new H.map.Marker(item.position, {
-              icon: new H.map.Icon(getMarkerIcon()),
+              icon: markerIcon,
             });
 
             map.addObject(marker);
@@ -76,7 +80,12 @@ export const Map = ({ location }: MapProps) => {
     return () => {
       map.dispose();
     };
-  }, [currentLocation, location, mapRef]); // This will run this hook every time this ref is updated
+  }, [currentLocation, location]); // This will run this hook every time this ref is updated
 
-  return <div ref={mapRef} style={{ width: "60%", height: 500 }} />;
-};
+  return (
+    <div
+      ref={mapRef}
+      style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
+    />
+  );
+});
