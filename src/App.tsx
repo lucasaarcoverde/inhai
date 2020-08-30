@@ -42,7 +42,7 @@ export function App() {
         </Header>
         <Content>
           <Switch>
-            <Route path="/map">
+            <Route exact path="/">
               <MapPage />
             </Route>
           </Switch>

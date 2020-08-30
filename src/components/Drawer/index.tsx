@@ -29,17 +29,17 @@ export function Drawer({ onClose, visible }: Props) {
         theme="light"
         style={{ width: "100%", padding: 0 }}
       >
-        <Menu.Item key="1" icon={<ProfileOutlined />}>
-          Perfil
+        <Menu.Item key="1" icon={<SearchOutlined />}>
+          <Link to="/">Mapa LGBT-Friendly</Link>
         </Menu.Item>
-        <Menu.Item key="2" icon={<SearchOutlined />}>
-          <Link to="/map">Mapa LGBT-Friendly</Link>
-        </Menu.Item>
-        <Menu.Item key="3" icon={<StarOutlined />}>
+        <Menu.Item key="2" icon={<StarOutlined />}>
           <Link to="/rating"> Avaliar Local</Link>
         </Menu.Item>
-        <Menu.Item key="4" icon={<BellOutlined />}>
+        <Menu.Item key="3" icon={<BellOutlined />}>
           Notificações
+        </Menu.Item>
+        <Menu.Item key="4" icon={<ProfileOutlined />}>
+          Perfil
         </Menu.Item>
         <Menu.Item key="5" icon={<SettingOutlined />}>
           Configurações
