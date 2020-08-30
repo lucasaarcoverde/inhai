@@ -9,11 +9,14 @@ import {
   StarOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const { Text } = Typography;
+
 /** @todo turn it accessible (focusable) */
 export function Drawer({ onClose, visible }: Props) {
+  const location = useLocation();
+
   return (
     <AntDrawer
       title={<DrawerTitle />}
@@ -24,8 +27,7 @@ export function Drawer({ onClose, visible }: Props) {
       visible={visible}
     >
       <Menu
-        defaultSelectedKeys={["1"]}
-        defaultOpenKeys={["sub1"]}
+        defaultSelectedKeys={[getSelectedKey(location.pathname)]}
         theme="light"
         style={{ width: "100%", padding: 0 }}
       >
@@ -60,6 +62,17 @@ function DrawerTitle() {
       <Text type="secondary">@lucas</Text>
     </div>
   );
+}
+
+function getSelectedKey(currentPath: string) {
+  switch (currentPath) {
+    case "/":
+      return "1";
+    case "/rating":
+      return "2";
+    default:
+      return "1";
+  }
 }
 
 interface Props {
