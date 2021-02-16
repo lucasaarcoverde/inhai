@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Welcome } from './components'
+import { Welcome } from '../components'
 
 // styles
 const pageStyles = {
