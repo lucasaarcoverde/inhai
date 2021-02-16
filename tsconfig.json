@@ -1,19 +1,11 @@
 {
+  "extends": "@vtex/tsconfig",
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
+    "noEmitOnError": false,
+    "lib": ["dom"],
     "module": "esnext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react"
+    "target": "es2017"
   },
-  "include": ["src"]
+  "include": ["./typings/*.d.ts", "./**/*.tsx", "./**/*.ts"]
 }
