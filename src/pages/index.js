@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Welcome } from '../components'
+import { Welcome, PageWrapper } from '../components'
 
 // styles
 const pageStyles = {
@@ -20,7 +20,8 @@ const headingAccentStyles = {
 const IndexPage = () => {
   return (
     <main style={pageStyles}>
-      <title>Home Page</title>
+      <PageWrapper />
+      <title>Inhai</title>
       <Welcome />
       <h1 style={headingStyles}>
         Congratulations
