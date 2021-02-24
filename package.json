@@ -21,26 +21,31 @@
     ]
   },
   "dependencies": {
+    "@vtex/prettier-config": "^0.3.6",
+    "@vtex/tsconfig": "^0.5.6",
     "babel-plugin-styled-components": "^1.12.0",
+    "eslint": "^7.20.0",
+    "eslint-config-vtex": "^12.9.4",
+    "eslint-config-vtex-react": "^6.9.4",
     "gatsby": "^2.32.3",
     "gatsby-image": "^2.11.0",
     "gatsby-plugin-manifest": "^2.12.0",
     "gatsby-plugin-offline": "^3.10.0",
+    "gatsby-plugin-react-helmet": "^3.10.0",
     "gatsby-plugin-sharp": "^2.14.1",
     "gatsby-plugin-sitemap": "^2.12.0",
     "gatsby-plugin-styled-components": "^3.10.0",
     "gatsby-source-filesystem": "^2.11.0",
     "gatsby-transformer-sharp": "^2.12.0",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-helmet": "^6.1.0",
     "styled-components": "^5.2.1",
-    "@vtex/prettier-config": "^0.3.6",
-    "eslint": "^7.20.0",
-    "eslint-config-vtex": "^12.9.4",
-    "eslint-config-vtex-react": "^6.9.4",
-    "prettier": "^2.2.1",
-    "lint-staged": "^10.5.4",
-    "typescript": "^3.9.6",
-    "@vtex/tsconfig": "^0.5.6"
+    "typescript": "^3.9.6"
+  },
+  "devDependencies": {
+    "@types/react-helmet": "^6.1.0"
   }
 }
