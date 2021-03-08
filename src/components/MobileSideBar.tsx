@@ -57,13 +57,14 @@ export function MobileSidebar(props: MobileSidebarProps) {
           </DrawerHeader>
           <Divider orientation="horizontal" />
           <DrawerBody paddingX="4">
-            <LeftNav />
+            <LeftNav onClose={onClose} />
           </DrawerBody>
           <Divider orientation="horizontal" />
           <DrawerFooter paddingX="4" justifyContent="flex-start">
             <Box width="100%">
               <NavButton
                 navigateUrl="/"
+                onClose={onClose}
                 leftIcon={<Icon as={RiLogoutBoxLine} />}
               >
                 Sair

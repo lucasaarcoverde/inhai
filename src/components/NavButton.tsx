@@ -4,14 +4,18 @@ import React from 'react'
 
 interface NavButtonProps extends Pick<ButtonProps, 'leftIcon' | 'children'> {
   navigateUrl: string
+  onClose: () => void
 }
 
 export function NavButton(props: NavButtonProps) {
-  const { children, navigateUrl, leftIcon } = props
+  const { children, onClose, navigateUrl, leftIcon } = props
 
   return (
     <Button
-      onClick={() => navigate(navigateUrl)}
+      onClick={() => {
+        navigate(navigateUrl)
+        onClose()
+      }}
       justifyContent="flex-start"
       paddingLeft="0"
       leftIcon={leftIcon}

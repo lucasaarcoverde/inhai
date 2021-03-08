@@ -13,7 +13,6 @@ import { LeftNav } from './LeftNav'
 import { MobileSidebar } from './MobileSideBar'
 
 import { HamburgerIcon } from '@chakra-ui/icons'
-import { Link } from 'gatsby'
 
 export function Layout({ children }: LayoutProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -33,7 +32,7 @@ export function Layout({ children }: LayoutProps) {
         <GridItem rowSpan={1} bg="blue.700" />
         {!isMobile && (
           <GridItem>
-            <LeftNav />
+            <LeftNav onClose={onClose} />
           </GridItem>
         )}
         <GridItem colSpan={isMobile ? 2 : 1}>
