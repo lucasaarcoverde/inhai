@@ -13,10 +13,15 @@ import {
   Icon,
   Stack,
 } from '@chakra-ui/react'
+
+import { SearchIcon } from '@chakra-ui/icons'
+import { IoMdNotificationsOutline } from 'react-icons/io'
+import { AiOutlineStar, AiOutlineSetting } from 'react-icons/ai'
+
 import React from 'react'
-import { LeftNav } from './LeftNav'
 import { RiLogoutBoxLine } from 'react-icons/ri'
-import { NavButton } from './NavButton'
+import { NavButton } from './components/NavButton'
+import { CgProfile } from 'react-icons/cg'
 
 export function MobileSidebar(props: MobileSidebarProps) {
   const { isOpen, onClose, btnRef } = props
@@ -28,15 +33,15 @@ export function MobileSidebar(props: MobileSidebarProps) {
       finalFocusRef={btnRef as any}
       size="xs"
     >
-      <DrawerOverlay width="md">
+      <DrawerOverlay>
         <DrawerContent>
-          <Flex paddingX="4" paddingY="2" alignItems="center" height="12">
+          <Flex paddingX="6" paddingY="2" alignItems="center" height="12">
             <Box as="span" fontSize="lg" fontWeight="semibold">
               Inhai
             </Box>
           </Flex>
           <Divider orientation="horizontal" />
-          <DrawerHeader paddingX="4">
+          <DrawerHeader paddingX="6">
             <DrawerCloseButton />
             <Stack direction="column" padding="0">
               <Avatar name="Lucas Arcoverde" colorScheme="telegram" />
@@ -56,8 +61,44 @@ export function MobileSidebar(props: MobileSidebarProps) {
             </Stack>
           </DrawerHeader>
           <Divider orientation="horizontal" />
-          <DrawerBody paddingX="4">
-            <LeftNav onClose={onClose} />
+          <DrawerBody paddingX="2">
+            <Stack direction="column" padding="0" spacing="16px">
+              <NavButton
+                onClose={onClose}
+                navigateUrl="/app/map"
+                leftIcon={<SearchIcon />}
+              >
+                Mapa LGBTQI+
+              </NavButton>
+              <NavButton
+                onClose={onClose}
+                navigateUrl="/app/ratings"
+                leftIcon={<Icon as={AiOutlineStar} />}
+              >
+                Avaliar Local
+              </NavButton>
+              <NavButton
+                onClose={onClose}
+                navigateUrl="/app/notifications"
+                leftIcon={<Icon as={IoMdNotificationsOutline} />}
+              >
+                Notificações
+              </NavButton>
+              <NavButton
+                onClose={onClose}
+                navigateUrl="/app/perfil"
+                leftIcon={<Icon as={CgProfile} />}
+              >
+                Perfil
+              </NavButton>
+              <NavButton
+                onClose={onClose}
+                navigateUrl="/app/settings"
+                leftIcon={<Icon as={AiOutlineSetting} />}
+              >
+                Configurações
+              </NavButton>
+            </Stack>
           </DrawerBody>
           <Divider orientation="horizontal" />
           <DrawerFooter paddingX="4" justifyContent="flex-start">

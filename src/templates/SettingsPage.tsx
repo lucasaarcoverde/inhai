@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Link } from 'gatsby'
 import { RouteComponentProps } from '@reach/router'
 
-import { Fragment } from 'react'
+import { Layout } from '../components/Layout'
 
 const headingStyles = {
   marginTop: 0,
@@ -18,14 +18,14 @@ const paragraphStyles = {
 const Settings = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => (
-  <Fragment>
+  <Layout>
     <title>Settings</title>
     <h1 style={headingStyles}>Settings</h1>
     <p style={paragraphStyles}>
       <Link to="/">Go home</Link>.
     </p>
     {children}
-  </Fragment>
+  </Layout>
 )
 
 export default Settings
