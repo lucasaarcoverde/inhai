@@ -7,17 +7,17 @@ module.exports = {
     'gatsby-plugin-styled-components',
     'gatsby-plugin-sharp',
     'gatsby-plugin-sitemap',
+    'gatsby-plugin-react-helmet',
     {
       resolve: 'gatsby-plugin-manifest',
       options: {
         icon: 'src/images/icon.png',
-        name: `GatsbyJS`,
-        short_name: `GatsbyJS`,
+        name: `Inhai`,
+        short_name: `Inhai`,
         start_url: `/`,
         background_color: `#f7f0eb`,
         theme_color: `#a2466c`,
         display: `standalone`,
-        cache_busting_mode: 'none',
       },
     },
     {
@@ -39,3 +39,13 @@ module.exports = {
     },
   ],
 }
+//   plugins: [
+//     {
+//       resolve: `gatsby-plugin-ts-config`,
+//       options: {
+//         configDir: '/src/gatsby/',
+//         tsNode: true,
+//       },
+//     },
+//   ],
+// }
