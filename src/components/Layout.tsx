@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   ChakraProvider,
   Flex,
@@ -6,7 +7,6 @@ import {
   IconButton,
   Stack,
   useDisclosure,
-  useMediaQuery,
 } from '@chakra-ui/react'
 import React, { ReactNode } from 'react'
 
@@ -14,11 +14,10 @@ import { PageWrapper } from './PageWrapper'
 
 import { HamburgerIcon, SearchIcon } from '@chakra-ui/icons'
 import { Sidebar } from './Sidebar'
+import { useMediaQueryContext } from './MediaQuery/context'
 
 export function Layout({ children, onOpenSearch }: LayoutProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const [desktop] = useMediaQuery('(min-width: 1024px)')
 
   const btnRef = React.useRef()
 
@@ -30,16 +29,10 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
           btnRef={btnRef}
           onOpenSidebar={onOpen}
           onOpenSearch={onOpenSearch}
-          desktop={desktop}
         />
 
         <Stack as="main" h="100%" direction="row">
-          <Sidebar
-            btnRef={btnRef}
-            isOpen={isOpen}
-            onClose={onClose}
-            desktop={desktop}
-          />
+          <Sidebar btnRef={btnRef} isOpen={isOpen} onClose={onClose} />
           {children}
         </Stack>
       </Stack>
@@ -48,7 +41,8 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
 }
 
 export function Header(props: HeaderProps) {
-  const { onOpenSidebar, onOpenSearch, btnRef, desktop } = props
+  const { onOpenSidebar, onOpenSearch, btnRef } = props
+  const { desktop } = useMediaQueryContext()
 
   return (
     <Flex
@@ -64,7 +58,7 @@ export function Header(props: HeaderProps) {
         <>
           <Heading color="white">Inhai</Heading>
           {!!onOpenSearch && (
-            <Flex width="100vw" justify="center">
+            <Flex width="100%" justify="center">
               <Button
                 onClick={onOpenSearch}
                 colorScheme="whiteAlpha"
@@ -107,7 +101,6 @@ export interface HeaderProps {
   onOpenSidebar: () => void
   onOpenSearch?: () => void
   btnRef: React.MutableRefObject<undefined>
-  desktop: boolean
 }
 
 export interface LayoutProps {

@@ -3,9 +3,6 @@ import { Link } from 'gatsby'
 import { RouteComponentProps } from '@reach/router'
 
 import { Layout } from '../components/Layout'
-import { useDisclosure } from '@chakra-ui/react'
-
-import { Search } from '../components/Search'
 
 const headingStyles = {
   marginTop: 0,
@@ -18,23 +15,19 @@ const paragraphStyles = {
 }
 
 // markup
-const RatingsPage = ({
+const ProfilePage = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
   return (
-    <Layout onOpenSearch={onOpen}>
-      <title>Ratings</title>
-
-      <h1 style={headingStyles}>Ratings</h1>
+    <Layout>
+      <title>Profile</title>
+      <h1 style={headingStyles}>Profile</h1>
       <p style={paragraphStyles}>
         <Link to="/">Go home</Link>.
       </p>
       {children}
-      <Search isSearchOpen={isOpen} onCloseSearch={onClose} />
     </Layout>
   )
 }
 
-export default RatingsPage
+export default ProfilePage

@@ -41,7 +41,7 @@ export function DesktopSidebar() {
       </NavButton>
       <NavButton
         size="lg"
-        navigateUrl="/profile"
+        navigateUrl="/app/profile"
         leftIcon={<Icon as={CgProfile} boxSize="6" />}
       >
         Perfil
