@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   ChakraProvider,
   Flex,
@@ -10,11 +9,9 @@ import {
 } from '@chakra-ui/react'
 import React, { ReactNode } from 'react'
 
-import { PageWrapper } from './PageWrapper'
-
 import { HamburgerIcon, SearchIcon } from '@chakra-ui/icons'
 import { Sidebar } from './Sidebar'
-import { useMediaQueryContext } from './MediaQuery/context'
+import { useMediaQueryContext } from '../contexts'
 
 export function Layout({ children, onOpenSearch }: LayoutProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -23,7 +20,6 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
 
   return (
     <ChakraProvider>
-      <PageWrapper />
       <Stack h="100vh" direction="column" spacing="0">
         <Header
           btnRef={btnRef}

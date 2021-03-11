@@ -4,9 +4,10 @@ import MapPage from '../templates/MapPage'
 import NotificationsPage from '../templates/NotificationsPage'
 import RatingsPage from '../templates/RatingsPage'
 import SettingsPage from '../templates/SettingsPage'
-import { MediaQueryProvider } from '../components/MediaQuery/context'
+import { MediaQueryProvider } from '../contexts'
 import { useMediaQuery } from '@chakra-ui/react'
 import ProfilePage from '../templates/ProfilePage'
+import { PageWrapper } from '../components'
 
 const App = () => {
   const [desktop] = useMediaQuery('(min-width: 1024px)')
@@ -14,6 +15,7 @@ const App = () => {
   return (
     <MediaQueryProvider desktop={desktop}>
       <title>App</title>
+      <PageWrapper />
       <Router basepath="/app">
         <MapPage path="/map" />
         <NotificationsPage path="/notifications" />

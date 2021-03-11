@@ -1,9 +1,11 @@
 import * as React from 'react'
 import { Link } from 'gatsby'
 import { RouteComponentProps } from '@reach/router'
-import { Layout } from '../components/Layout'
 import { useDisclosure } from '@chakra-ui/react'
-import { Search } from '../components/Search'
+
+import { Search, Map, Layout } from '../components'
+import { HereItem } from '../hooks/useHere'
+import { useState } from 'react'
 
 const headingStyles = {
   marginTop: 0,
@@ -20,18 +22,19 @@ const MapPage = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [item, setItem] = useState<HereItem>({} as HereItem)
 
   return (
     <React.Fragment>
       <Layout onOpenSearch={onOpen}>
         <title>Map</title>
-        {/* <Layout> */}
-        <h1 style={headingStyles}>Map Test</h1>
-        <p style={paragraphStyles}>
-          <Link to="/">Go home</Link>.
-        </p>
+        <Map item={item} />
+        <Search
+          isSearchOpen={isOpen}
+          onCloseSearch={onClose}
+          setItem={setItem}
+        />
         {children}
-        <Search isSearchOpen={isOpen} onCloseSearch={onClose} />
       </Layout>
     </React.Fragment>
   )
