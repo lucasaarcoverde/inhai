@@ -53,6 +53,26 @@ export const Map = React.memo(({ item }: MapProps) => {
         pixelRatio: 1,
       })
 
+      const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map))
+      /* eslint-disable-next-line */
+      var ui = H.ui.UI.createDefault(map, defaultLayers, 'pt-BR')
+
+      const markerIcon = new H.map.Icon(getMarkerIcon())
+      const fixedMarker = new H.map.Marker(currentLocation, {
+        icon: markerIcon,
+      })
+
+      map.addObject(fixedMarker)
+
+      console.log(item)
+
+      const marker = new H.map.Marker(position, {
+        icon: markerIcon,
+      })
+
+      map.addObject(marker)
+      map.setCenter(position)
+
       return () => {
         map.dispose()
       }
@@ -61,25 +81,6 @@ export const Map = React.memo(({ item }: MapProps) => {
     }
 
     /* eslint-disable-next-line */
-    // const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map))
-    /* eslint-disable-next-line */
-    // var ui = H.ui.UI.createDefault(map, defaultLayers, 'pt-BR')
-
-    // const markerIcon = new H.map.Icon(getMarkerIcon())
-    // const fixedMarker = new H.map.Marker(currentLocation, {
-    //   icon: markerIcon,
-    // })
-
-    // map.addObject(fixedMarker)
-
-    // console.log(item)
-
-    // const marker = new H.map.Marker(position, {
-    //   icon: markerIcon,
-    // })
-
-    // map.addObject(marker)
-    // map.setCenter(position)
 
     // This will act as a cleanup to run once this hook runs again.
     // This includes when the component un-mounts
