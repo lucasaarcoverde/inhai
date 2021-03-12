@@ -27,7 +27,7 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
           onOpenSearch={onOpenSearch}
         />
 
-        <Stack as="main" h="100%" direction="row">
+        <Stack as="main" h="100%" direction="row" spacing={0}>
           <Sidebar btnRef={btnRef} isOpen={isOpen} onClose={onClose} />
           {children}
         </Stack>

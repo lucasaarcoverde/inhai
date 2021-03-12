@@ -1,38 +1,27 @@
 import * as React from 'react'
-import { Link } from 'gatsby'
 import { RouteComponentProps } from '@reach/router'
 
 import { Layout } from '../components/Layout'
-import { useDisclosure } from '@chakra-ui/react'
+import { Box, useDisclosure } from '@chakra-ui/react'
 
 import { Search } from '../components/Search'
-
-const headingStyles = {
-  marginTop: 0,
-  marginBottom: 64,
-  maxWidth: 320,
-}
-
-const paragraphStyles = {
-  marginBottom: 48,
-}
+import { Map } from '../components/Map'
+import { HereItem } from '../hooks/useHere'
 
 // markup
 const RatingsPage = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [item, setItem] = React.useState<HereItem>({} as HereItem)
 
   return (
     <Layout onOpenSearch={onOpen}>
-      <title>Ratings</title>
-
-      <h1 style={headingStyles}>Ratings</h1>
-      <p style={paragraphStyles}>
-        <Link to="/">Go home</Link>.
-      </p>
+      <Box position="relative" height="40vh">
+        <Map item={item} />
+      </Box>
       {children}
-      <Search isSearchOpen={isOpen} onCloseSearch={onClose} />
+      <Search isSearchOpen={isOpen} onCloseSearch={onClose} setItem={setItem} />
     </Layout>
   )
 }

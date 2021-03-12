@@ -10,7 +10,7 @@ export function Search(props: SearchProps) {
   const [query, setQuery] = useState('')
   const [items, setItems] = useState<HereItem[]>([])
 
-  const [queryValue] = useDebounce(query, 1000)
+  const [queryValue] = useDebounce(query, 400)
 
   const { discoverAddress } = useHere()
 
@@ -32,7 +32,12 @@ export function Search(props: SearchProps) {
   return desktop ? (
     <DesktopSearch {...props} setSearch={setQuery} searchItems={items} />
   ) : (
-    <MobileSearch {...props} setSearch={setQuery} searchItems={items} />
+    <MobileSearch
+      {...props}
+      setSearch={setQuery}
+      searchValue={query}
+      searchItems={items}
+    />
   )
 }
 

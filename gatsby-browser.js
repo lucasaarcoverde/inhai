@@ -13,8 +13,8 @@ exports.onClientEntry = () => {
 
     first.onload = () => {
       addScript('//js.api.here.com/v3/3.1/mapsjs-service.js')
-      addScript('//js.api.here.com/v3/3.1/mapsjs-ui.js')
       addScript('//js.api.here.com/v3/3.1/mapsjs-mapevents.js')
+      addScript('//js.api.here.com/v3/3.1/mapsjs-ui.js')
     }
   }
 }

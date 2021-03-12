@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CAMPINAGRANDE_GEOLOCATION = '-7.23072,-35.8817'
@@ -28,23 +28,29 @@ type HereDiscoverReturn = {
 
 export default () => {
   const hereClient = useRef()
-  
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const { H } = window as Window
-    console.log('h', H)
-    console.log('window', window)
-    try {
-      hereClient.current = new H.service.Platform({
-        app_id: process.env.GATSBY_HERE_APP_ID,
-        apikey: process.env.GATSBY_HERE_KEY,
-      })
-    } catch (err) {
-      console.error('Error instantiating Here client', err)
+    if (!loading) {
+      const { H } = window as Window
+      try {
+        hereClient.current = new H.service.Platform({
+          app_id: process.env.GATSBY_HERE_APP_ID,
+          apikey: process.env.GATSBY_HERE_KEY,
+        })
+      } catch (err) {
+        console.error('Error instantiating Here client', err)
+      }
+    }
+  }, [loading])
+
+  useEffect(() => {
+    if (loading) {
+      setTimeout(() => {
+        setLoading(false)
+      }, 1000)
     }
   }, [])
-
-  
 
   const discoverAddress = useCallback(
     async ({
@@ -65,12 +71,10 @@ export default () => {
       return new Promise<HereDiscoverReturn>((resolve, reject) => {
         client.getSearchService().discover(
           {
-            at:
-              at ?? CAMPINAGRANDE_GEOLOCATION,
+            at: at ?? CAMPINAGRANDE_GEOLOCATION,
             limit,
             q,
-            in:
-              inParam ?? 'countryCode:BRA',
+            in: inParam ?? 'countryCode:BRA',
           },
           (data: HereDiscoverReturn) => resolve(data),
           (error: any) => {
@@ -83,8 +87,8 @@ export default () => {
     []
   )
 
-
   return {
     discoverAddress,
+    client: hereClient.current as any,
   }
 }
