@@ -20,17 +20,23 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
 
   return (
     <ChakraProvider>
-      <Stack h="100vh" direction="column" spacing="0">
+      <Stack
+        h="100vh"
+        direction="column"
+        spacing="0"
+        maxHeight="100vh"
+        overflowY="hidden"
+      >
         <Header
           btnRef={btnRef}
           onOpenSidebar={onOpen}
           onOpenSearch={onOpenSearch}
         />
 
-        <Stack as="main" h="100%" direction="row" spacing={0}>
+        <Flex as="main" direction="row" height="100%">
           <Sidebar btnRef={btnRef} isOpen={isOpen} onClose={onClose} />
           {children}
-        </Stack>
+        </Flex>
       </Stack>
     </ChakraProvider>
   )

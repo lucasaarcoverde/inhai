@@ -4,6 +4,16 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CAMPINAGRANDE_GEOLOCATION = '-7.23072,-35.8817'
 
+export interface Category {
+  id: string
+  name: string
+}
+
+export interface Contact {
+  phone: {value: string}[]
+  www: {value: string}[]
+}
+
 export type HereItem = {
   title: string
   address: {
@@ -16,10 +26,13 @@ export type HereItem = {
     street: string
     postalCode: string
   }
+  categories: Category[]
+  resultType: string
   position: {
     lat: number
     lng: number
   }
+  contacts: Contact[]
 }
 
 type HereDiscoverReturn = {

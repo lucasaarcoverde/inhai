@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
-import { useDisclosure } from '@chakra-ui/react'
+import { Box, useDisclosure } from '@chakra-ui/react'
 
 import { Search, Map, Layout } from '../components'
 import { HereItem } from '../hooks/useHere'
@@ -16,7 +16,9 @@ const MapPage = ({
     <React.Fragment>
       <Layout onOpenSearch={onOpen}>
         <title>Map</title>
+
         <Map item={item} />
+
         <Search
           isSearchOpen={isOpen}
           onCloseSearch={onClose}
