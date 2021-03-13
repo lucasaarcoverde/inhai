@@ -1,37 +1,52 @@
 import * as React from 'react'
-import { Link } from 'gatsby'
 import { RouteComponentProps } from '@reach/router'
-import { Layout } from '../components/Layout'
-import { useDisclosure } from '@chakra-ui/react'
-import { Search } from '../components/Search'
+import { Box, useDisclosure } from '@chakra-ui/react'
 
-const headingStyles = {
-  marginTop: 0,
-  marginBottom: 64,
-  maxWidth: 320,
-}
+import { Search, MapSearch, Layout } from '../components'
+import { HereItem } from '../hooks/useHere'
+import { useState } from 'react'
+import { PlaceDetails } from '../components/PlaceDetails'
 
-const paragraphStyles = {
-  marginBottom: 48,
-}
-
-// markup
 const MapPage = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    isOpen: isSearchOpen,
+    onOpen: onOpenSearch,
+    onClose: onCloseSearch,
+  } = useDisclosure()
+
+  const {
+    isOpen: isDetailsOpen,
+    onOpen: onOpenDetails,
+    onClose: onCloseDetails,
+  } = useDisclosure()
+
+  const [searchedItem, setSearchedItem] = useState<HereItem>({} as HereItem)
+
+  const [currentItem, setCurrentItem] = useState<HereItem>({} as HereItem)
 
   return (
     <React.Fragment>
-      <Layout onOpenSearch={onOpen}>
+      <Layout onOpenSearch={onOpenSearch}>
         <title>Map</title>
-        {/* <Layout> */}
-        <h1 style={headingStyles}>Map Test</h1>
-        <p style={paragraphStyles}>
-          <Link to="/">Go home</Link>.
-        </p>
+
+        <MapSearch
+          onOpenDetails={onOpenDetails}
+          searchedItem={searchedItem}
+          setCurrentItem={setCurrentItem}
+        />
+        <PlaceDetails
+          isDetailsOpen={isDetailsOpen}
+          onCloseDetails={onCloseDetails}
+          item={currentItem}
+        />
+        <Search
+          isSearchOpen={isSearchOpen}
+          onCloseSearch={onCloseSearch}
+          setSearchedItem={setSearchedItem}
+        />
         {children}
-        <Search isSearchOpen={isOpen} onCloseSearch={onClose} />
       </Layout>
     </React.Fragment>
   )

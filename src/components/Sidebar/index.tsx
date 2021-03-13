@@ -1,5 +1,5 @@
 import React from 'react'
-import { useMediaQueryContext } from '../MediaQuery/context'
+import { useMediaQueryContext } from '../../contexts'
 import { DesktopSidebar } from './DesktopSidebar'
 import { MobileSidebar, MobileSidebarProps } from './MobileSideBar'
 
