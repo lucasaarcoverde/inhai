@@ -2,27 +2,49 @@ import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
 import { Box, useDisclosure } from '@chakra-ui/react'
 
-import { Search, Map, Layout } from '../components'
+import { Search, MapSearch, Layout } from '../components'
 import { HereItem } from '../hooks/useHere'
 import { useState } from 'react'
+import { PlaceDetails } from '../components/PlaceDetails'
 
 const MapPage = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const [item, setItem] = useState<HereItem>({} as HereItem)
+  const {
+    isOpen: isSearchOpen,
+    onOpen: onOpenSearch,
+    onClose: onCloseSearch,
+  } = useDisclosure()
+
+  const {
+    isOpen: isDetailsOpen,
+    onOpen: onOpenDetails,
+    onClose: onCloseDetails,
+  } = useDisclosure()
+
+  const [searchedItem, setSearchedItem] = useState<HereItem>({} as HereItem)
+
+  const [currentItem, setCurrentItem] = useState<HereItem>({} as HereItem)
 
   return (
     <React.Fragment>
-      <Layout onOpenSearch={onOpen}>
+      <Layout onOpenSearch={onOpenSearch}>
         <title>Map</title>
 
-        <Map item={item} />
-
+        <MapSearch
+          onOpenDetails={onOpenDetails}
+          searchedItem={searchedItem}
+          setCurrentItem={setCurrentItem}
+        />
+        <PlaceDetails
+          isDetailsOpen={isDetailsOpen}
+          onCloseDetails={onCloseDetails}
+          item={currentItem}
+        />
         <Search
-          isSearchOpen={isOpen}
-          onCloseSearch={onClose}
-          setItem={setItem}
+          isSearchOpen={isSearchOpen}
+          onCloseSearch={onCloseSearch}
+          setSearchedItem={setSearchedItem}
         />
         {children}
       </Layout>

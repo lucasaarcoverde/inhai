@@ -27,7 +27,7 @@ export function MobileSearch(
     setSearch,
     searchValue,
     searchItems,
-    setItem,
+    setSearchedItem,
   } = props
 
   const {
@@ -41,7 +41,7 @@ export function MobileSearch(
     items: searchItems,
     onSelectedItemChange: ({ selectedItem }) => {
       if (!selectedItem) return
-      setItem(selectedItem)
+      setSearchedItem(selectedItem)
       onCloseSearch()
 
       return selectedItem.title

@@ -1,6 +1,6 @@
 export * from './Welcome'
 export * from './PageWrapper'
 export * from './Search'
-export * from './Map'
+export * from './MapSearch'
 export * from './Layout'
 export * from './Sidebar'

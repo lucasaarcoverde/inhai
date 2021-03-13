@@ -44,5 +44,5 @@ export function Search(props: SearchProps) {
 export interface SearchProps {
   isSearchOpen: boolean
   onCloseSearch: () => void
-  setItem: React.Dispatch<React.SetStateAction<HereItem>>
+  setSearchedItem: React.Dispatch<React.SetStateAction<HereItem>>
 }

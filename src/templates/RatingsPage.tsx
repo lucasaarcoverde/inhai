@@ -5,7 +5,7 @@ import { Layout } from '../components/Layout'
 import { Box, useDisclosure } from '@chakra-ui/react'
 
 import { Search } from '../components/Search'
-import { Map } from '../components/Map'
+
 import { HereItem } from '../hooks/useHere'
 
 // markup
@@ -17,11 +17,13 @@ const RatingsPage = ({
 
   return (
     <Layout onOpenSearch={onOpen}>
-      <Box position="relative" height="40vh">
-        <Map item={item} />
-      </Box>
+      <Box position="relative" height="40vh"></Box>
       {children}
-      <Search isSearchOpen={isOpen} onCloseSearch={onClose} setItem={setItem} />
+      <Search
+        isSearchOpen={isOpen}
+        onCloseSearch={onClose}
+        setSearchedItem={setItem}
+      />
     </Layout>
   )
 }
