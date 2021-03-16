@@ -7,7 +7,12 @@ import { RiLogoutBoxLine } from 'react-icons/ri'
 import { NavButton } from './components/NavButton'
 import { CgProfile } from 'react-icons/cg'
 
-export function DesktopSidebar() {
+export interface DesktopSidebarProps {
+  logout: () => void
+}
+
+export function DesktopSidebar(props: DesktopSidebarProps) {
+  const { logout } = props
   return (
     <Stack
       width="256px"
@@ -55,7 +60,7 @@ export function DesktopSidebar() {
       </NavButton>
       <NavButton
         size="lg"
-        navigateUrl="/logout"
+        onClick={logout}
         leftIcon={<Icon as={RiLogoutBoxLine} boxSize="6" />}
       >
         Sair

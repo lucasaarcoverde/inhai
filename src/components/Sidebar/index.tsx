@@ -1,18 +1,23 @@
 import React from 'react'
 import { useMediaQueryContext } from '../../contexts'
-import { DesktopSidebar } from './DesktopSidebar'
+import { DesktopSidebar, DesktopSidebarProps } from './DesktopSidebar'
 import { MobileSidebar, MobileSidebarProps } from './MobileSideBar'
 
-type SidebarProps = MobileSidebarProps
+type SidebarProps = MobileSidebarProps & DesktopSidebarProps
 
 export function Sidebar(props: SidebarProps) {
-  const { onClose, isOpen, btnRef } = props
+  const { onClose, isOpen, btnRef, logout } = props
 
   const { desktop } = useMediaQueryContext()
 
   return desktop ? (
-    <DesktopSidebar />
+    <DesktopSidebar logout={logout} />
   ) : (
-    <MobileSidebar onClose={onClose} isOpen={isOpen} btnRef={btnRef} />
+    <MobileSidebar
+      onClose={onClose}
+      logout={logout}
+      isOpen={isOpen}
+      btnRef={btnRef}
+    />
   )
 }

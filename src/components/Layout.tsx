@@ -7,38 +7,60 @@ import {
   Stack,
   useDisclosure,
 } from '@chakra-ui/react'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useCallback } from 'react'
 
 import { HamburgerIcon, SearchIcon } from '@chakra-ui/icons'
 import { Sidebar } from './Sidebar'
-import { useMediaQueryContext } from '../contexts'
+import { FirebaseProvider, useMediaQueryContext } from '../contexts'
+import PrivateRoute from './PrivateRoute'
+import firebase from 'firebase'
+import { navigate } from 'gatsby'
 
 export function Layout({ children, onOpenSearch }: LayoutProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const btnRef = React.useRef()
 
-  return (
-    <ChakraProvider>
-      <Stack
-        h="100vh"
-        direction="column"
-        spacing="0"
-        maxHeight="100vh"
-        overflowY="hidden"
-      >
-        <Header
-          btnRef={btnRef}
-          onOpenSidebar={onOpen}
-          onOpenSearch={onOpenSearch}
-        />
+  const logout = useCallback(() => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        window.localStorage.removeItem('authToken')
+        navigate('/login')
+      })
+  }, [])
 
-        <Flex as="main" direction="row" height="100%">
-          <Sidebar btnRef={btnRef} isOpen={isOpen} onClose={onClose} />
-          {children}
-        </Flex>
-      </Stack>
-    </ChakraProvider>
+  return (
+    <FirebaseProvider>
+      <PrivateRoute path="/login">
+        <ChakraProvider>
+          <Stack
+            h="100vh"
+            direction="column"
+            spacing="0"
+            maxHeight="100vh"
+            overflowY="hidden"
+          >
+            <Header
+              btnRef={btnRef}
+              onOpenSidebar={onOpen}
+              onOpenSearch={onOpenSearch}
+            />
+
+            <Flex as="main" direction="row" height="100%">
+              <Sidebar
+                logout={logout}
+                btnRef={btnRef}
+                isOpen={isOpen}
+                onClose={onClose}
+              />
+              {children}
+            </Flex>
+          </Stack>
+        </ChakraProvider>
+      </PrivateRoute>
+    </FirebaseProvider>
   )
 }
 

@@ -3,12 +3,18 @@ import { navigate } from 'gatsby'
 import React from 'react'
 
 interface NavButtonProps extends ButtonProps {
-  navigateUrl: string
+  navigateUrl?: string
   onClose?: () => void
 }
 
 export function NavButton(props: NavButtonProps) {
-  const { children, onClose, navigateUrl, leftIcon, ...buttonProps } = props
+  const {
+    children,
+    onClose,
+    navigateUrl = '/',
+    leftIcon,
+    ...buttonProps
+  } = props
 
   return (
     <Button

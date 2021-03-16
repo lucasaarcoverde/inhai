@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
-import { Box, useDisclosure } from '@chakra-ui/react'
+import { useDisclosure } from '@chakra-ui/react'
 
 import { Search, MapSearch, Layout } from '../components'
 import { HereItem } from '../hooks/useHere'

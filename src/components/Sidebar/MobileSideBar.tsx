@@ -24,7 +24,7 @@ import { NavButton } from './components/NavButton'
 import { CgProfile } from 'react-icons/cg'
 
 export function MobileSidebar(props: MobileSidebarProps) {
-  const { isOpen, onClose, btnRef } = props
+  const { isOpen, onClose, btnRef, logout } = props
   return (
     <Drawer
       isOpen={isOpen}
@@ -104,7 +104,7 @@ export function MobileSidebar(props: MobileSidebarProps) {
           <DrawerFooter paddingX="4" justifyContent="flex-start">
             <Box width="100%">
               <NavButton
-                navigateUrl="/"
+                onClick={logout}
                 onClose={onClose}
                 leftIcon={<Icon as={RiLogoutBoxLine} />}
               >
@@ -122,4 +122,5 @@ export interface MobileSidebarProps {
   isOpen: boolean
   onClose: () => void
   btnRef: React.MutableRefObject<undefined>
+  logout: () => void
 }
