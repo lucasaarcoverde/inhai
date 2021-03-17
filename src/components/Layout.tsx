@@ -76,11 +76,11 @@ export function Header(props: HeaderProps) {
       justify="space-between"
       direction="row"
       height="56px"
-      bg="blue.500"
+      bg="teal"
     >
       {desktop ? (
         <>
-          <Heading color="white">Inhai</Heading>
+          <Heading color="white">Inhaí</Heading>
           {!!onOpenSearch && (
             <Flex width="100%" justify="center">
               <Button

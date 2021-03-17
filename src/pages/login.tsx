@@ -6,17 +6,15 @@ import { FirebaseProvider } from '../contexts'
 
 const LoginPage = () => {
   return (
-    <React.Fragment>
-      <FirebaseProvider>
-        <ChakraProvider>
-          <Center as="main" height="100vh">
-            <PageWrapper />
-            <title>Map</title>
-            <Login />
-          </Center>
-        </ChakraProvider>
-      </FirebaseProvider>
-    </React.Fragment>
+    <FirebaseProvider>
+      <ChakraProvider>
+        <Center as="main" height="100vh" overflowY="hidden">
+          <PageWrapper />
+          <title>Map</title>
+          <Login />
+        </Center>
+      </ChakraProvider>
+    </FirebaseProvider>
   )
 }
 

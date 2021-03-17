@@ -11,6 +11,7 @@ import {
   DrawerOverlay,
   Flex,
   Icon,
+  Text,
   Stack,
 } from '@chakra-ui/react'
 
@@ -36,15 +37,15 @@ export function MobileSidebar(props: MobileSidebarProps) {
       <DrawerOverlay>
         <DrawerContent>
           <Flex paddingX="6" paddingY="2" alignItems="center" height="12">
-            <Box as="span" fontSize="lg" fontWeight="semibold">
-              Inhai
-            </Box>
+            <Text fontSize="lg" fontWeight="bold" color="teal">
+              Inhaí
+            </Text>
           </Flex>
           <Divider orientation="horizontal" />
           <DrawerHeader paddingX="6">
             <DrawerCloseButton />
             <Stack direction="column" padding="0">
-              <Avatar name="Lucas Arcoverde" colorScheme="telegram" />
+              <Avatar name="Lucas Arcoverde" />
               <Stack direction="column" spacing="0">
                 <Box as="span" fontSize="md" fontWeight="semibold">
                   Lucas Arcoverde

@@ -1,13 +1,33 @@
-import React from 'react'
-import { Button, FormControl, FormHelperText, Input } from '@chakra-ui/react'
+import React, { useState } from 'react'
+import {
+  Button,
+  Divider,
+  Flex,
+  FormControl,
+  Icon,
+  IconButton,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  Stack,
+  Text,
+  Link,
+  Heading,
+  Center,
+} from '@chakra-ui/react'
+
+import { FcGoogle } from 'react-icons/fc'
 
 import { navigate } from 'gatsby'
 import { useAuth } from '../../contexts/firebase'
+import { EmailIcon, LockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 
 export type AuthError = Error
 
 export const Login: React.FC = () => {
   // get the variables we need for authentication.
+  const [passwordShown, setPasswordShown] = useState(false)
 
   const { firebase, authToken, setAuthToken } = useAuth()
 
@@ -87,44 +107,89 @@ export const Login: React.FC = () => {
 
   return (
     <form style={{ display: 'flex', flexDirection: 'column' }}>
-      <FormControl>
-        <label htmlFor="email">Email address</label>
-        <Input
-          id="email"
-          aria-describedby="email-helper"
-          value={email}
-          onChange={(event) => setEmail(event.currentTarget.value)}
-        />
-        <FormHelperText id="email-helper">
-          We&apos;ll never share your email.
-        </FormHelperText>
-      </FormControl>
-      <FormControl>
-        <label htmlFor="password">Password</label>
-        <Input
-          id="password"
-          value={password}
-          onChange={(event) => setPassword(event.currentTarget.value)}
-        />
-      </FormControl>
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        style={{ marginTop: '10px' }}
-        onClick={handleSignupAndLogin}
-      >
-        Login / Sign Up
-      </Button>
-      <Button
-        type="button"
-        variant="contained"
-        color="primary"
-        style={{ marginTop: '10px' }}
-        onClick={handleGoogleAuth}
-      >
-        Login With Google
-      </Button>
+      <Stack spacing={6}>
+        <Center padding={6}>
+          <Heading color="teal">Inhaí</Heading>
+        </Center>
+        <Stack>
+          <FormControl>
+            <label htmlFor="email">Email</label>
+            <InputGroup>
+              <InputLeftElement
+                pointerEvents="none"
+                children={<EmailIcon color="gray.300" />}
+              />
+              <Input
+                id="email"
+                variant="flushed"
+                aria-describedby="email-helper"
+                value={email}
+                onChange={(event) => setEmail(event.currentTarget.value)}
+              />
+            </InputGroup>
+          </FormControl>
+          <FormControl>
+            <label htmlFor="password">Senha</label>
+            <InputGroup size="md">
+              <InputLeftElement
+                pointerEvents="none"
+                children={<LockIcon color="gray.300" />}
+              />
+              <Input
+                variant="flushed"
+                pr="4.5rem"
+                type={passwordShown ? 'text' : 'password'}
+                placeholder="Enter password"
+                id="password"
+                value={password}
+                onChange={(event) => setPassword(event.currentTarget.value)}
+              />
+              <InputRightElement width="4.5rem">
+                <IconButton
+                  aria-label="password-button"
+                  h="1.75rem"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setPasswordShown((prev) => !prev)}
+                  icon={passwordShown ? <ViewIcon /> : <ViewOffIcon />}
+                />
+              </InputRightElement>
+            </InputGroup>
+          </FormControl>
+          <Flex justify="flex-end">
+            <Text fontSize="xs" colorScheme="gray">
+              Novo no nosso app?{' '}
+              <Link color="blue.600" fontWeight="bold" fontSize="xs">
+                Registrar-se
+              </Link>
+            </Text>
+          </Flex>
+        </Stack>
+
+        <Button
+          type="submit"
+          colorScheme="teal"
+          size="lg"
+          onClick={handleSignupAndLogin}
+        >
+          Entrar
+        </Button>
+        <Stack direction="row" align="center" paddingX={4}>
+          <Divider />
+          <Text textColor="gray.300">ou</Text>
+          <Divider />
+        </Stack>
+        <Button
+          leftIcon={<Icon boxSize={6} as={FcGoogle} />}
+          type="button"
+          variant="ghost"
+          size="lg"
+          colorScheme="blackAlpha"
+          onClick={handleGoogleAuth}
+        >
+          Entrar com Google
+        </Button>
+      </Stack>
     </form>
   )
 }
