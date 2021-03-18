@@ -27,6 +27,7 @@ export function NavButton(props: NavButtonProps) {
       variant="ghost"
       size="md"
       width="100%"
+      colorScheme="teal"
       {...buttonProps}
     >
       {children}

@@ -38,7 +38,7 @@ export function MobileSidebar(props: MobileSidebarProps) {
       size="xs"
     >
       <DrawerOverlay>
-        <DrawerContent>
+        <DrawerContent bg="white">
           <Flex paddingX="6" paddingY="2" alignItems="center" height="12">
             <Text fontSize="lg" fontWeight="bold" color="teal.400">
               Inhaí

@@ -1,5 +1,6 @@
 import { Box, Fade, Skeleton } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
+import { useAuth } from '../../contexts/firebase'
 import { HereItem } from '../../hooks/useHere'
 import { getMarkerIcon } from './utils'
 
@@ -22,6 +23,8 @@ export const MapSearch = ({
 }: MapProps) => {
   const mapRef = React.useRef(null)
 
+  const [items, setItems] = useState<HereItem[]>()
+  const { firebase } = useAuth()
   const [loading, setLoading] = useState(true)
   const [windowLoading, setWindowLoading] = useState(true)
   const [mapOpen, setMapOpen] = useState(false)
@@ -30,6 +33,28 @@ export const MapSearch = ({
     lat: -7.223895099999999,
     lng: -35.8825037,
   }
+
+  useEffect(() => {
+    if (items) return
+
+    const db = firebase.firestore()
+
+    db.collection('places')
+      .where('positiveRating', '>=', 3)
+      .get()
+      .then((snap) => {
+        const docs = snap.docs
+        const mapItems =
+          docs.map((doc) => {
+            if (!doc.exists) return
+
+            return doc.data() as HereItem
+          }) ?? []
+
+        console.log('map items', mapItems)
+        setItems(mapItems as HereItem[])
+      })
+  }, [items])
 
   useEffect(() => {
     if (!mapRef.current) return
@@ -42,11 +67,9 @@ export const MapSearch = ({
       })
       const defaultLayers = client.createDefaultLayers()
 
-      const position = searchedItem?.position ?? defaultLocation
-
       const map = new H.Map(mapRef.current, defaultLayers.vector.normal.map, {
         center: defaultLocation,
-        zoom: 16,
+        zoom: 14,
         pixelRatio: devicePixelRatio ?? 1,
       })
 
@@ -54,62 +77,51 @@ export const MapSearch = ({
       var ui = H.ui.UI.createDefault(map, defaultLayers, 'pt-BR')
 
       const markerIcon = new H.map.Icon(getMarkerIcon())
-      const fixedMarker = new H.map.Marker(defaultLocation, {
-        icon: markerIcon,
-      })
 
-      fixedMarker.setData({
-        title: 'Bar do Nilson',
-        address: { label: 'Rua teste, perto do pp' },
-        categories: [
-          { name: 'Bar ou Pub', id: '1' },
-          { name: 'Test categoria', id: '2' },
-        ],
-        contacts: [
-          {
-            phone: [{ value: '8329318738' }],
-            www: [
-              { value: 'inhai.app' },
-              { value: 'facebook.com/inhai.app' },
-              { value: 'twitter.com/inhai.app' },
-            ],
-          },
-        ],
-      })
+      const markers =
+        items?.map((item) => {
+          const marker = new H.map.Marker(item.position, {
+            icon: markerIcon,
+          })
 
-      const container = new H.map.Group({
-        objects: [fixedMarker],
-      })
+          marker.setData(item)
 
-      fixedMarker.addEventListener('tap', (evt: any) => {
-        if (!evt) return
-        const data = evt.target.getData()
-        setCurrentItem(data as HereItem)
+          marker.addEventListener('tap', (evt: any) => {
+            if (!evt) return
+            const data = evt.target.getData()
 
-        map.getViewModel().setLookAtData({
-          zoom: 16,
-        })
-        map.setCenter(data.position)
+            setCurrentItem(data as HereItem)
 
-        setTimeout(onOpenDetails, 50)
-      })
+            map.setCenter(data.position)
+            map.getViewModel().setLookAtData({
+              zoom: 16,
+              center: data.position,
+            })
 
-      if (searchedItem) {
-        console.log('item', searchedItem)
+            setTimeout(onOpenDetails, 50)
+          })
 
-        const marker = new H.map.Marker(position, {
+          return marker
+        }) ?? []
+
+      console.log('searchedItem', searchedItem)
+      if (searchedItem?.position) {
+        console.log('itemsss', searchedItem)
+
+        const marker = new H.map.Marker(searchedItem.position, {
           icon: markerIcon,
         })
 
         marker.setData(searchedItem)
 
         const container = new H.map.Group({
-          objects: [fixedMarker, marker],
+          objects: [...markers, marker],
         })
 
         marker.addEventListener('tap', (evt: any) => {
           if (!evt) return
           const data = evt.target.getData() as HereItem
+
           setCurrentItem(data)
           map.getViewModel().setLookAtData({
             zoom: 16,
@@ -118,12 +130,17 @@ export const MapSearch = ({
 
           setTimeout(onOpenDetails, 50)
         })
-        map.addObject(container)
-      } else {
-        map.addObject(container)
+
+        markers.push(marker)
+
+        map.setCenter(searchedItem.position)
       }
 
-      map.setCenter(position)
+      const container = new H.map.Group({
+        objects: markers,
+      })
+
+      map.addObject(container)
 
       window.addEventListener('resize', () => map.getViewPort().resize())
 
@@ -133,7 +150,7 @@ export const MapSearch = ({
     }
 
     return
-  }, [windowLoading, searchedItem])
+  }, [windowLoading, searchedItem, items])
 
   useEffect(() => {
     if (loading) {

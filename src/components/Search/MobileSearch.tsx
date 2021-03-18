@@ -13,6 +13,7 @@ import { Location } from '@reach/router'
 import { useCombobox } from 'downshift'
 import { HereItem } from '../../hooks/useHere'
 import { SearchProps } from './index'
+import { useMediaQueryContext } from '../../contexts'
 
 export function MobileSearch(
   props: SearchProps & {
@@ -30,6 +31,8 @@ export function MobileSearch(
     setSearchedItem,
   } = props
 
+  const { desktop } = useMediaQueryContext()
+
   const {
     getLabelProps,
     getMenuProps,
@@ -42,7 +45,8 @@ export function MobileSearch(
     onSelectedItemChange: ({ selectedItem }) => {
       if (!selectedItem) return
       setSearchedItem(selectedItem)
-      onCloseSearch()
+
+      if (!desktop) onCloseSearch()
 
       return selectedItem.title
     },
@@ -58,9 +62,13 @@ export function MobileSearch(
     <Location>
       {({ location: { pathname } }) => (
         <Slide
-          direction="bottom"
+          direction="right"
           in={isSearchOpen}
-          style={{ zIndex: 10, margin: 0 }}
+          style={{
+            zIndex: 10,
+            margin: 0,
+            maxWidth: desktop ? '400px' : '100vw',
+          }}
         >
           <Box
             h={pathname.includes('map') ? '100vh' : '60vh'}
@@ -85,10 +93,11 @@ export function MobileSearch(
                   placeholder="Buscar local LGBT-Friendly"
                 />
               </Box>
+              <Box>Sugestõesssss</Box>
               <Stack
                 divider={<StackDivider borderColor="gray.200" />}
                 {...getMenuProps()}
-                height="100%"
+                height="80vh"
                 overflowY="scroll"
               >
                 {searchItems.map((item, index) => (
