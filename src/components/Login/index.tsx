@@ -36,7 +36,10 @@ export const Login = () => {
   const { firebase, loginWithGoogle, authToken } = useAuth()
 
   useEffect(() => {
-    if (!authToken) return
+    if (typeof window === 'object' && !authToken) {
+      window.localStorage.removeItem('authToken')
+      return
+    }
     navigate('/')
   }, [authToken])
 
