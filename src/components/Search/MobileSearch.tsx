@@ -64,6 +64,7 @@ export function MobileSearch(
         >
           <Box
             h={pathname.includes('map') ? '100vh' : '60vh'}
+            maxHeight="-webkit-fill-available"
             paddingX="4"
             paddingY="2"
             bg="white"
