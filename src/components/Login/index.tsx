@@ -33,68 +33,62 @@ export const Login = () => {
   const [passwordShown, setPasswordShown] = useState(false)
   const [signup, setSignup] = useState(false)
   const [error, setError] = useState(false)
-  const { firebase, loginWithGoogle, setAuthToken, authToken } = useAuth()
+  const { firebase, loginWithGoogle, authToken } = useAuth()
 
   useEffect(() => {
     if (!authToken) return
     navigate('/')
   }, [authToken])
 
-  const handleEmailLogin = useCallback(
-    async (values: Values) => {
-      try {
-        const { email, password } = values
-        const { user } = await firebase
-          .auth()
-          .signInWithEmailAndPassword(email, password)
+  const handleEmailLogin = useCallback(async (values: Values) => {
+    try {
+      const { email, password } = values
+      const { user } = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
 
-        if (user) {
-          setError(false)
-          navigate('/app/loading')
-        } else {
-          setError(true)
-        }
-      } catch (e) {
-        console.log(e)
+      if (user) {
+        setError(false)
+        navigate('/app/loading')
+      } else {
         setError(true)
       }
-    },
-    [firebase, setAuthToken]
-  )
+    } catch (e) {
+      console.log(e)
+      setError(true)
+    }
+  }, [])
 
   // Method for signing up and logging in.
-  const handleEmailSignup = useCallback(
-    async (values: Values) => {
-      const { email, name, password } = values
-      const db = firebase.firestore()
+  const handleEmailSignup = useCallback(async (values: Values) => {
+    const { email, name, password } = values
+    const db = firebase.firestore()
 
-      const usersRef = db.collection('users')
+    const usersRef = db.collection('users')
 
-      try {
-        const { user } = await firebase
-          .auth()
-          .createUserWithEmailAndPassword(email, password)
+    try {
+      const { user } = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
 
-        if (user) {
-          const userDb = {
-            name,
-            email,
-          }
-
-          usersRef.doc(email).set(userDb)
-
-          setError(false)
-          navigate('/app/loading')
-        } else {
-          setError(true)
+      if (user) {
+        const userDb = {
+          name,
+          email,
         }
-      } catch (e) {
-        console.log(e)
+
+        usersRef.doc(email).set(userDb)
+
+        setError(false)
+        navigate('/app/loading')
+      } else {
         setError(true)
       }
-    },
-    [firebase, setAuthToken]
-  )
+    } catch (e) {
+      console.log(e)
+      setError(true)
+    }
+  }, [])
 
   function validateField(value: string, message: string) {
     return !value ? message : undefined
@@ -104,6 +98,7 @@ export const Login = () => {
     <Formik
       initialValues={{ name: '', email: '', password: '' }}
       onSubmit={(values, actions) => {
+        console.log('submit')
         if (signup) {
           handleEmailSignup(values)
         } else {

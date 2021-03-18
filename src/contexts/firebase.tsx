@@ -88,27 +88,18 @@ export const FirebaseProvider: React.FC = ({ children }) => {
     firebase.initializeApp(firebaseConfig)
   }
 
-  const onSetAuthToken = useCallback(
-    (authToken: string) => {
-      dispatch({ type: 'set_authToken', authToken })
-      localStorage.setItem('authToken', authToken)
-    },
-    [dispatch]
-  )
+  const onSetAuthToken = useCallback((authToken: string) => {
+    dispatch({ type: 'set_authToken', authToken })
+    localStorage.setItem('authToken', authToken)
+  }, [])
 
-  const onSetUser = useCallback(
-    (user: User) => {
-      dispatch({ type: 'set_user', user })
-    },
-    [dispatch]
-  )
+  const onSetUser = useCallback((user: User) => {
+    dispatch({ type: 'set_user', user })
+  }, [])
 
-  const onSetLoading = useCallback(
-    (loading: boolean) => {
-      dispatch({ type: 'set_loading', loading })
-    },
-    [dispatch]
-  )
+  const onSetLoading = useCallback((loading: boolean) => {
+    dispatch({ type: 'set_loading', loading })
+  }, [])
 
   useEffect(() => {
     if (typeof window === 'object' && !authToken) {
@@ -125,10 +116,8 @@ export const FirebaseProvider: React.FC = ({ children }) => {
 
     const db = firebase.firestore()
 
-    firebase.auth().onAuthStateChanged((authUser) => {
+    const unsub = firebase.auth().onAuthStateChanged((authUser) => {
       if (authUser) {
-        console.log('Auth State Changed')
-
         const { refreshToken } = authUser
         onSetAuthToken(refreshToken)
         const usersDoc = usersRef(db).doc(`${authUser.email}`)
@@ -152,8 +141,8 @@ export const FirebaseProvider: React.FC = ({ children }) => {
       }
     })
 
-    return
-  }, [state.user, usersRef, onSetAuthToken, onSetUser, firebase])
+    return unsub
+  }, [state.user, usersRef, onSetAuthToken, firebase])
 
   return (
     <FirebaseContext.Provider

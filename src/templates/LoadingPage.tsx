@@ -20,6 +20,8 @@ import theme from '../theme'
 const LoadingPage = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
+  const [loading, setLoading] = React.useState(true)
+
   const data = useStaticQuery(graphql`
     query {
       file(relativePath: { eq: "loading.png" }) {
@@ -37,23 +39,22 @@ const LoadingPage = ({
   const { authToken } = useAuth()
 
   React.useEffect(() => {
-    if (!authToken) {
-      setTimeout(() => navigate('/'), 15000)
-      return
+    if (!loading) {
+      navigate('/login')
     }
+  }, [loading])
 
-    setTimeout(() => navigate('/'), 2000)
+  React.useEffect(() => {
+    setTimeout(() => setLoading(false), 20000)
+    if (authToken) setTimeout(() => navigate('/'), 2000)
+
+    return
   }, [authToken])
 
   return (
     <ChakraProvider theme={extendTheme(theme)}>
       <Flex direction="column" height="100vh">
-        <Progress
-          size="xs"
-          colorScheme="teal"
-          marginBottom={1}
-          isIndeterminate
-        />
+        <Progress size="xs" colorScheme="teal" isIndeterminate />
         <title>Loading Page</title>
         {children}
         <Center height="100%">
@@ -70,7 +71,7 @@ const LoadingPage = ({
               </Box>
             </Center>
             <Center>
-              <Text color="blackAlpha.700">Iniciando sessão....</Text>
+              <Text color="blackAlpha.700">Iniciando sessão...</Text>
             </Center>
           </Stack>
         </Center>
