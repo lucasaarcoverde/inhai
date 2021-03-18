@@ -77,7 +77,7 @@ export function Header(props: HeaderProps) {
       justify="space-between"
       direction="row"
       height="56px"
-      bg="teal"
+      bg="teal.500"
     >
       {desktop ? (
         <>

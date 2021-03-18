@@ -37,7 +37,10 @@ const LoadingPage = ({
   const { authToken } = useAuth()
 
   React.useEffect(() => {
-    if (!authToken) return
+    if (!authToken) {
+      setTimeout(() => navigate('/'), 15000)
+      return
+    }
 
     setTimeout(() => navigate('/'), 2000)
   }, [authToken])
@@ -56,7 +59,7 @@ const LoadingPage = ({
         <Center height="100%">
           <Stack spacing={6} width="100%">
             <Center>
-              <Heading color="teal">Inhaí</Heading>
+              <Heading color="teal.500">Inhaí</Heading>
             </Center>
             <Center width="100%">
               <Box width="100%" maxWidth="1111px">

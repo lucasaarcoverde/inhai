@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Button,
   Divider,
@@ -33,7 +33,12 @@ export const Login = () => {
   const [passwordShown, setPasswordShown] = useState(false)
   const [signup, setSignup] = useState(false)
   const [error, setError] = useState(false)
-  const { firebase, loginWithGoogle, setAuthToken } = useAuth()
+  const { firebase, loginWithGoogle, setAuthToken, authToken } = useAuth()
+
+  useEffect(() => {
+    if (!authToken) return
+    navigate('/')
+  }, [authToken])
 
   const handleEmailLogin = useCallback(
     async (values: Values) => {
@@ -113,7 +118,7 @@ export const Login = () => {
         <Form>
           <Stack spacing={6}>
             <Center padding={6}>
-              <Heading color="teal">Inhaí</Heading>
+              <Heading color="teal.500">Inhaí</Heading>
             </Center>
             <Stack>
               {signup && (
@@ -279,7 +284,7 @@ export const Login = () => {
               color="blackAlpha.700"
               onClick={() => {
                 loginWithGoogle()
-                setTimeout(() => navigate('/app/loading'), 500)
+                navigate('/app/loading')
               }}
             >
               Entrar com Google

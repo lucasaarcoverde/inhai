@@ -38,7 +38,7 @@ const NotFound = ({
       <Center height="100vh">
         <Stack width="100%" spacing="6">
           <Center>
-            <Heading color="teal">Inhaí</Heading>
+            <Heading color="teal.500">Inhaí</Heading>
           </Center>
           <Center width="100%">
             <Box width="100%" maxWidth="1314px">
@@ -46,7 +46,11 @@ const NotFound = ({
             </Box>
           </Center>
           <Center>
-            <Text fontSize="xs" color="blackAlpha.700" fontWeight="semibold">
+            <Text
+              fontSize={['xs', 'xs', 'md']}
+              color="blackAlpha.700"
+              fontWeight="semibold"
+            >
               Ops, página não encontrada,{' '}
               <Link as={GatsbyLink} color="blue.600" cursor="pointer" to="/">
                 clique aqui para voltar!
