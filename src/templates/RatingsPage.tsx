@@ -13,7 +13,7 @@ const RatingsPage = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [item, setItem] = React.useState<HereItem>({} as HereItem)
+  const [_, setItem] = React.useState<HereItem>({} as HereItem)
 
   return (
     <Layout onOpenSearch={onOpen}>

@@ -4,19 +4,23 @@ import { PageWrapper, Welcome } from '../components'
 
 import { Layout } from '../components/Layout'
 import { MediaQueryProvider } from '../contexts'
+import { FirebaseProvider } from '../contexts/firebase'
+import 'firebase/firestore'
 
 // markup
 const IndexPage = () => {
   const [desktop] = useMediaQuery('(min-width: 1024px)')
 
   return (
-    <MediaQueryProvider desktop={desktop}>
-      <Layout>
-        <PageWrapper />
-        <title>Inhai</title>
-        <Welcome />
-      </Layout>
-    </MediaQueryProvider>
+    <FirebaseProvider>
+      <MediaQueryProvider desktop={desktop}>
+        <Layout>
+          <PageWrapper />
+          <title>Inhai</title>
+          <Welcome />
+        </Layout>
+      </MediaQueryProvider>
+    </FirebaseProvider>
   )
 }
 

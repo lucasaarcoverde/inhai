@@ -6,8 +6,15 @@ import { IoMdNotificationsOutline } from 'react-icons/io'
 import { RiLogoutBoxLine } from 'react-icons/ri'
 import { NavButton } from './components/NavButton'
 import { CgProfile } from 'react-icons/cg'
+import { useAuth } from '../../contexts/firebase'
 
-export function DesktopSidebar() {
+export interface DesktopSidebarProps {
+  logout: () => void
+}
+
+export function DesktopSidebar(props: DesktopSidebarProps) {
+  const { logout } = props
+
   return (
     <Stack
       width="256px"
@@ -55,7 +62,7 @@ export function DesktopSidebar() {
       </NavButton>
       <NavButton
         size="lg"
-        navigateUrl="/logout"
+        onClick={logout}
         leftIcon={<Icon as={RiLogoutBoxLine} boxSize="6" />}
       >
         Sair
@@ -67,16 +74,22 @@ export function DesktopSidebar() {
 }
 
 function ProfileCard() {
+  const { user } = useAuth()
+
   return (
     <Stack direction="row" padding="2" marginBottom="6">
-      <Avatar size="md" name="Lucas Arcoverde" />
+      <Avatar size="md" name={user?.name} src={user?.photo} />
       <Flex direction="column" align="flex-start" justify="center">
-        <Box as="span" fontSize="md" fontWeight="semibold">
-          Lucas Arcoverde
-        </Box>
-        <Box as="span" fontSize="sm" fontWeight="normal" color="gray.600">
-          @lucas
-        </Box>
+        {user?.name && (
+          <>
+            <Box as="span" fontSize="md" fontWeight="semibold">
+              {user.name ?? 'Nome de usuário'}
+            </Box>
+            <Box as="span" fontSize="sm" fontWeight="normal" color="gray.600">
+              {`@${user.name}`}
+            </Box>
+          </>
+        )}
       </Flex>
     </Stack>
   )

@@ -25,3 +25,5 @@ yarn-error.log*
 # Gatsby
 .cache
 /public
+
+.env.development

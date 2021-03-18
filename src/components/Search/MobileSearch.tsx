@@ -48,7 +48,7 @@ export function MobileSearch(
     },
     onInputValueChange: ({ inputValue: value }) => {
       if (value === undefined && typeof value !== 'string') return
-      console.log(value)
+
       if (value.includes('object')) setSearch((prev) => prev)
       else setSearch(value)
     },
