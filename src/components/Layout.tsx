@@ -6,19 +6,22 @@ import {
   IconButton,
   Stack,
   useDisclosure,
+  extendTheme,
 } from '@chakra-ui/react'
 import React, { ReactNode, useCallback } from 'react'
 
 import { HamburgerIcon, SearchIcon } from '@chakra-ui/icons'
 import { Sidebar } from './Sidebar'
-import { FirebaseProvider, useMediaQueryContext } from '../contexts'
+import { useMediaQueryContext } from '../contexts'
 import PrivateRoute from './PrivateRoute'
-import firebase from 'firebase'
 import { navigate } from 'gatsby'
+import { useAuth } from '../contexts/firebase'
+import theme from '../theme'
 
 export function Layout({ children, onOpenSearch }: LayoutProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const { firebase } = useAuth()
   const btnRef = React.useRef()
 
   const logout = useCallback(() => {
@@ -32,35 +35,33 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
   }, [])
 
   return (
-    <FirebaseProvider>
-      <PrivateRoute path="/login">
-        <ChakraProvider>
-          <Stack
-            h="100vh"
-            direction="column"
-            spacing="0"
-            maxHeight="100vh"
-            overflowY="hidden"
-          >
-            <Header
-              btnRef={btnRef}
-              onOpenSidebar={onOpen}
-              onOpenSearch={onOpenSearch}
-            />
+    <PrivateRoute path="/login">
+      <ChakraProvider theme={extendTheme(theme)}>
+        <Stack
+          h="100vh"
+          direction="column"
+          spacing="0"
+          maxHeight="100vh"
+          overflowY="hidden"
+        >
+          <Header
+            btnRef={btnRef}
+            onOpenSidebar={onOpen}
+            onOpenSearch={onOpenSearch}
+          />
 
-            <Flex as="main" direction="row" height="100%">
-              <Sidebar
-                logout={logout}
-                btnRef={btnRef}
-                isOpen={isOpen}
-                onClose={onClose}
-              />
-              {children}
-            </Flex>
-          </Stack>
-        </ChakraProvider>
-      </PrivateRoute>
-    </FirebaseProvider>
+          <Flex as="main" direction="row" height="100%">
+            <Sidebar
+              logout={logout}
+              btnRef={btnRef}
+              isOpen={isOpen}
+              onClose={onClose}
+            />
+            {children}
+          </Flex>
+        </Stack>
+      </ChakraProvider>
+    </PrivateRoute>
   )
 }
 

@@ -1,10 +1,17 @@
-import React, { createContext, useContext } from 'react'
-import firebase from 'firebase'
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useReducer,
+} from 'react'
+import firebase from 'firebase/app'
 
 import 'firebase/auth'
 import 'firebase/firestore'
 
-// Your config that you stored in the env file.
+import { useEffect } from 'react'
+import { navigate } from 'gatsby'
+
 const firebaseConfig = {
   apiKey: process.env.GATSBY_FIREBASE_APIKEY,
   appId: process.env.GATSBY_FIREBASE_APPID,
@@ -16,28 +23,31 @@ const firebaseConfig = {
   storageBucket: process.env.GATSBY_FIREBASE_STORAGEBUCKET,
 }
 
-// The type definition for the firebase context data.
+export interface User {
+  age?: number
+  name?: string
+  email: string
+  photo?: string
+  sexualOrientation?: string
+  pronoun?: string
+}
 
 export interface FirebaseContextData {
-  isInitialized: boolean
   firebase: typeof firebase
-  authToken: string | null
+  user?: User
+  authToken?: string
+  loading?: boolean
   setAuthToken: (authToken: string) => void
+  setLoading: (loading: boolean) => void
+  loginWithGoogle: () => void
 }
-// The firebase context that will store the firebase instance and other useful variables.
 
 export const FirebaseContext = createContext<FirebaseContextData>({
-  authToken: null,
   firebase,
-  isInitialized: false,
   setAuthToken: () => {},
+  setLoading: () => {},
+  loginWithGoogle: () => {},
 })
-
-export const loginWithGoogle = () => {
-  const googleProvider = new firebase.auth.GoogleAuthProvider()
-
-  return firebase.auth().signInWithRedirect(googleProvider)
-}
 
 export function useAuth() {
   const context = useContext(FirebaseContext)
@@ -47,34 +57,60 @@ export function useAuth() {
 
   return context
 }
-// The provider that will store the logic for manipulating the firebase instance and variables.
 
 export const FirebaseProvider: React.FC = ({ children }) => {
-  const [isInitialized, setIsInitialized] = React.useState(false)
+  const authToken =
+    typeof window === 'object'
+      ? window.localStorage.getItem('authToken')
+      : undefined
 
-  // If we have a window and the authToken already exists in localstorage then initialize the authToken value otherwise null.
+  const initialState = { loading: false, authToken: authToken ?? undefined }
 
-  const [authToken, setAuthToken] = React.useState<
-    FirebaseContextData['authToken']
-  >(
-    typeof window === 'object' ? window.localStorage.getItem('authToken') : null
+  const [state, dispatch] = useReducer(authReducer, initialState)
+
+  const loginWithGoogle = useCallback(() => {
+    const googleProvider = new firebase.auth.GoogleAuthProvider()
+
+    return firebase
+      .auth()
+      .signInWithRedirect(googleProvider)
+      .catch(() => {
+        navigate('/login')
+      })
+  }, [firebase])
+
+  const usersRef = useCallback(
+    (db: firebase.firestore.Firestore) => db.collection('users'),
+    []
   )
-
-  // If firebase has not been initialized then initialize it.
 
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig)
-    setIsInitialized(true)
   }
 
-  // A method for setting the authToken in state and local storage.
-  const onSetAuthToken = (token: string) => {
-    setAuthToken(token)
-    localStorage.setItem('authToken', token)
-  }
+  const onSetAuthToken = useCallback(
+    (authToken: string) => {
+      dispatch({ type: 'set_authToken', authToken })
+      localStorage.setItem('authToken', authToken)
+    },
+    [dispatch]
+  )
 
-  // If we have the window object and there is no authToken then try to get the authToken from local storage.
-  React.useEffect(() => {
+  const onSetUser = useCallback(
+    (user: User) => {
+      dispatch({ type: 'set_user', user })
+    },
+    [dispatch]
+  )
+
+  const onSetLoading = useCallback(
+    (loading: boolean) => {
+      dispatch({ type: 'set_loading', loading })
+    },
+    [dispatch]
+  )
+
+  useEffect(() => {
     if (typeof window === 'object' && !authToken) {
       const token = window.localStorage.getItem('authToken')
 
@@ -84,16 +120,87 @@ export const FirebaseProvider: React.FC = ({ children }) => {
     }
   }, [authToken])
 
+  useEffect(() => {
+    if (state.user) return
+
+    const db = firebase.firestore()
+
+    firebase.auth().onAuthStateChanged((authUser) => {
+      if (authUser) {
+        console.log('Auth State Changed')
+
+        const { refreshToken } = authUser
+        onSetAuthToken(refreshToken)
+        const usersDoc = usersRef(db).doc(`${authUser.email}`)
+
+        usersDoc.get().then((doc) => {
+          if (doc.exists) {
+            const userDb = doc.data() as User
+            onSetUser(userDb)
+          } else {
+            const userDb = {
+              name: authUser.displayName,
+              photo: authUser.photoURL,
+              email: authUser.email,
+            } as User
+
+            usersDoc.set(userDb)
+
+            onSetUser(userDb)
+          }
+        })
+      }
+    })
+
+    return
+  }, [state.user, usersRef, onSetAuthToken, onSetUser, firebase])
+
   return (
     <FirebaseContext.Provider
       value={{
         firebase,
-        authToken,
-        isInitialized,
+        authToken: state.authToken,
+        user: state.user,
+        loading: state.loading,
         setAuthToken: onSetAuthToken,
+        setLoading: onSetLoading,
+        loginWithGoogle,
       }}
     >
       {children}
     </FirebaseContext.Provider>
   )
 }
+
+function authReducer(
+  state: AuthContextState,
+  action: Action
+): AuthContextState {
+  switch (action.type) {
+    case 'set_loading': {
+      return { ...state, loading: action.loading }
+    }
+    case 'set_user': {
+      return { ...state, user: action.user }
+    }
+    case 'set_authToken': {
+      return { ...state, authToken: action.authToken }
+    }
+    default:
+      throw new Error('Auth Reducer: Unsupported action type')
+  }
+}
+
+export type AuthContextState = {
+  loading?: boolean
+  user?: User
+  authToken?: string
+}
+
+type Action =
+  | {
+      type: 'set_loading'
+      loading: boolean
+    }
+  | { type: 'set_user'; user: User }
+  | { type: 'set_authToken'; authToken: string }

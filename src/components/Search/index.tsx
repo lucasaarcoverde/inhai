@@ -16,7 +16,6 @@ export function Search(props: SearchProps) {
 
   useEffect(() => {
     if (queryValue.length > 0) {
-      console.log(queryValue)
       discoverAddress({
         q: queryValue,
       })

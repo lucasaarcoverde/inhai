@@ -1,29 +1,34 @@
 import React from 'react'
-import { Router } from '@reach/router'
+import { Router, Redirect } from '@reach/router'
 import MapPage from '../templates/MapPage'
 import NotificationsPage from '../templates/NotificationsPage'
 import RatingsPage from '../templates/RatingsPage'
 import SettingsPage from '../templates/SettingsPage'
-import { MediaQueryProvider } from '../contexts'
+import { FirebaseProvider, MediaQueryProvider } from '../contexts'
 import { useMediaQuery } from '@chakra-ui/react'
 import ProfilePage from '../templates/ProfilePage'
 import { PageWrapper } from '../components'
+import LoadingPage from '../templates/LoadingPage'
 
 const App = () => {
   const [desktop] = useMediaQuery('(min-width: 1024px)')
 
   return (
-    <MediaQueryProvider desktop={desktop}>
-      <title>App</title>
-      <PageWrapper />
-      <Router basepath="/app">
-        <MapPage path="/map" />
-        <NotificationsPage path="/notifications" />
-        <RatingsPage path="/ratings" />
-        <ProfilePage path="/profile" />
-        <SettingsPage path="/settings" />
-      </Router>
-    </MediaQueryProvider>
+    <FirebaseProvider>
+      <MediaQueryProvider desktop={desktop}>
+        <title>App</title>
+        <PageWrapper />
+        <Router>
+          <LoadingPage path="/app/loading" />
+          <MapPage path="/app/map" />
+          <NotificationsPage path="/app/notifications" />
+          <RatingsPage path="/app/ratings" />
+          <ProfilePage path="/app/profile" />
+          <SettingsPage path="/app/settings" />
+          <Redirect noThrow from="*" to="/404" />
+        </Router>
+      </MediaQueryProvider>
+    </FirebaseProvider>
   )
 }
 

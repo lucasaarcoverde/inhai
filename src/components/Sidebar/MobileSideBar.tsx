@@ -23,9 +23,12 @@ import React from 'react'
 import { RiLogoutBoxLine } from 'react-icons/ri'
 import { NavButton } from './components/NavButton'
 import { CgProfile } from 'react-icons/cg'
+import { useAuth } from '../../contexts/firebase'
 
 export function MobileSidebar(props: MobileSidebarProps) {
   const { isOpen, onClose, btnRef, logout } = props
+  const { user } = useAuth()
+
   return (
     <Drawer
       isOpen={isOpen}
@@ -45,19 +48,23 @@ export function MobileSidebar(props: MobileSidebarProps) {
           <DrawerHeader paddingX="6">
             <DrawerCloseButton />
             <Stack direction="column" padding="0">
-              <Avatar name="Lucas Arcoverde" />
+              <Avatar name={user?.name} src={user?.photo} />
               <Stack direction="column" spacing="0">
-                <Box as="span" fontSize="md" fontWeight="semibold">
-                  Lucas Arcoverde
-                </Box>
-                <Box
-                  as="span"
-                  fontSize="sm"
-                  fontWeight="normal"
-                  color="gray.600"
-                >
-                  @lucas
-                </Box>
+                {user?.name && (
+                  <>
+                    <Box as="span" fontSize="md" fontWeight="semibold">
+                      {user.name ?? 'Nome de usuário'}
+                    </Box>
+                    <Box
+                      as="span"
+                      fontSize="sm"
+                      fontWeight="normal"
+                      color="gray.600"
+                    >
+                      {`@${user?.name}`}
+                    </Box>
+                  </>
+                )}
               </Stack>
             </Stack>
           </DrawerHeader>
@@ -87,7 +94,7 @@ export function MobileSidebar(props: MobileSidebarProps) {
               </NavButton>
               <NavButton
                 onClose={onClose}
-                navigateUrl="/app/perfil"
+                navigateUrl="/app/profile"
                 leftIcon={<Icon as={CgProfile} />}
               >
                 Perfil

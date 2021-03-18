@@ -1,16 +1,17 @@
-import { Center, ChakraProvider } from '@chakra-ui/react'
+import { Center, ChakraProvider, extendTheme } from '@chakra-ui/react'
 import * as React from 'react'
 
 import { Login, PageWrapper } from '../components'
 import { FirebaseProvider } from '../contexts'
+import theme from '../theme'
 
 const LoginPage = () => {
   return (
     <FirebaseProvider>
-      <ChakraProvider>
+      <ChakraProvider theme={extendTheme(theme)}>
         <Center as="main" height="100vh" overflowY="hidden">
           <PageWrapper />
-          <title>Map</title>
+          <title>Login</title>
           <Login />
         </Center>
       </ChakraProvider>
