@@ -39,9 +39,9 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
       <ChakraProvider theme={extendTheme(theme)}>
         <Stack
           h="100vh"
+          maxHeight="-webkit-fill-available"
           direction="column"
           spacing="0"
-          maxHeight="100vh"
           overflowY="hidden"
         >
           <Header

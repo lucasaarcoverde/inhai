@@ -9,7 +9,12 @@ const LoginPage = () => {
   return (
     <FirebaseProvider>
       <ChakraProvider theme={extendTheme(theme)}>
-        <Center as="main" height="100vh" overflowY="hidden">
+        <Center
+          as="main"
+          height="100vh"
+          maxHeight="-webkit-fill-available"
+          overflowY="hidden"
+        >
           <PageWrapper />
           <title>Login</title>
           <Login />

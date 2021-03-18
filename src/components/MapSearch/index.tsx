@@ -158,7 +158,12 @@ export const MapSearch = ({
         </Box>
       )}
       <Fade in={mapOpen}>
-        <Box ref={mapRef} height="100vh" width="100%" />
+        <Box
+          ref={mapRef}
+          height="100vh"
+          maxHeight="-webkit-fill-available"
+          width="100%"
+        />
       </Fade>
     </Box>
   )
