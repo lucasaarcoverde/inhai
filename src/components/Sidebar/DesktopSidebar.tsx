@@ -1,8 +1,8 @@
 import { SearchIcon } from '@chakra-ui/icons'
 import { Avatar, Spacer, Icon, Stack, Box, Flex } from '@chakra-ui/react'
 import React from 'react'
-import { AiOutlineSetting, AiOutlineStar } from 'react-icons/ai'
-import { IoMdNotificationsOutline } from 'react-icons/io'
+import { AiOutlineStar } from 'react-icons/ai'
+// import { IoMdNotificationsOutline } from 'react-icons/io'
 import { RiLogoutBoxLine } from 'react-icons/ri'
 import { NavButton } from './components/NavButton'
 import { CgProfile } from 'react-icons/cg'
@@ -39,26 +39,19 @@ export function DesktopSidebar(props: DesktopSidebarProps) {
       >
         Avaliar Local
       </NavButton>
-      <NavButton
+      {/* <NavButton
         size="lg"
         navigateUrl="/app/notifications"
         leftIcon={<Icon as={IoMdNotificationsOutline} boxSize="6" />}
       >
         Notificações
-      </NavButton>
+      </NavButton> */}
       <NavButton
         size="lg"
         navigateUrl="/app/profile"
         leftIcon={<Icon as={CgProfile} boxSize="6" />}
       >
         Perfil
-      </NavButton>
-      <NavButton
-        size="lg"
-        navigateUrl="/app/settings"
-        leftIcon={<Icon as={AiOutlineSetting} boxSize="6" />}
-      >
-        Configurações
       </NavButton>
       <NavButton
         size="lg"

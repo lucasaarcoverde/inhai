@@ -50,7 +50,12 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
             onOpenSearch={onOpenSearch}
           />
 
-          <Flex as="main" direction="row" height="100%">
+          <Flex
+            as="main"
+            direction="row"
+            bg="white"
+            height="calc(100vh - 56px)"
+          >
             <Sidebar
               logout={logout}
               btnRef={btnRef}

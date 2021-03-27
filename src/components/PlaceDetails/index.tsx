@@ -20,6 +20,7 @@ import {
 import { SiTwitter, SiFacebook } from 'react-icons/si'
 import React from 'react'
 import { HereItem } from '../../hooks/useHere'
+import { useMediaQueryContext } from '../../contexts'
 
 export interface PlaceDetailsProps {
   item: HereItem
@@ -37,10 +38,16 @@ export function PlaceDetails(props: PlaceDetailsProps) {
   const secondCategory = categories?.[1]
   const phone = contacts?.[0]?.phone?.[0].value
 
+  const { mobile } = useMediaQueryContext()
   const { site, facebook, twitter } = getUrls(contacts?.[0]?.www)
 
   return (
-    <Modal isOpen={isDetailsOpen} onClose={onCloseDetails} size="sm" isCentered>
+    <Modal
+      isOpen={isDetailsOpen}
+      onClose={onCloseDetails}
+      size={mobile ? 'xs' : 'sm'}
+      isCentered
+    >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>{title}</ModalHeader>

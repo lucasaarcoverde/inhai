@@ -33,6 +33,7 @@ export type HereItem = {
     lng: number
   }
   contacts: Contact[]
+  id: string
 }
 
 type HereDiscoverReturn = {
@@ -69,7 +70,7 @@ export default () => {
     async ({
       q,
       at,
-      limit = 10,
+      limit = 20,
       inParam,
     }: {
       q: string
