@@ -55,7 +55,6 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
             direction="row"
             bg="white"
             height="calc(100vh - 56px)"
-            overflowY="scroll"
           >
             <Sidebar
               logout={logout}
