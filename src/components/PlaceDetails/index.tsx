@@ -50,7 +50,7 @@ export function PlaceDetails(props: PlaceDetailsProps) {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{title}</ModalHeader>
+        <ModalHeader isTruncated>{title}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Stack spacing={3}>

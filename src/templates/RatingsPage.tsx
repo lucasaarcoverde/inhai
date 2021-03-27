@@ -17,6 +17,7 @@ import {
   Textarea,
   useDisclosure,
   createStandaloneToast,
+  IconButton,
 } from '@chakra-ui/react'
 import { v4 } from 'uuid'
 import { Search } from '../components/Search'
@@ -24,7 +25,7 @@ import { Search } from '../components/Search'
 import { HereItem } from '../hooks/useHere'
 import { MapProvider } from '../contexts/map'
 import { Map, PlaceDetails } from '../components'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import {
   Field,
   FieldProps,
@@ -35,6 +36,7 @@ import {
 } from 'formik'
 import { useAuth } from '../contexts/firebase'
 import { useMediaQueryContext } from '../contexts'
+import { SearchIcon } from '@chakra-ui/icons'
 
 interface Rating {
   comment: string
@@ -160,7 +162,7 @@ const RatingsPage = ({
 
   return (
     <MapProvider>
-      <Layout onOpenSearch={onOpenSearch}>
+      <Layout>
         <Flex direction="column" width="100%" overflowY="scroll">
           <Map
             height="40vh"
@@ -185,7 +187,10 @@ const RatingsPage = ({
               {(props) => {
                 return (
                   <Form>
-                    <PlaceField item={searchedItem} />
+                    <PlaceField
+                      onOpenSearch={onOpenSearch}
+                      item={searchedItem}
+                    />
 
                     <Divider />
 
@@ -213,8 +218,8 @@ const RatingsPage = ({
                                 fontSize="xs"
                                 fontWeight="semibold"
                               >
-                                Você considera esse local LGBTQI+ friendly?
-                                Considere 1 (péssimo) e 5 (ótimo).
+                                De 1 (péssimo) a 5 (ótimo) o quanto esse local é
+                                LGBTQI+ friendly?
                               </FormLabel>
                               <Select
                                 {...field}
@@ -263,14 +268,14 @@ const RatingsPage = ({
                             fontWeight="semibold"
                             marginX={0}
                           >
-                            Marque se você concordar.
+                            Assinale as opções que você concorda.
                           </FormLabel>
                         </Stack>
                         <Stack>
                           <Field type="checkbox" name="safePlace">
                             {({ field }: FieldProps) => (
                               <Checkbox {...field}>
-                                Você se sente seguro nesse local?
+                                Me sinto seguro nesse local.
                               </Checkbox>
                             )}
                           </Field>
@@ -284,8 +289,8 @@ const RatingsPage = ({
                                   onChange={(e) => onChange(e)}
                                   {...rest}
                                 >
-                                  Você diria que a comunidade LGBTQI+ frequenta
-                                  esse lugar?
+                                  Esse local é frequentado pela comunidade
+                                  LGBTQI+.
                                 </Checkbox>
                               )
                             }}
@@ -296,6 +301,7 @@ const RatingsPage = ({
                         isLoading={props.isSubmitting}
                         type="submit"
                         colorScheme="teal"
+                        disabled={!searchedItem?.title}
                       >
                         Enviar
                       </Button>
@@ -325,12 +331,12 @@ const RatingsPage = ({
 export default RatingsPage
 
 function PlaceField(props: PlaceFieldProps) {
-  const { item } = props
+  const { item, onOpenSearch } = props
 
   const [_, meta, helpers] = useField<HereItem>({
     name: 'place',
     validate: (value: HereItem) =>
-      !value?.title ? 'Escolha um local antes!' : undefined,
+      !value?.title ? 'Escolha um local antes' : undefined,
   })
 
   React.useEffect(() => {
@@ -340,21 +346,31 @@ function PlaceField(props: PlaceFieldProps) {
   }, [item])
 
   return (
-    <Box paddingX={6} paddingY={2}>
+    <Stack direction="row" paddingX={6} paddingY={2}>
+      <IconButton
+        aria-label="open-search"
+        icon={<SearchIcon />}
+        variant="outline"
+        size="sm"
+        onClick={onOpenSearch}
+      />
       <Text
         border="GrayText"
         fontSize="lg"
         fontWeight="bold"
+        isTruncated
+        align="center"
         color={meta.error && meta.touched ? 'red.500' : 'blackAlpha.800'}
       >
         {meta.error && meta.touched
           ? meta.error
           : meta.value?.title ?? 'Escolha um local'}
       </Text>
-    </Box>
+    </Stack>
   )
 }
 
 interface PlaceFieldProps {
   item: HereItem
+  onOpenSearch: () => void
 }
