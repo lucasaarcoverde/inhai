@@ -117,8 +117,6 @@ export const FirebaseProvider: React.FC = ({ children }) => {
 
     const db = firebase.firestore()
 
-    const uuid = v4()
-
     const unsub = firebase.auth().onAuthStateChanged((authUser) => {
       if (authUser) {
         const { refreshToken } = authUser
@@ -128,6 +126,8 @@ export const FirebaseProvider: React.FC = ({ children }) => {
           .limit(1)
           .get()
           .then((res) => {
+            console.log('res', res.empty)
+
             if (!res.empty) {
               const [doc] = res.docs
 
@@ -135,21 +135,22 @@ export const FirebaseProvider: React.FC = ({ children }) => {
                 const userDb = doc.data() as User
 
                 onSetUser(userDb)
-              } else {
-                const uuid = v4()
-                const userDb = {
-                  name: authUser.displayName,
-                  photo: authUser.photoURL,
-                  email: authUser.email,
-                  id: uuid,
-                } as User
-
-                usersRef(db).doc(uuid).set(userDb)
-
-                onSetUser(userDb)
               }
+            } else {
+              console.log('eyes eyes')
+              const uuid = v4()
+              const userDb = {
+                name: authUser.displayName,
+                photo: authUser.photoURL,
+                email: authUser.email,
+                id: uuid,
+              } as User
+              usersRef(db).doc(uuid).set(userDb)
+
+              onSetUser(userDb)
             }
           })
+          .catch((e) => console.log(e))
       }
     })
 

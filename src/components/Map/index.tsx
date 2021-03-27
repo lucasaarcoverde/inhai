@@ -127,13 +127,13 @@ export const Map = ({
       setTimeout(() => {
         setLoading(false)
         setMapOpen(true)
-      }, 1500)
+      }, 1400)
     }
 
     if (windowLoading) {
       setTimeout(() => {
         setWindowLoading(false)
-      }, 800)
+      }, 600)
     }
   }, [])
 
