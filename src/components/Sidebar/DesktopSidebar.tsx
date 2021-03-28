@@ -71,7 +71,7 @@ function ProfileCard() {
 
   return (
     <Stack direction="row" padding="2" marginBottom="6">
-      <Avatar size="md" name={user?.name} src={user?.photo} />
+      <Avatar size="md" bg="transparent" name={user?.name} src={user?.photo} />
       <Flex direction="column" align="flex-start" justify="center">
         {user?.name && (
           <>
@@ -79,7 +79,7 @@ function ProfileCard() {
               {user.name ?? 'Nome de usuário'}
             </Box>
             <Box as="span" fontSize="sm" fontWeight="normal" color="gray.600">
-              {`@${user.name}`}
+              {`@${user?.displayName}`}
             </Box>
           </>
         )}

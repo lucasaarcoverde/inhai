@@ -26,9 +26,11 @@ const firebaseConfig = {
 export interface User {
   age?: number
   name?: string
+  displayName?: string
   email: string
   photo?: string
   sexualOrientation?: string
+  genderIdentity?: string
   pronoun?: string
   id: string
 }
@@ -40,6 +42,8 @@ export interface FirebaseContextData {
   loading?: boolean
   setAuthToken: (authToken: string) => void
   setLoading: (loading: boolean) => void
+  setUser: (user: User) => void
+  logout: () => void
   loginWithGoogle: () => void
 }
 
@@ -47,6 +51,8 @@ export const FirebaseContext = createContext<FirebaseContextData>({
   firebase,
   setAuthToken: () => {},
   setLoading: () => {},
+  setUser: () => {},
+  logout: () => {},
   loginWithGoogle: () => {},
 })
 
@@ -68,6 +74,18 @@ export const FirebaseProvider: React.FC = ({ children }) => {
   const initialState = { loading: false, authToken: authToken ?? undefined }
 
   const [state, dispatch] = useReducer(authReducer, initialState)
+
+  const logout = useCallback(() => {
+    if (!window) return
+
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        window.localStorage.removeItem('authToken')
+        navigate('/login')
+      })
+  }, [window])
 
   const loginWithGoogle = useCallback(() => {
     const googleProvider = new firebase.auth.GoogleAuthProvider()
@@ -141,6 +159,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
               const uuid = v4()
               const userDb = {
                 name: authUser.displayName,
+                displayName: authUser.displayName,
                 photo: authUser.photoURL,
                 email: authUser.email,
                 id: uuid,
@@ -166,7 +185,9 @@ export const FirebaseProvider: React.FC = ({ children }) => {
         loading: state.loading,
         setAuthToken: onSetAuthToken,
         setLoading: onSetLoading,
+        setUser: onSetUser,
         loginWithGoogle,
+        logout,
       }}
     >
       {children}
