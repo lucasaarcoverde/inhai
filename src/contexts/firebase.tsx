@@ -76,8 +76,6 @@ export const FirebaseProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState)
 
   const logout = useCallback(() => {
-    if (!window) return
-
     firebase
       .auth()
       .signOut()
@@ -85,7 +83,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
         window.localStorage.removeItem('authToken')
         navigate('/login')
       })
-  }, [window])
+  }, [])
 
   const loginWithGoogle = useCallback(() => {
     const googleProvider = new firebase.auth.GoogleAuthProvider()
