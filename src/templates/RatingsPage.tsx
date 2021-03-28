@@ -214,9 +214,10 @@ const RatingsPage = ({
                         name="friendly"
                         label="Para você, o quanto esse local é LGBTQI+ friendly?"
                         selectProps={{
-                          placeholder: 'Considere 1 (péssimo) e 5 (ótimo)',
+                          placeholder: 'Selecione uma opção',
                           cursor: 'pointer',
                         }}
+                        helperText="Considere 1 (péssimo) e 5 (ótimo)"
                       >
                         <option value={1}>1</option>
                         <option value={2}>2</option>
