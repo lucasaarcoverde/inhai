@@ -170,7 +170,7 @@ const RatingsPage = ({
             searchedItem={searchedItem}
             setCurrentItem={setCurrentItem}
           />
-          <Box overflowY="scroll">
+          <Box overflowY="scroll" maxHeight="calc(60vh-56px)">
             <Formik
               enableReinitialize
               initialValues={
