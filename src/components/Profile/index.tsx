@@ -28,13 +28,11 @@ import { useMediaQueryContext } from '../../contexts'
 
 const labelStyle = {
   label: {
-    color: 'gray.400',
     fontSize: 'xs',
     fontWeight: 'semibold',
   },
   ':disabled': {
     label: {
-      color: 'gray.400',
       fontSize: 'xs',
       fontWeight: 'semibold',
     },

@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { PlaceDetails } from '../components/PlaceDetails'
 import { MapProvider } from '../contexts/map'
 import { useAuth } from '../contexts/firebase'
+import { RatedPlace } from './RatingsPage'
 
 const MapPage = ({
   children,
@@ -26,7 +27,7 @@ const MapPage = ({
 
   const [searchedItem, setSearchedItem] = useState<HereItem>({} as HereItem)
 
-  const [currentItem, setCurrentItem] = useState<HereItem>({} as HereItem)
+  const [currentItem, setCurrentItem] = useState<RatedPlace>({} as RatedPlace)
 
   const { firebase } = useAuth()
 

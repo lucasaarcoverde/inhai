@@ -1,20 +1,17 @@
 import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
+import * as Yup from 'yup'
 
 import { Layout } from '../components/Layout'
 import {
   Box,
   Button,
-  Checkbox,
   Divider,
   Flex,
   FormControl,
-  FormErrorMessage,
   FormLabel,
-  Select,
   Stack,
   Text,
-  Textarea,
   useDisclosure,
   createStandaloneToast,
   IconButton,
@@ -26,29 +23,39 @@ import { HereItem } from '../hooks/useHere'
 import { MapProvider } from '../contexts/map'
 import { Map, PlaceDetails } from '../components'
 import { useCallback, useState } from 'react'
-import {
-  Field,
-  FieldProps,
-  Form,
-  Formik,
-  FormikHelpers,
-  useField,
-} from 'formik'
-import { useAuth } from '../contexts/firebase'
+import { Form, Formik, FormikHelpers, useField } from 'formik'
+import { useAuth, User } from '../contexts/firebase'
 import { useMediaQueryContext } from '../contexts'
 import { SearchIcon } from '@chakra-ui/icons'
+import {
+  CheckboxSingleControl,
+  SelectControl,
+  TextareaControl,
+} from 'formik-chakra-ui'
 
-interface Rating {
+export interface Rating {
   comment: string
   safePlace: boolean
   frequentedBy: boolean
   friendly: number
   place: HereItem
+  userId?: string
+  user?: User
+  placeId?: string
+  anonymous?: boolean
 }
 
-interface RatedPlace extends HereItem {
+export interface RatedPlace extends HereItem {
   ratings: Rating[]
 }
+
+const validationSchema = Yup.object({
+  place: Yup.object().required(),
+  friendly: Yup.number()
+    .required('Este campo é obrigatório.')
+    .typeError('Este campo é obrigatório.')
+    .min(1, 'Você precisa selecionar uma opcão.'),
+})
 
 const RatingsPage = ({
   children,
@@ -96,16 +103,12 @@ const RatingsPage = ({
   const { firebase, user } = useAuth()
   const [searchedItem, setSearchedItem] = useState<HereItem>({} as HereItem)
 
-  const [currentItem, setCurrentItem] = useState<HereItem>({} as HereItem)
-
-  function validateField(value: string, message: string) {
-    return !value ? message : undefined
-  }
+  const [currentItem, setCurrentItem] = useState<RatedPlace>({} as RatedPlace)
 
   const handleSubmit = useCallback(
     (values: Rating, actions: FormikHelpers<Rating>) => {
       const { place, ...rating } = values
-      const { id: userId = 'anon' } = user ?? {}
+      const { id: userId = 'anonymous' } = user ?? {}
       const db = firebase.firestore()
 
       db.collection('places')
@@ -123,7 +126,7 @@ const RatingsPage = ({
             db.collection('places')
               .doc(id)
               .update({
-                ratings: [...ratings, { ...rating, placeId: id, userId }],
+                ratings: [...ratings, { ...rating, placeId: id, userId, user }],
                 positiveRating,
               })
               .then(() => {
@@ -140,7 +143,7 @@ const RatingsPage = ({
               .doc(uuid)
               .set({
                 ...place,
-                ratings: [{ ...rating, placeId: uuid, userId }],
+                ratings: [{ ...rating, placeId: uuid, userId, user }],
                 id: uuid,
                 positiveRating: rating.friendly > 3 ? 1 : 0,
               })
@@ -178,11 +181,13 @@ const RatingsPage = ({
                   comment: '',
                   safePlace: false,
                   frequentedBy: false,
-                  friendly: 3,
-                  place: {},
+                  place: currentItem,
+                  friendly: 0,
+                  anonymous: false,
                 } as Rating
               }
               onSubmit={handleSubmit}
+              validationSchema={validationSchema}
             >
               {(props) => {
                 return (
@@ -195,75 +200,44 @@ const RatingsPage = ({
                     <Divider />
 
                     <Stack spacing={2} paddingX={6} paddingY={3}>
-                      <Field
-                        name="friendly"
-                        validate={(value: string) =>
-                          validateField(value, 'Este campo é obrigatório!')
-                        }
-                      >
-                        {({
-                          field,
-                          form: { errors, touched },
-                        }: FieldProps<string>) => {
-                          return (
-                            <FormControl
-                              isInvalid={
-                                !!errors.friendly && !!touched.friendly
-                              }
-                              isRequired
-                            >
-                              <FormLabel
-                                htmlFor="friendly-select"
-                                color="gray.400"
-                                fontSize="xs"
-                                fontWeight="semibold"
-                              >
-                                De 1 (péssimo) a 5 (ótimo) o quanto esse local é
-                                LGBTQI+ friendly?
-                              </FormLabel>
-                              <Select
-                                {...field}
-                                id="friendly-select"
-                                maxWidth={400}
-                              >
-                                <option value={1}>1</option>
-                                <option value={2}>2</option>
-                                <option value={3}>3</option>
-                                <option value={4}>4</option>
-                                <option value={5}>5</option>
-                              </Select>
-                              <FormErrorMessage>
-                                {errors.friendly}
-                              </FormErrorMessage>
-                            </FormControl>
-                          )
+                      <CheckboxSingleControl name="anonymous">
+                        Responder anonimamente
+                      </CheckboxSingleControl>
+                      <SelectControl
+                        sx={{
+                          maxWidth: 400,
+                          label: {
+                            fontSize: 'xs',
+                            fontWeight: 'semibold',
+                          },
                         }}
-                      </Field>
-                      <Field name="comment">
-                        {({ field }: FieldProps<string>) => (
-                          <FormControl>
-                            <FormLabel
-                              htmlFor="comments"
-                              color="gray.400"
-                              fontSize="xs"
-                              fontWeight="semibold"
-                            >
-                              Comentários
-                            </FormLabel>
-                            <Textarea
-                              {...field}
-                              id="comment"
-                              variant="outline"
-                              aria-describedby="comments-helper"
-                            />
-                          </FormControl>
-                        )}
-                      </Field>
+                        name="friendly"
+                        label="Para você, o quanto esse local é LGBTQI+ friendly?"
+                        selectProps={{
+                          placeholder: 'Considere 1 (péssimo) e 5 (ótimo)',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                      </SelectControl>
+                      <TextareaControl
+                        sx={{
+                          label: {
+                            fontSize: 'xs',
+                            fontWeight: 'semibold',
+                          },
+                        }}
+                        name="comment"
+                        label="Comentário"
+                      />
                       <FormControl>
                         <Stack direction="row" spacing={1}>
                           <FormLabel
                             htmlFor="group"
-                            color="gray.400"
                             fontSize="xs"
                             fontWeight="semibold"
                             marginX={0}
@@ -271,37 +245,20 @@ const RatingsPage = ({
                             Assinale as opções que você concorda.
                           </FormLabel>
                         </Stack>
-                        <Stack>
-                          <Field type="checkbox" name="safePlace">
-                            {({ field }: FieldProps) => (
-                              <Checkbox {...field}>
-                                Me sinto seguro nesse local.
-                              </Checkbox>
-                            )}
-                          </Field>
-                          <Field type="checkbox" name="frequentedBy">
-                            {({
-                              field: { value, onChange, ...rest },
-                            }: FieldProps) => {
-                              return (
-                                <Checkbox
-                                  checked={value}
-                                  onChange={(e) => onChange(e)}
-                                  {...rest}
-                                >
-                                  Esse local é frequentado pela comunidade
-                                  LGBTQI+.
-                                </Checkbox>
-                              )
-                            }}
-                          </Field>
+                        <Stack id="group">
+                          <CheckboxSingleControl name="safePlace">
+                            Me sinto seguro nesse local.
+                          </CheckboxSingleControl>
+                          <CheckboxSingleControl name="frequentedBy">
+                            Esse local é frequentado pela comunidade LGBTQI+.{' '}
+                          </CheckboxSingleControl>
                         </Stack>
                       </FormControl>
+
                       <Button
                         isLoading={props.isSubmitting}
                         type="submit"
                         colorScheme="teal"
-                        disabled={!searchedItem?.title}
                       >
                         Enviar
                       </Button>
