@@ -45,6 +45,9 @@ export interface FirebaseContextData {
   setUser: (user: User) => void
   logout: () => void
   loginWithGoogle: () => void
+  usersRef?: (
+    db: firebase.firestore.Firestore
+  ) => firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
 }
 
 export const FirebaseContext = createContext<FirebaseContextData>({
@@ -184,6 +187,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
         setAuthToken: onSetAuthToken,
         setLoading: onSetLoading,
         setUser: onSetUser,
+        usersRef,
         loginWithGoogle,
         logout,
       }}

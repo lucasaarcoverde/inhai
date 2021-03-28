@@ -16,14 +16,17 @@ import {
   Button,
   IconButton,
   HStack,
+  StackDivider,
+  Box,
 } from '@chakra-ui/react'
 import { SiTwitter, SiFacebook } from 'react-icons/si'
-import React from 'react'
-import { HereItem } from '../../hooks/useHere'
+import React, { useCallback, useMemo } from 'react'
 import { useMediaQueryContext } from '../../contexts'
+import { RatedPlace } from '../../templates/RatingsPage'
+import { CommentList } from './components/CommentList'
 
 export interface PlaceDetailsProps {
-  item: HereItem
+  item: RatedPlace
   isDetailsOpen: boolean
   onCloseDetails: () => void
 }
@@ -31,7 +34,12 @@ export interface PlaceDetailsProps {
 export function PlaceDetails(props: PlaceDetailsProps) {
   const { isDetailsOpen, onCloseDetails, item } = props
 
-  const { title = '', address, categories, contacts } = item
+  const { title = '', address, categories, contacts, ratings = [] } = item
+
+  const positiveRatings = useMemo(
+    () => ratings.filter((rating) => rating.friendly >= 3 && rating.comment),
+    [ratings]
+  )
 
   const label = address?.label
   const firstCategory = categories?.[0]
@@ -39,7 +47,10 @@ export function PlaceDetails(props: PlaceDetailsProps) {
   const phone = contacts?.[0]?.phone?.[0].value
 
   const { mobile } = useMediaQueryContext()
-  const { site, facebook, twitter } = getUrls(contacts?.[0]?.www)
+  const { site, facebook, twitter } = useMemo(
+    () => getUrls(contacts?.[0]?.www),
+    [contacts]
+  )
 
   return (
     <Modal
@@ -96,6 +107,7 @@ export function PlaceDetails(props: PlaceDetailsProps) {
                 />
               )}
             </HStack>
+            <CommentList ratings={positiveRatings} />
           </Stack>
         </ModalBody>
         <ModalFooter justifyContent="flex-start">

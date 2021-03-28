@@ -2,11 +2,12 @@ import { Box, BoxProps, Fade, Skeleton } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useMap } from '../../contexts/map'
 import { HereItem } from '../../hooks/useHere'
+import { RatedPlace } from '../../templates/RatingsPage'
 import { getMarkerIcon } from './utils'
 
 interface MapProps extends BoxProps {
   searchedItem: HereItem
-  setCurrentItem: React.Dispatch<React.SetStateAction<HereItem>>
+  setCurrentItem: React.Dispatch<React.SetStateAction<RatedPlace>>
   onOpenDetails: () => void
   items?: HereItem[]
 }
@@ -70,7 +71,7 @@ export const Map = ({
             if (!evt) return
             const data = evt.target.getData()
 
-            setCurrentItem(data as HereItem)
+            setCurrentItem(data as RatedPlace)
 
             map.getViewModel().setLookAtData({
               position: data.position,
@@ -93,7 +94,7 @@ export const Map = ({
           if (!evt) return
           const data = evt.target.getData() as HereItem
 
-          setCurrentItem(data)
+          setCurrentItem(data as RatedPlace)
           map.getViewModel().setLookAtData({
             position: data.position,
           })

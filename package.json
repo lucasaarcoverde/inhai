@@ -62,7 +62,8 @@
     "styled-components": "^5.2.1",
     "typescript": "^3.9.6",
     "use-debounce": "^6.0.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@types/react-helmet": "^6.1.0",

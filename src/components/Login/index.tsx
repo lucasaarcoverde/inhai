@@ -19,6 +19,7 @@ import {
   FormLabel,
 } from '@chakra-ui/react'
 
+import * as Yup from 'yup'
 import { FcGoogle } from 'react-icons/fc'
 
 import { navigate } from 'gatsby'
@@ -26,8 +27,20 @@ import { useAuth } from '../../contexts/firebase'
 import { EmailIcon, LockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { CgProfile } from 'react-icons/cg'
 import { Formik, Form, Field } from 'formik'
+import { v4 } from 'uuid'
 
 export type Values = { name: string; email: string; password: string }
+
+const signupValidationSchema = Yup.object({
+  name: Yup.string().required('Nome é obrigatório.'),
+  email: Yup.string().email('Email inválido.').required('Email é obrigatório'),
+  password: Yup.string().required('Senha é obrigatório.'),
+})
+
+const signinValidationSchema = Yup.object({
+  email: Yup.string().email('Email inválido.').required('Email é obrigatório'),
+  password: Yup.string().required('Senha é obrigatório.'),
+})
 
 export const Login = () => {
   const [passwordShown, setPasswordShown] = useState(false)
@@ -75,12 +88,16 @@ export const Login = () => {
         .createUserWithEmailAndPassword(email, password)
 
       if (user) {
+        const uuid = v4()
+
         const userDb = {
           name,
           email,
+          displayName: name,
+          id: uuid,
         }
 
-        usersRef.doc(email).set(userDb)
+        usersRef.doc(uuid).set(userDb)
 
         setError(false)
         navigate('/app/loading')
@@ -92,10 +109,6 @@ export const Login = () => {
       setError(true)
     }
   }, [])
-
-  function validateField(value: string, message: string) {
-    return !value ? message : undefined
-  }
 
   return (
     <Formik
@@ -111,6 +124,9 @@ export const Login = () => {
           actions.setSubmitting(false)
         }, 1000)
       }}
+      validationSchema={
+        signup ? signupValidationSchema : signinValidationSchema
+      }
     >
       {(props) => (
         <Form>
@@ -120,12 +136,7 @@ export const Login = () => {
             </Center>
             <Stack>
               {signup && (
-                <Field
-                  name="name"
-                  validate={(value: string) =>
-                    validateField(value, 'Nome é obrigatório.')
-                  }
-                >
+                <Field name="name">
                   {({ field, form }: any) => (
                     <FormControl
                       isInvalid={form.errors.name && form.touched.name}
@@ -156,12 +167,7 @@ export const Login = () => {
                   )}
                 </Field>
               )}
-              <Field
-                name="email"
-                validate={(value: string) =>
-                  validateField(value, 'Email é obrigatório.')
-                }
-              >
+              <Field name="email">
                 {({ field, form }: any) => (
                   <FormControl
                     isInvalid={form.errors.email && form.touched.email}
@@ -192,12 +198,7 @@ export const Login = () => {
                   </FormControl>
                 )}
               </Field>
-              <Field
-                name="password"
-                validate={(value: string) =>
-                  validateField(value, 'Senha é obrigatório.')
-                }
-              >
+              <Field name="password">
                 {({ field, form }: any) => (
                   <FormControl
                     isInvalid={form.errors.password && form.touched.password}
