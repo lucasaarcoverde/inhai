@@ -6,7 +6,7 @@ export function CommentList(props: CommentListProps) {
   const { ratings } = props
 
   return (
-    <Stack maxHeight={250} spacing="3" overflowY="scroll" overflowX="hidden">
+    <Stack maxHeight={200} spacing="3" overflowY="scroll" overflowX="hidden">
       {ratings.map((rating, index) => {
         if (rating.friendly < 3) return
 
@@ -18,18 +18,23 @@ export function CommentList(props: CommentListProps) {
 
 export function Comment(props: CommentProps) {
   const {
-    rating: { user, comment },
+    rating: { user, comment, anonymous = true },
     ...restProps
   } = props
+
+  const photo = anonymous ? '' : user?.photo
+  const name = anonymous ? 'anônimo' : user?.displayName
 
   return (
     <Box {...restProps}>
       <HStack>
-        <Avatar size="xs" src={user?.photo} alt={user?.name} />
+        <Avatar size="xs" src={photo} alt={name} />
 
         <Text fontSize="xs" fontWeight="bold">
-          @{user?.displayName ?? 'anônimo'}
-          <Text fontWeight="normal">{comment}</Text>
+          @{name}{' '}
+          <Box as="span" fontWeight="normal">
+            {comment}
+          </Box>
         </Text>
       </HStack>
     </Box>

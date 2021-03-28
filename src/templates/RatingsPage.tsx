@@ -42,6 +42,7 @@ export interface Rating {
   userId?: string
   user?: User
   placeId?: string
+  anonymous?: boolean
 }
 
 export interface RatedPlace extends HereItem {
@@ -107,7 +108,7 @@ const RatingsPage = ({
   const handleSubmit = useCallback(
     (values: Rating, actions: FormikHelpers<Rating>) => {
       const { place, ...rating } = values
-      const { id: userId = 'anon' } = user ?? {}
+      const { id: userId = 'anonymous' } = user ?? {}
       const db = firebase.firestore()
 
       db.collection('places')
@@ -182,6 +183,7 @@ const RatingsPage = ({
                   frequentedBy: false,
                   place: currentItem,
                   friendly: 0,
+                  anonymous: false,
                 } as Rating
               }
               onSubmit={handleSubmit}
@@ -198,6 +200,9 @@ const RatingsPage = ({
                     <Divider />
 
                     <Stack spacing={2} paddingX={6} paddingY={3}>
+                      <CheckboxSingleControl name="anonymous">
+                        Responder anonimamente
+                      </CheckboxSingleControl>
                       <SelectControl
                         sx={{
                           maxWidth: 400,
@@ -249,6 +254,7 @@ const RatingsPage = ({
                           </CheckboxSingleControl>
                         </Stack>
                       </FormControl>
+
                       <Button
                         isLoading={props.isSubmitting}
                         type="submit"
