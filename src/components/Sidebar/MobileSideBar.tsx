@@ -48,7 +48,7 @@ export function MobileSidebar(props: MobileSidebarProps) {
           <DrawerHeader paddingX="6">
             <DrawerCloseButton />
             <Stack direction="column" padding="0">
-              <Avatar name={user?.name} src={user?.photo} />
+              <Avatar bg="transparent" name={user?.name} src={user?.photo} />
               <Stack direction="column" spacing="0">
                 {user?.name && (
                   <>
@@ -61,7 +61,7 @@ export function MobileSidebar(props: MobileSidebarProps) {
                       fontWeight="normal"
                       color="gray.600"
                     >
-                      {`@${user?.name}`}
+                      {`@${user?.displayName ?? user.name}`}
                     </Box>
                   </>
                 )}

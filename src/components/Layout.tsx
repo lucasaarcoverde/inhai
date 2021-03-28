@@ -8,31 +8,20 @@ import {
   useDisclosure,
   extendTheme,
 } from '@chakra-ui/react'
-import React, { ReactNode, useCallback } from 'react'
+import React, { ReactNode } from 'react'
 
 import { HamburgerIcon, SearchIcon } from '@chakra-ui/icons'
 import { Sidebar } from './Sidebar'
 import { useMediaQueryContext } from '../contexts'
 import PrivateRoute from './PrivateRoute'
-import { navigate } from 'gatsby'
 import { useAuth } from '../contexts/firebase'
 import theme from '../theme'
 
 export function Layout({ children, onOpenSearch }: LayoutProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const { firebase } = useAuth()
+  const { logout } = useAuth()
   const btnRef = React.useRef()
-
-  const logout = useCallback(() => {
-    firebase
-      .auth()
-      .signOut()
-      .then(() => {
-        window.localStorage.removeItem('authToken')
-        navigate('/login')
-      })
-  }, [])
 
   return (
     <PrivateRoute path="/login">
