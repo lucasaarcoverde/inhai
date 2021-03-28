@@ -204,7 +204,8 @@ export function Profile() {
                 <InputControl
                   sx={labelStyle}
                   name="pronoun"
-                  label="Pronome (Ele/Dele; Ela/Dela; Eles/Deles)"
+                  helperText="(Ele/Dele; Ela/Dela; Eles/Deles)"
+                  label="Pronome"
                 />
                 <NumberInputControl sx={labelStyle} name="age" label="Idade" />
               </Stack>
