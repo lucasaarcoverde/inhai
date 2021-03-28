@@ -163,7 +163,11 @@ const RatingsPage = ({
   return (
     <MapProvider>
       <Layout>
-        <Flex direction="column" width="100%" overflowY="scroll">
+        <Flex
+          direction="column"
+          width="100%"
+          maxHeight="-webkit-fill-available"
+        >
           <Map
             height="40vh"
             onOpenDetails={onOpenDetails}
