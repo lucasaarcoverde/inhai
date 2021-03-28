@@ -2,10 +2,12 @@ import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
 import { useDisclosure } from '@chakra-ui/react'
 
-import { Search, MapSearch, Layout } from '../components'
+import { Search, Map, Layout } from '../components'
 import { HereItem } from '../hooks/useHere'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PlaceDetails } from '../components/PlaceDetails'
+import { MapProvider } from '../contexts/map'
+import { useAuth } from '../contexts/firebase'
 
 const MapPage = ({
   children,
@@ -26,12 +28,38 @@ const MapPage = ({
 
   const [currentItem, setCurrentItem] = useState<HereItem>({} as HereItem)
 
+  const { firebase } = useAuth()
+
+  const [items, setItems] = useState<HereItem[]>()
+
+  useEffect(() => {
+    if (items) return
+
+    const db = firebase.firestore()
+
+    db.collection('places')
+      .where('positiveRating', '>=', 3)
+      .get()
+      .then((snap) => {
+        const docs = snap.docs
+        const mapItems =
+          docs.map((doc) => {
+            if (!doc.exists) return
+
+            return doc.data() as HereItem
+          }) ?? []
+
+        console.log('map items', mapItems)
+        setItems(mapItems as HereItem[])
+      })
+  }, [items])
+
   return (
-    <React.Fragment>
+    <MapProvider items={items}>
       <Layout onOpenSearch={onOpenSearch}>
         <title>Map</title>
 
-        <MapSearch
+        <Map
           onOpenDetails={onOpenDetails}
           searchedItem={searchedItem}
           setCurrentItem={setCurrentItem}
@@ -48,7 +76,7 @@ const MapPage = ({
         />
         {children}
       </Layout>
-    </React.Fragment>
+    </MapProvider>
   )
 }
 

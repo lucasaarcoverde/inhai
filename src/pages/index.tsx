@@ -17,7 +17,6 @@ const IndexPage = () => {
         <Layout>
           <PageWrapper />
           <title>Inhai</title>
-          <Welcome />
         </Layout>
       </MediaQueryProvider>
     </FirebaseProvider>

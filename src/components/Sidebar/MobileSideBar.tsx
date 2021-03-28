@@ -16,8 +16,8 @@ import {
 } from '@chakra-ui/react'
 
 import { SearchIcon } from '@chakra-ui/icons'
-import { IoMdNotificationsOutline } from 'react-icons/io'
-import { AiOutlineStar, AiOutlineSetting } from 'react-icons/ai'
+// import { IoMdNotificationsOutline } from 'react-icons/io'
+import { AiOutlineStar } from 'react-icons/ai'
 
 import React from 'react'
 import { RiLogoutBoxLine } from 'react-icons/ri'
@@ -38,7 +38,7 @@ export function MobileSidebar(props: MobileSidebarProps) {
       size="xs"
     >
       <DrawerOverlay>
-        <DrawerContent>
+        <DrawerContent bg="white">
           <Flex paddingX="6" paddingY="2" alignItems="center" height="12">
             <Text fontSize="lg" fontWeight="bold" color="teal.400">
               Inhaí
@@ -85,26 +85,19 @@ export function MobileSidebar(props: MobileSidebarProps) {
               >
                 Avaliar Local
               </NavButton>
-              <NavButton
+              {/* <NavButton
                 onClose={onClose}
                 navigateUrl="/app/notifications"
                 leftIcon={<Icon as={IoMdNotificationsOutline} />}
               >
                 Notificações
-              </NavButton>
+              </NavButton> */}
               <NavButton
                 onClose={onClose}
                 navigateUrl="/app/profile"
                 leftIcon={<Icon as={CgProfile} />}
               >
                 Perfil
-              </NavButton>
-              <NavButton
-                onClose={onClose}
-                navigateUrl="/app/settings"
-                leftIcon={<Icon as={AiOutlineSetting} />}
-              >
-                Configurações
               </NavButton>
             </Stack>
           </DrawerBody>

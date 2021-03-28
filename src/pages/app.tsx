@@ -12,10 +12,11 @@ import LoadingPage from '../templates/LoadingPage'
 
 const App = () => {
   const [desktop] = useMediaQuery('(min-width: 1024px)')
+  const [mobile] = useMediaQuery('(max-width: 720px)')
 
   return (
     <FirebaseProvider>
-      <MediaQueryProvider desktop={desktop}>
+      <MediaQueryProvider mobile={mobile} desktop={desktop}>
         <title>App</title>
         <PageWrapper />
         <Router>

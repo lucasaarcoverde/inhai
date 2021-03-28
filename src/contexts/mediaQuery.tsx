@@ -2,6 +2,7 @@ import React, { createContext, useContext } from 'react'
 
 interface MediaQueryProps {
   desktop: boolean
+  mobile: boolean
 }
 
 const MediaQueryContext = createContext<MediaQueryProps | null>(null)

@@ -5,7 +5,7 @@ import React, {
   useReducer,
 } from 'react'
 import firebase from 'firebase/app'
-
+import { v4 } from 'uuid'
 import 'firebase/auth'
 import 'firebase/firestore'
 
@@ -30,6 +30,7 @@ export interface User {
   photo?: string
   sexualOrientation?: string
   pronoun?: string
+  id: string
 }
 
 export interface FirebaseContextData {
@@ -120,24 +121,36 @@ export const FirebaseProvider: React.FC = ({ children }) => {
       if (authUser) {
         const { refreshToken } = authUser
         onSetAuthToken(refreshToken)
-        const usersDoc = usersRef(db).doc(`${authUser.email}`)
+        usersRef(db)
+          .where('email', '==', authUser.email)
+          .limit(1)
+          .get()
+          .then((res) => {
+            console.log('res', res.empty)
 
-        usersDoc.get().then((doc) => {
-          if (doc.exists) {
-            const userDb = doc.data() as User
-            onSetUser(userDb)
-          } else {
-            const userDb = {
-              name: authUser.displayName,
-              photo: authUser.photoURL,
-              email: authUser.email,
-            } as User
+            if (!res.empty) {
+              const [doc] = res.docs
 
-            usersDoc.set(userDb)
+              if (doc.exists) {
+                const userDb = doc.data() as User
 
-            onSetUser(userDb)
-          }
-        })
+                onSetUser(userDb)
+              }
+            } else {
+              console.log('eyes eyes')
+              const uuid = v4()
+              const userDb = {
+                name: authUser.displayName,
+                photo: authUser.photoURL,
+                email: authUser.email,
+                id: uuid,
+              } as User
+              usersRef(db).doc(uuid).set(userDb)
+
+              onSetUser(userDb)
+            }
+          })
+          .catch((e) => console.log(e))
       }
     })
 

@@ -52,7 +52,12 @@ const NotFound = ({
               fontWeight="semibold"
             >
               Ops, página não encontrada,{' '}
-              <Link as={GatsbyLink} color="blue.600" cursor="pointer" to="/">
+              <Link
+                as={GatsbyLink}
+                color="blue.600"
+                cursor="pointer"
+                to="/app/map"
+              >
                 clique aqui para voltar!
               </Link>
             </Text>

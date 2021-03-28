@@ -40,7 +40,7 @@ export const Login = () => {
       window.localStorage.removeItem('authToken')
       return
     }
-    navigate('/')
+    navigate('/app/map')
   }, [authToken])
 
   const handleEmailLogin = useCallback(async (values: Values) => {
@@ -183,6 +183,7 @@ export const Login = () => {
                       <Input
                         {...field}
                         id="email"
+                        inputMode="email"
                         variant="flushed"
                         aria-describedby="email-helper"
                       />
@@ -238,7 +239,7 @@ export const Login = () => {
                 )}
               </Field>
               {error && (
-                <Text fontSize="sm" color="red">
+                <Text fontSize="sm" color="red.500">
                   Email ou Senha inválidos
                 </Text>
               )}

@@ -50,7 +50,13 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
             onOpenSearch={onOpenSearch}
           />
 
-          <Flex as="main" direction="row" height="100%">
+          <Flex
+            as="main"
+            direction="row"
+            bg="white"
+            height="calc(100vh - 56px)"
+            maxHeight="-webkit-fill-available"
+          >
             <Sidebar
               logout={logout}
               btnRef={btnRef}
@@ -73,51 +79,49 @@ export function Header(props: HeaderProps) {
     <Flex
       align="center"
       paddingY="2"
-      paddingX={desktop ? '6' : '1'}
+      paddingLeft={desktop ? '6' : '1'}
+      paddingRight={desktop ? '2' : '1'}
       justify="space-between"
       direction="row"
       height="56px"
       bg="teal.500"
     >
       {desktop ? (
-        <>
-          <Heading color="white">Inhaí</Heading>
-          {!!onOpenSearch && (
-            <Flex width="100%" justify="center">
-              <Button
-                onClick={onOpenSearch}
-                colorScheme="whiteAlpha"
-                width="256px"
-                color="whitesmoke"
-              >
-                Buscar Local
-              </Button>
-            </Flex>
-          )}
-        </>
+        <Heading color="white">Inhaí</Heading>
       ) : (
-        <>
-          <IconButton
-            ref={btnRef as any}
-            onClick={onOpenSidebar}
+        <IconButton
+          ref={btnRef as any}
+          onClick={onOpenSidebar}
+          size="lg"
+          aria-label="LeftNav button"
+          icon={<HamburgerIcon boxSize="6" />}
+          variant="ghost"
+          colorScheme="whiteAlpha"
+        />
+      )}
+      {!!onOpenSearch &&
+        (desktop ? (
+          <Button
             size="lg"
-            aria-label="LeftNav button"
-            icon={<HamburgerIcon boxSize="6" />}
+            aria-label="Search button"
+            leftIcon={<SearchIcon />}
+            variant="ghost"
+            padding={4}
+            colorScheme="whiteAlpha"
+            onClick={onOpenSearch}
+          >
+            Buscar por local
+          </Button>
+        ) : (
+          <IconButton
+            size="lg"
+            aria-label="Search button"
+            icon={<SearchIcon />}
             variant="ghost"
             colorScheme="whiteAlpha"
+            onClick={onOpenSearch}
           />
-          {!!onOpenSearch && (
-            <IconButton
-              size="lg"
-              aria-label="Search button"
-              icon={<SearchIcon />}
-              variant="ghost"
-              colorScheme="whiteAlpha"
-              onClick={onOpenSearch}
-            />
-          )}
-        </>
-      )}
+        ))}
     </Flex>
   )
 }

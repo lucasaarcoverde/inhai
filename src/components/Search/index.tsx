@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import useHere, { HereItem } from '../../hooks/useHere'
 
-import { useMediaQueryContext } from '../../contexts'
-import { DesktopSearch } from './DesktopSearch'
 import { MobileSearch } from './MobileSearch'
 
 export function Search(props: SearchProps) {
@@ -26,11 +24,8 @@ export function Search(props: SearchProps) {
     }
   }, [queryValue])
 
-  const { desktop } = useMediaQueryContext()
   console.log(items)
-  return desktop ? (
-    <DesktopSearch {...props} setSearch={setQuery} searchItems={items} />
-  ) : (
+  return (
     <MobileSearch
       {...props}
       setSearch={setQuery}
