@@ -55,6 +55,7 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
             direction="row"
             bg="white"
             height="calc(100vh - 56px)"
+            maxHeight="-webkit-fill-available"
           >
             <Sidebar
               logout={logout}
