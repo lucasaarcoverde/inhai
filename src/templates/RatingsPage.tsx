@@ -167,6 +167,7 @@ const RatingsPage = ({
           direction="column"
           width="100%"
           maxHeight="-webkit-fill-available"
+          overflowY="scroll"
         >
           <Map
             height="40vh"
@@ -174,7 +175,7 @@ const RatingsPage = ({
             searchedItem={searchedItem}
             setCurrentItem={setCurrentItem}
           />
-          <Box overflowY="scroll" maxHeight="calc(60vh-56px)">
+          <Box>
             <Formik
               enableReinitialize
               initialValues={

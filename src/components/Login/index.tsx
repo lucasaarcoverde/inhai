@@ -183,6 +183,7 @@ export const Login = () => {
                       <Input
                         {...field}
                         id="email"
+                        inputMode="email"
                         variant="flushed"
                         aria-describedby="email-helper"
                       />
