@@ -14,8 +14,9 @@ const IndexPage = () => {
   const [mobile] = useMediaQuery('(max-width: 720px)')
 
   React.useEffect(() => {
-    navigate('/app/map')
+    navigate('/app/')
   }, [])
+
   return (
     <FirebaseProvider>
       <MediaQueryProvider mobile={mobile} desktop={desktop}>
