@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'inhai',
+    title: 'Inhaí',
     siteUrl: 'https://inhai.vercel.app',
   },
   plugins: [
@@ -12,13 +12,13 @@ module.exports = {
       resolve: 'gatsby-plugin-manifest',
       options: {
         icon: 'src/images/icon.png',
-        name: `Inhai`,
-        short_name: `Inhai`,
+        name: `Inhaí`,
+        short_name: `Inhaí`,
         start_url: `/`,
-        background_color: `#f7f0eb`,
-        theme_color: `#a2466c`,
+        background_color: `#FFFFFF`,
+        theme_color: `#319795`,
         orientation: 'portrait',
-        display: 'fullscreen',
+        display: 'standalone',
       },
     },
     {
