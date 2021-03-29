@@ -5,12 +5,11 @@ import Img from 'gatsby-image'
 
 import { Card } from './Card'
 import { Box, LinkOverlay } from '@chakra-ui/react'
-import { useMediaQueryContext } from '../../../contexts'
 
 export function Search() {
   const search = useStaticQuery(graphql`
     query {
-      file(relativePath: { eq: "location-search.png" }) {
+      file(relativePath: { eq: "location-search2.png" }) {
         childImageSharp {
           # Specify the image processing specifications right in the query.
           # Makes it trivial to update as your page's design changes.
@@ -21,12 +20,11 @@ export function Search() {
       }
     }
   `)
-  const { desktop } = useMediaQueryContext()
 
   return (
     <Card label="Visualize os locais mais bem avaliados como LGBTQI+ friendly.">
       <LinkOverlay as={Link} to="/app/map">
-        <Box width="100%" maxWidth={desktop ? '400px' : '250px'}>
+        <Box width="100%">
           <Img fluid={search.file.childImageSharp.fluid} alt="Search image" />
         </Box>
       </LinkOverlay>

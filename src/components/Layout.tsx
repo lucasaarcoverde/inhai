@@ -5,7 +5,6 @@ import {
   Heading,
   IconButton,
   Stack,
-  useDisclosure,
   extendTheme,
   Grid,
   Icon,
@@ -20,13 +19,9 @@ import { useAuth } from '../contexts/firebase'
 import theme from '../theme'
 import { navigate, useLocation } from '@reach/router'
 import { HiLogout } from 'react-icons/hi'
+import { Topbar } from './Topbar'
 
 export function Layout({ children, onOpenSearch }: LayoutProps) {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const { logout } = useAuth()
-  const btnRef = React.useRef()
-
   return (
     <PrivateRoute path="/login">
       <ChakraProvider theme={extendTheme(theme)}>
@@ -37,25 +32,17 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
           spacing="0"
           overflowY="hidden"
         >
-          <Header
-            btnRef={btnRef}
-            onOpenSidebar={onOpen}
-            onOpenSearch={onOpenSearch}
-          />
+          <Topbar onOpenSearch={onOpenSearch} />
+
           <Flex
             as="main"
             direction="row"
-            bg="white"
+            bg="whiteAlpha"
             height="calc(100vh - 56px)"
             overflowY="scroll"
             maxHeight="-webkit-fill-available"
           >
-            <Sidebar
-              logout={logout}
-              btnRef={btnRef}
-              isOpen={isOpen}
-              onClose={onClose}
-            />
+            <Sidebar />
             {children}
           </Flex>
         </Stack>

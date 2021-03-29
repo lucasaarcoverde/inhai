@@ -2,10 +2,10 @@ import React from 'react'
 import { Box, LinkOverlay } from '@chakra-ui/react'
 import { graphql, useStaticQuery } from 'gatsby'
 import Img from 'gatsby-image'
+import { Link } from 'gatsby'
 
 import { Card } from './Card'
-import { useMediaQueryContext } from '../../../contexts'
-import { Link } from 'gatsby'
+
 export function Ratings() {
   const review = useStaticQuery(graphql`
     query {
@@ -20,12 +20,11 @@ export function Ratings() {
       }
     }
   `)
-  const { desktop } = useMediaQueryContext()
 
   return (
     <Card label="Avalie um local.">
       <LinkOverlay as={Link} to="/app/ratings">
-        <Box width="100%" maxWidth={desktop ? '400px' : '250px'}>
+        <Box width="100%">
           <Img fluid={review.file.childImageSharp.fluid} alt="Ratings image" />
         </Box>
       </LinkOverlay>

@@ -225,16 +225,7 @@ const RatingsPage = ({
                         <option value={4}>4</option>
                         <option value={5}>5</option>
                       </SelectControl>
-                      <TextareaControl
-                        sx={{
-                          label: {
-                            fontSize: 'xs',
-                            fontWeight: 'semibold',
-                          },
-                        }}
-                        name="comment"
-                        label="Comentário"
-                      />
+
                       <FormControl>
                         <Stack direction="row" spacing={1}>
                           <FormLabel
@@ -255,7 +246,16 @@ const RatingsPage = ({
                           </CheckboxSingleControl>
                         </Stack>
                       </FormControl>
-
+                      <TextareaControl
+                        sx={{
+                          label: {
+                            fontSize: 'xs',
+                            fontWeight: 'semibold',
+                          },
+                        }}
+                        name="comment"
+                        label="Comentário"
+                      />
                       <Button
                         isLoading={props.isSubmitting}
                         type="submit"
@@ -305,6 +305,18 @@ function PlaceField(props: PlaceFieldProps) {
 
   return (
     <Stack direction="row" paddingX={6} paddingY={2}>
+      <Text
+        border="GrayText"
+        fontSize="lg"
+        fontWeight="bold"
+        isTruncated
+        align="center"
+        color={meta.error && meta.touched ? 'red.500' : 'blackAlpha'}
+      >
+        {meta.error && meta.touched
+          ? meta.error
+          : meta.value?.title ?? 'Escolha um local'}
+      </Text>
       <IconButton
         aria-label="open-search"
         icon={<SearchIcon />}
@@ -312,18 +324,6 @@ function PlaceField(props: PlaceFieldProps) {
         size="sm"
         onClick={onOpenSearch}
       />
-      <Text
-        border="GrayText"
-        fontSize="lg"
-        fontWeight="bold"
-        isTruncated
-        align="center"
-        color={meta.error && meta.touched ? 'red.500' : 'blackAlpha.800'}
-      >
-        {meta.error && meta.touched
-          ? meta.error
-          : meta.value?.title ?? 'Escolha um local'}
-      </Text>
     </Stack>
   )
 }

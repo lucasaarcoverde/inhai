@@ -5,10 +5,10 @@ import Img from 'gatsby-image'
 
 import { Card } from './Card'
 
-export function Profile() {
-  const profile = useStaticQuery(graphql`
+export function Faq() {
+  const faq = useStaticQuery(graphql`
     query {
-      file(relativePath: { eq: "profile.png" }) {
+      file(relativePath: { eq: "faq.png" }) {
         childImageSharp {
           # Specify the image processing specifications right in the query.
           # Makes it trivial to update as your page's design changes.
@@ -21,10 +21,10 @@ export function Profile() {
   `)
 
   return (
-    <Card label="Edite seu perfil ou visualize suas informações.">
-      <LinkOverlay as={Link} to="/app/profile">
+    <Card label="Sobre nós.">
+      <LinkOverlay as={Link} to="/app/about-us">
         <Box width="100%">
-          <Img fluid={profile.file.childImageSharp.fluid} alt="Profile image" />
+          <Img fluid={faq.file.childImageSharp.fluid} alt="Profile image" />
         </Box>
       </LinkOverlay>
     </Card>

@@ -48,7 +48,7 @@ const NotFound = ({
           <Center>
             <Text
               fontSize={['xs', 'xs', 'md']}
-              color="blackAlpha.700"
+              color="blackAlpha"
               fontWeight="semibold"
             >
               Ops, página não encontrada,{' '}

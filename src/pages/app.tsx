@@ -10,6 +10,7 @@ import ProfilePage from '../templates/ProfilePage'
 import { PageWrapper } from '../components'
 import LoadingPage from '../templates/LoadingPage'
 import HomePage from '../templates/Home'
+import AboutUsPage from '../templates/AboutUsPage'
 
 const App = () => {
   const [desktop] = useMediaQuery('(min-width: 1024px)')
@@ -22,6 +23,7 @@ const App = () => {
         <PageWrapper />
         <Router>
           <HomePage path="/app/" />
+          <AboutUsPage path="/app/about-us" />
           <LoadingPage path="/app/loading" />
           <MapPage path="/app/map" />
           <NotificationsPage path="/app/notifications" />
