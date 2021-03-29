@@ -8,6 +8,7 @@ import {
   useDisclosure,
   extendTheme,
   Grid,
+  Icon,
 } from '@chakra-ui/react'
 import React, { ReactNode } from 'react'
 
@@ -18,6 +19,7 @@ import PrivateRoute from './PrivateRoute'
 import { useAuth } from '../contexts/firebase'
 import theme from '../theme'
 import { navigate, useLocation } from '@reach/router'
+import { HiLogout } from 'react-icons/hi'
 
 export function Layout({ children, onOpenSearch }: LayoutProps) {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -66,7 +68,8 @@ export function Header(props: HeaderProps) {
   const { onOpenSearch, btnRef } = props
   const { desktop } = useMediaQueryContext()
   const { pathname } = useLocation()
-  console.log(pathname)
+  const { logout } = useAuth()
+
   return (
     <Grid
       templateColumns={desktop ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)'}
@@ -100,8 +103,8 @@ export function Header(props: HeaderProps) {
         <Heading color="white">Inhaí</Heading>
       </Flex>
       <Flex h="100%" align="center" justifyContent="flex-end">
-        {!!onOpenSearch &&
-          (desktop ? (
+        {!!onOpenSearch ? (
+          desktop ? (
             <Button
               size="lg"
               aria-label="Search button"
@@ -122,7 +125,19 @@ export function Header(props: HeaderProps) {
               colorScheme="whiteAlpha"
               onClick={onOpenSearch}
             />
-          ))}
+          )
+        ) : (
+          pathname === '/app/' && (
+            <IconButton
+              size="lg"
+              aria-label="Search button"
+              icon={<Icon as={HiLogout} boxSize="6" />}
+              variant="ghost"
+              colorScheme="whiteAlpha"
+              onClick={logout}
+            />
+          )
+        )}
       </Flex>
     </Grid>
   )
