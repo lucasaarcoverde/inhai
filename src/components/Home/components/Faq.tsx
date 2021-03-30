@@ -21,7 +21,7 @@ export function Faq() {
   `)
 
   return (
-    <Card label="Sobre nós.">
+    <Card label="Quem somos.">
       <LinkOverlay as={Link} to="/app/about-us">
         <Box width="100%">
           <Img fluid={faq.file.childImageSharp.fluid} alt="Profile image" />

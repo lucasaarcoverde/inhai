@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react'
 
 import { useField } from 'formik'
 import { useDropzone } from 'react-dropzone'
-import { Avatar, Box } from '@chakra-ui/react'
+import { Avatar, Box, Flex, Text } from '@chakra-ui/react'
 import { User } from '../../../contexts/firebase'
 import { useEffect } from 'react'
 
@@ -44,8 +44,19 @@ export function ProfileDropzone(props: Props) {
   }, [imageUrl])
 
   return (
-    <Box as={Avatar} size="xl" src={imageUrl} {...getRootProps()}>
-      <input {...getInputProps()} />
-    </Box>
+    <Flex
+      justifyContent="center"
+      direction="column"
+      align="center"
+      sx={{ outline: 'none' }}
+      {...getRootProps()}
+    >
+      <Box as={Avatar} size="xl" src={imageUrl}>
+        <input {...getInputProps()} />
+      </Box>
+      <Text fontSize="sm" fontWeight="bold" color="blue.600">
+        Mudar foto de perfil
+      </Text>
+    </Flex>
   )
 }

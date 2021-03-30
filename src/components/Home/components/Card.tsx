@@ -17,8 +17,8 @@ export function Card(props: Props) {
     >
       <Flex justifyContent="center" direction="column">
         <Box width="100%">{children}</Box>
-        <Text>{label}</Text>
       </Flex>
+      <Text>{label}</Text>
     </LinkBox>
   )
 }

@@ -209,7 +209,7 @@ export function Profile() {
                 />
                 <NumberInputControl sx={labelStyle} name="age" label="Idade" />
               </Stack>
-              <Stack marginTop="6" direction="row" width="100%">
+              <Stack direction="row" width="100%" paddingY="6">
                 <Button
                   onClick={onOpen}
                   colorScheme="red"
