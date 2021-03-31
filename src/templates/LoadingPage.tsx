@@ -71,7 +71,7 @@ const LoadingPage = ({
               </Box>
             </Center>
             <Center>
-              <Text color="blackAlpha.700">Iniciando sessão...</Text>
+              <Text color="blackAlpha">Iniciando sessão...</Text>
             </Center>
           </Stack>
         </Center>

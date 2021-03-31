@@ -158,6 +158,7 @@ export const Login = () => {
                         <Input
                           {...field}
                           id="name"
+                          placeholder="Nome"
                           variant="flushed"
                           aria-describedby="name-helper"
                         />
@@ -190,6 +191,7 @@ export const Login = () => {
                         {...field}
                         id="email"
                         inputMode="email"
+                        placeholder="Email"
                         variant="flushed"
                         aria-describedby="email-helper"
                       />
@@ -245,11 +247,7 @@ export const Login = () => {
                 </Text>
               )}
               <Flex justify="center">
-                <Text
-                  fontSize="xs"
-                  color="blackAlpha.700"
-                  fontWeight="semibold"
-                >
+                <Text fontSize="xs" color="blackAlpha" fontWeight="semibold">
                   {signup ? 'Já possui uma conta?' : 'Novo no nosso app?'}{' '}
                   <Link
                     color="blue.600"
@@ -281,7 +279,7 @@ export const Login = () => {
               type="button"
               variant="ghost"
               size="lg"
-              color="blackAlpha.700"
+              color="blackAlpha"
               onClick={() => {
                 loginWithGoogle()
                 navigate('/app/loading')

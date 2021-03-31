@@ -1,4 +1,4 @@
-import { Box, BoxProps, Fade, Skeleton } from '@chakra-ui/react'
+import { Box, BoxProps, Fade, Skeleton, useColorMode } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useMap } from '../../contexts/map'
 import { HereItem } from '../../hooks/useHere'
@@ -25,6 +25,7 @@ export const Map = ({
   ...boxProps
 }: MapProps) => {
   const mapRef = React.useRef(null)
+  const { colorMode } = useColorMode()
 
   const [loading, setLoading] = useState(true)
   const [windowLoading, setWindowLoading] = useState(true)
@@ -48,7 +49,12 @@ export const Map = ({
       })
       const defaultLayers = client.createDefaultLayers()
 
-      const map = new H.Map(mapRef.current, defaultLayers.vector.normal.map, {
+      const mapLayer =
+        colorMode === 'light'
+          ? defaultLayers.raster.normal.map
+          : defaultLayers.raster.normal.mapnight
+
+      const map = new H.Map(mapRef.current, mapLayer, {
         center: defaultLocation,
         zoom: 14,
         pixelRatio: devicePixelRatio ?? 1,
@@ -121,7 +127,7 @@ export const Map = ({
     }
 
     return
-  }, [windowLoading, searchedItem, items])
+  }, [windowLoading, searchedItem, items, colorMode])
 
   useEffect(() => {
     if (loading) {

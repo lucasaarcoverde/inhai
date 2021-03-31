@@ -8,12 +8,10 @@ import { NavButton } from './components/NavButton'
 import { CgProfile } from 'react-icons/cg'
 import { useAuth } from '../../contexts/firebase'
 
-export interface DesktopSidebarProps {
-  logout: () => void
-}
+export interface DesktopSidebarProps {}
 
 export function DesktopSidebar(props: DesktopSidebarProps) {
-  const { logout } = props
+  const { logout } = useAuth()
 
   return (
     <Stack
@@ -24,6 +22,7 @@ export function DesktopSidebar(props: DesktopSidebarProps) {
       borderColor="gray.300"
       spacing="2"
       padding="2"
+      {...props}
     >
       <NavButton
         size="lg"
