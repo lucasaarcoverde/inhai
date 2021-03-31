@@ -21,6 +21,8 @@ export function MobileTopbar(props: TopbarProps) {
   const { pathname } = useLocation()
   const { logout } = useAuth()
 
+  const home = pathname === '/app/' || pathname === '/app'
+
   return (
     <Box zIndex="popover">
       <Grid
@@ -34,7 +36,7 @@ export function MobileTopbar(props: TopbarProps) {
         bg="white"
       >
         <Flex h="100%" align="center" justifyContent="flex-start">
-          {pathname !== '/app/' && (
+          {!home && (
             <IconButton
               onClick={() => navigate('/app/')}
               size="lg"
@@ -60,7 +62,7 @@ export function MobileTopbar(props: TopbarProps) {
               onClick={onOpenSearch}
             />
           ) : (
-            pathname === '/app/' && (
+            home && (
               <IconButton
                 size="lg"
                 aria-label="Search button"

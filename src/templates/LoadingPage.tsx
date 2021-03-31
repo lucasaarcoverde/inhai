@@ -46,7 +46,7 @@ const LoadingPage = ({
 
   React.useEffect(() => {
     setTimeout(() => setLoading(false), 15000)
-    if (authToken) setTimeout(() => navigate('/app/map'), 1500)
+    if (authToken) setTimeout(() => navigate('/app'), 1500)
 
     return
   }, [authToken])
