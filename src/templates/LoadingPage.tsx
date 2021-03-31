@@ -55,7 +55,6 @@ const LoadingPage = ({
     <ChakraProvider theme={extendTheme(theme)}>
       <Flex direction="column" height="100vh" maxH="-webkit-fill-available">
         <Progress size="xs" colorScheme="teal" isIndeterminate />
-        <title>Loading Page</title>
         {children}
         <Center height="100%">
           <Stack spacing={6} width="100%">

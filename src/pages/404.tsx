@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { Fragment } from 'react'
 import NotFound from '../templates/NotFound'
-import { PageWrapper } from '../components'
+import { Seo } from '../components'
 
 // markup
 const NotFoundPage = () => {
   return (
     <Fragment>
-      <PageWrapper />
+      <Seo />
       <NotFound />
     </Fragment>
   )

@@ -1,6 +1,6 @@
 import { useMediaQuery } from '@chakra-ui/react'
 import * as React from 'react'
-import { PageWrapper } from '../components'
+import { Seo } from '../components'
 
 import { Layout } from '../components/Layout'
 import { MediaQueryProvider } from '../contexts'
@@ -21,8 +21,7 @@ const IndexPage = () => {
     <FirebaseProvider>
       <MediaQueryProvider mobile={mobile} desktop={desktop}>
         <Layout>
-          <PageWrapper />
-          <title>Inhai</title>
+          <Seo />
         </Layout>
       </MediaQueryProvider>
     </FirebaseProvider>

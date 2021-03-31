@@ -1,7 +1,7 @@
 import { Center, ChakraProvider, extendTheme } from '@chakra-ui/react'
 import * as React from 'react'
 
-import { Login, PageWrapper } from '../components'
+import { Login, Seo } from '../components'
 import { FirebaseProvider } from '../contexts'
 import theme from '../theme'
 
@@ -15,8 +15,7 @@ const LoginPage = () => {
           maxHeight="-webkit-fill-available"
           overflowY="hidden"
         >
-          <PageWrapper />
-          <title>Login</title>
+          <Seo />
           <Login />
         </Center>
       </ChakraProvider>

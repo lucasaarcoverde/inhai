@@ -9,7 +9,6 @@ const ProfilePage = ({
 }: React.PropsWithChildren<RouteComponentProps>) => {
   return (
     <Layout>
-      <title>Profile</title>
       <Profile justifyContent="center" />
       {children}
     </Layout>

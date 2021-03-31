@@ -12,7 +12,6 @@ const AboutUsPage = ({
   return (
     <Layout>
       <Flex direction="column" height="100vh" maxH="-webkit-fill-available">
-        <title>About us</title>
         {children}
         <Text>
           Page still under development. <Link to="/app/">Go back to home!</Link>

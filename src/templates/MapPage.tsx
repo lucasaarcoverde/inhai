@@ -57,8 +57,6 @@ const MapPage = ({
   return (
     <MapProvider items={items}>
       <Layout onOpenSearch={onOpenSearch}>
-        <title>Map</title>
-
         <Map
           onOpenDetails={onOpenDetails}
           searchedItem={searchedItem}

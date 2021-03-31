@@ -15,7 +15,6 @@ function HomePage(props: React.PropsWithChildren<RouteComponentProps>) {
 
   return (
     <Layout>
-      <title>Home</title>
       {props.children}
       <Home />
     </Layout>

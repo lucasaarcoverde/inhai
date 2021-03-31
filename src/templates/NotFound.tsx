@@ -33,7 +33,6 @@ const NotFound = ({
 
   return (
     <ChakraProvider theme={extendTheme(theme)}>
-      <title>Not found</title>
       {children}
       <Center height="100vh" maxHeight="-webkit-fill-available">
         <Stack width="100%" spacing="6">
