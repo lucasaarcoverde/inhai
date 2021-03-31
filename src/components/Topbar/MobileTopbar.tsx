@@ -7,6 +7,7 @@ import {
   Heading,
   Icon,
   Divider,
+  Box,
 } from '@chakra-ui/react'
 import { ArrowBackIcon, SearchIcon } from '@chakra-ui/icons'
 import { navigate } from 'gatsby'
@@ -21,15 +22,16 @@ export function MobileTopbar(props: TopbarProps) {
   const { logout } = useAuth()
 
   return (
-    <>
+    <Box zIndex="popover">
       <Grid
+        position="fixed"
         templateColumns="repeat(3, 1fr)"
         paddingLeft="1"
         paddingRight="1"
         direction="row"
         height="56px"
         width="100vw"
-        bg="whiteAlpha"
+        bg="white"
       >
         <Flex h="100%" align="center" justifyContent="flex-start">
           {pathname !== '/app/' && (
@@ -71,7 +73,7 @@ export function MobileTopbar(props: TopbarProps) {
           )}
         </Flex>
       </Grid>
-      <Divider w="100vw" />
-    </>
+      <Divider w="100vw" top="56px" position="fixed" />
+    </Box>
   )
 }

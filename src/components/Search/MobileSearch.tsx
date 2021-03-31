@@ -15,7 +15,6 @@ import { useCombobox } from 'downshift'
 
 import { HereItem } from '../../hooks/useHere'
 import { SearchProps } from './index'
-import { useMediaQueryContext } from '../../contexts'
 
 export function MobileSearch(
   props: SearchProps & {
@@ -33,8 +32,6 @@ export function MobileSearch(
     setSearchedItem,
   } = props
 
-  const { desktop } = useMediaQueryContext()
-
   const {
     getLabelProps,
     getMenuProps,
@@ -48,7 +45,7 @@ export function MobileSearch(
       if (!selectedItem) return
       setSearchedItem(selectedItem)
 
-      onCloseSearch()
+      onCloseSearch?.()
 
       return selectedItem.title
     },
@@ -65,9 +62,9 @@ export function MobileSearch(
       direction="right"
       in={isSearchOpen}
       style={{
-        zIndex: 10,
+        zIndex: 9999,
         margin: 0,
-        maxWidth: desktop ? '400px' : '100vw',
+        maxWidth: '100vw',
         maxHeight: '-webkit-fill-available',
         height: '100vh',
       }}
@@ -75,7 +72,7 @@ export function MobileSearch(
       <Box
         paddingX="4"
         paddingY="2"
-        bg="white"
+        backgroundColor="white"
         rounded="md"
         shadow="md"
         h="100%"
@@ -120,7 +117,7 @@ export function MobileSearch(
             {searchItems.map((item, index) => (
               <Stack
                 key={index}
-                bg={highlightedIndex === index ? 'gray.100' : 'white'}
+                bg={highlightedIndex === index ? 'gray.50' : 'whiteAlpha'}
                 {...getItemProps({ item, index })}
                 padding="4"
                 cursor="pointer"

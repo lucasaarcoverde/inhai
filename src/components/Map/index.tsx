@@ -145,7 +145,7 @@ export const Map = ({
   }, [])
 
   return (
-    <Box width="100%" maxHeight="-webkit-fill-available">
+    <Box width="100%" maxHeight="-webkit-fill-available" {...boxProps}>
       {loading && (
         <Box height="100%" width="100%" padding={1}>
           <Skeleton height="100%" width="100%" />

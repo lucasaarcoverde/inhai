@@ -2,6 +2,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useMemo,
   useReducer,
 } from 'react'
 import firebase from 'firebase/app'
@@ -121,6 +122,12 @@ export const FirebaseProvider: React.FC = ({ children }) => {
     dispatch({ type: 'set_loading', loading })
   }, [])
 
+  const userAuthenticated = useMemo(() => {
+    if (!state.user) return {} as User
+
+    return state.user
+  }, [state.user])
+
   useEffect(() => {
     if (typeof window === 'object' && !authToken) {
       const token = window.localStorage.getItem('authToken')
@@ -179,7 +186,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
       value={{
         firebase,
         authToken: state.authToken,
-        user: state.user,
+        user: userAuthenticated,
         loading: state.loading,
         setAuthToken: onSetAuthToken,
         setLoading: onSetLoading,

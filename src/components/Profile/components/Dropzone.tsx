@@ -49,6 +49,7 @@ export function ProfileDropzone(props: Props) {
       direction="column"
       align="center"
       sx={{ outline: 'none' }}
+      cursor="pointer"
       {...getRootProps()}
     >
       <Box as={Avatar} size="xl" src={imageUrl}>

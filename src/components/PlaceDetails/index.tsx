@@ -166,7 +166,7 @@ export function PlaceDetails(props: PlaceDetailsProps) {
               positiveRatings.length > 0 && (
                 <Stack spacing="2">
                   <Text fontWeight="bold" fontSize="sm">
-                    Comentárioss
+                    Comentários
                   </Text>
                   <Divider />
                   <CommentList ratings={positiveRatings} />
