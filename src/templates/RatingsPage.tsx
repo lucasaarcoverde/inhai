@@ -205,7 +205,7 @@ const RatingsPage = ({
   return (
     <MapProvider>
       <Layout>
-        <Flex direction="column" width="100%" height="100%" overflowY="scroll">
+        <Flex direction="column" width="100%" height="100%">
           <Map
             height="40vh"
             onOpenDetails={onOpenDetails}
@@ -329,6 +329,7 @@ export default RatingsPage
 
 function PlaceField(props: PlaceFieldProps) {
   const { item, onOpenSearch } = props
+  const { desktop } = useMediaQueryContext()
 
   const [_, meta, helpers] = useField<HereItem>({
     name: 'place',
@@ -356,13 +357,15 @@ function PlaceField(props: PlaceFieldProps) {
           ? meta.error
           : meta.value?.title ?? 'Escolha um local'}
       </Text>
-      <IconButton
-        aria-label="open-search"
-        icon={<SearchIcon />}
-        variant="outline"
-        size="sm"
-        onClick={onOpenSearch}
-      />
+      {!desktop && (
+        <IconButton
+          aria-label="open-search"
+          icon={<SearchIcon />}
+          variant="outline"
+          size="sm"
+          onClick={onOpenSearch}
+        />
+      )}
     </Stack>
   )
 }

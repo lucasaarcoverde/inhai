@@ -1,40 +1,23 @@
 import React from 'react'
 
-import { Grid, Flex, Heading, Button } from '@chakra-ui/react'
-import { SearchIcon } from '@chakra-ui/icons'
-import { TopbarProps } from './'
+import { Box, Flex, Heading, Divider, FlexboxProps } from '@chakra-ui/react'
 
-export function DesktopTopbar(props: TopbarProps) {
-  const { onOpenSearch } = props
-
+export function DesktopTopbar(props: FlexboxProps) {
   return (
-    <Grid
-      templateColumns="repeat(2, 1fr)"
-      paddingLeft="6"
-      paddingRight="2"
-      direction="row"
-      height="56px"
-      width="100vw"
-      bg="teal.500"
-    >
-      <Flex h="100%" align="center" justifyContent="flex-start">
-        <Heading color="white">Inhaí</Heading>
+    <Box>
+      <Flex
+        {...props}
+        position="fixed"
+        direction="row"
+        height="56px"
+        width="100%"
+        justifyContent="center"
+        align="center"
+        bg="whiteAlpha"
+      >
+        <Heading color="teal.500">Inhaí</Heading>
       </Flex>
-      <Flex h="100%" align="center" justifyContent="flex-end">
-        {!!onOpenSearch && (
-          <Button
-            size="lg"
-            aria-label="Search button"
-            leftIcon={<SearchIcon />}
-            variant="ghost"
-            padding={4}
-            colorScheme="whiteAlpha"
-            onClick={onOpenSearch}
-          >
-            Buscar por local
-          </Button>
-        )}
-      </Flex>
-    </Grid>
+      <Divider width="100%" top="56px" position="fixed" />
+    </Box>
   )
 }

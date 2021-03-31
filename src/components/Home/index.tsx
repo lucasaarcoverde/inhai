@@ -7,13 +7,7 @@ import { Profile, Ratings, Search, Faq } from './components'
 
 export function Home() {
   return (
-    <Stack
-      overflowY="scroll"
-      align="center"
-      width="100%"
-      spacing={4}
-      padding={6}
-    >
+    <Stack height="100%" align="center" width="100%" spacing={4} padding={6}>
       <Search />
       <Ratings />
       <Profile />

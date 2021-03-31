@@ -14,6 +14,7 @@ import {
   AlertDialogBody,
   AlertDialogFooter,
   useDisclosure,
+  FlexProps,
 } from '@chakra-ui/react'
 import { Form, Formik, FormikHelpers } from 'formik'
 
@@ -24,7 +25,7 @@ import { useMediaQueryContext } from '../../contexts'
 import * as Yup from 'yup'
 
 const validationSchema = Yup.object({
-  name: Yup.object().required('Nome é obrigatório'),
+  name: Yup.string().required('Nome é obrigatório'),
   displayName: Yup.string().required('Nome de usuário é obrigatório'),
 })
 
@@ -40,7 +41,7 @@ const labelStyle = {
     },
   },
 }
-export function Profile() {
+export function Profile(props: FlexProps) {
   const { user, logout, setUser, firebase } = useAuth()
   const toast = useCallback(createStandaloneToast(), [])
   const { desktop } = useMediaQueryContext()
@@ -135,7 +136,7 @@ export function Profile() {
   }, [])
 
   return !user ? (
-    <Center h="100%" w="100%">
+    <Center h="100%" w="100%" {...props}>
       <Spinner size="xl" />
     </Center>
   ) : (
@@ -145,7 +146,7 @@ export function Profile() {
       initialValues={user}
     >
       {({ isSubmitting }) => (
-        <Flex justifyContent="center" width="100%" overflowY="scroll">
+        <Flex justifyContent="center" width="100%" {...props}>
           <Box paddingY="6" maxWidth="600px">
             <Form>
               <Stack justifyContent="center" align="center">

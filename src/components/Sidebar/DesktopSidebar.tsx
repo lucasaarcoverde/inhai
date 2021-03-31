@@ -6,79 +6,84 @@ import { AiOutlineStar } from 'react-icons/ai'
 import { RiLogoutBoxLine } from 'react-icons/ri'
 import { NavButton } from './components/NavButton'
 import { CgProfile } from 'react-icons/cg'
-import { useAuth } from '../../contexts/firebase'
+import { useAuth, User } from '../../contexts/firebase'
+import { useLocation } from '@reach/router'
 
 export interface DesktopSidebarProps {}
 
 export function DesktopSidebar(props: DesktopSidebarProps) {
   const { logout } = useAuth()
+  const { pathname } = useLocation()
 
   return (
-    <Stack
-      width="256px"
-      height="100%"
-      borderRight="solid"
-      borderRightWidth="1px"
-      borderColor="gray.300"
-      spacing="2"
+    <Flex
+      width="100%"
       padding="2"
-      {...props}
+      shadow="md"
+      justifyContent="flex-end"
+      height="100%"
     >
-      <NavButton
-        size="lg"
-        navigateUrl="/app/map"
-        leftIcon={<SearchIcon boxSize="6" />}
+      <Stack
+        spacing="2"
+        minWidth="300px"
+        maxWidth="350px"
+        width="100%"
+        {...props}
       >
-        Mapa LGBTQI+
-      </NavButton>
-      <NavButton
-        size="lg"
-        navigateUrl="/app/ratings"
-        leftIcon={<Icon as={AiOutlineStar} boxSize="6" />}
-      >
-        Avaliar Local
-      </NavButton>
-      {/* <NavButton
-        size="lg"
-        navigateUrl="/app/notifications"
-        leftIcon={<Icon as={IoMdNotificationsOutline} boxSize="6" />}
-      >
-        Notificações
-      </NavButton> */}
-      <NavButton
-        size="lg"
-        navigateUrl="/app/profile"
-        leftIcon={<Icon as={CgProfile} boxSize="6" />}
-      >
-        Perfil
-      </NavButton>
-      <NavButton
-        size="lg"
-        onClick={logout}
-        leftIcon={<Icon as={RiLogoutBoxLine} boxSize="6" />}
-      >
-        Sair
-      </NavButton>
-      <Spacer />
-      <ProfileCard />
-    </Stack>
+        <NavButton
+          size="lg"
+          navigateUrl="/app/map"
+          leftIcon={<SearchIcon boxSize="6" />}
+          bg={pathname.includes('/app/map') ? 'gray.50' : 'whiteAlpha'}
+        >
+          Mapa LGBTQI+
+        </NavButton>
+        <NavButton
+          size="lg"
+          navigateUrl="/app/ratings"
+          leftIcon={<Icon as={AiOutlineStar} boxSize="6" />}
+          bg={pathname.includes('/app/ratings') ? 'gray.50' : 'whiteAlpha'}
+        >
+          Avaliar Local
+        </NavButton>
+        <NavButton
+          size="lg"
+          navigateUrl="/app/profile"
+          leftIcon={<Icon as={CgProfile} boxSize="6" />}
+          bg={pathname.includes('/app/profile') ? 'gray.50' : 'whiteAlpha'}
+        >
+          Perfil
+        </NavButton>
+        <NavButton
+          size="lg"
+          onClick={logout}
+          leftIcon={<Icon as={RiLogoutBoxLine} boxSize="6" />}
+        >
+          Sair
+        </NavButton>
+        <Spacer />
+        <ProfileCard />
+      </Stack>
+    </Flex>
   )
 }
 
 function ProfileCard() {
   const { user } = useAuth()
 
+  const { name, photo, displayName } = user as User
+
   return (
     <Stack direction="row" padding="2" marginBottom="6">
-      <Avatar size="md" bg="transparent" name={user?.name} src={user?.photo} />
+      <Avatar size="md" bg="transparent" name={name} src={photo} />
       <Flex direction="column" align="flex-start" justify="center">
-        {user?.name && (
+        {name && (
           <>
             <Box as="span" fontSize="md" fontWeight="semibold">
-              {user.name ?? 'Nome de usuário'}
+              {name ?? 'Nome de usuário'}
             </Box>
             <Box as="span" fontSize="sm" fontWeight="normal" color="gray.600">
-              {`@${user?.displayName}`}
+              {`@${displayName}`}
             </Box>
           </>
         )}
