@@ -53,7 +53,7 @@ export const Login = () => {
       window.localStorage.removeItem('authToken')
       return
     }
-    navigate('/app/map')
+    navigate('/app')
   }, [authToken])
 
   const handleEmailLogin = useCallback(async (values: Values) => {

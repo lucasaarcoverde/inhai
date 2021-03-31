@@ -10,7 +10,7 @@ function HomePage(props: React.PropsWithChildren<RouteComponentProps>) {
   const { desktop } = useMediaQueryContext()
 
   useEffect(() => {
-    if (desktop) navigate('/app/map')
+    if (desktop === true) navigate('/app/map')
   }, [desktop])
 
   return (
