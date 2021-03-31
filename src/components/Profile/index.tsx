@@ -17,14 +17,16 @@ import {
 } from '@chakra-ui/react'
 import { Form, Formik, FormikHelpers } from 'formik'
 
-import {
-  InputControl,
-  NumberInputControl,
-  SelectControl,
-} from 'formik-chakra-ui'
+import { InputControl, SelectControl } from 'formik-chakra-ui'
 import { useAuth, User } from '../../contexts/firebase'
 import { ProfileDropzone } from './components/Dropzone'
 import { useMediaQueryContext } from '../../contexts'
+import * as Yup from 'yup'
+
+const validationSchema = Yup.object({
+  name: Yup.object().required('Nome é obrigatório'),
+  displayName: Yup.string().required('Nome de usuário é obrigatório'),
+})
 
 const labelStyle = {
   label: {
@@ -103,7 +105,7 @@ export function Profile() {
       console.log(values)
       db.collection('users')
         .doc(id)
-        .update(values)
+        .update({ ...values, age: Number(values.age) })
         .then(() => {
           successSaving()
           setUser(values)
@@ -137,7 +139,11 @@ export function Profile() {
       <Spinner size="xl" />
     </Center>
   ) : (
-    <Formik onSubmit={handleSubmit} initialValues={user}>
+    <Formik
+      onSubmit={handleSubmit}
+      validationSchema={validationSchema}
+      initialValues={user}
+    >
       {({ isSubmitting }) => (
         <Flex justifyContent="center" width="100%" overflowY="scroll">
           <Box paddingY="6" maxWidth="600px">
@@ -152,6 +158,7 @@ export function Profile() {
                 />
                 <InputControl
                   sx={labelStyle}
+                  isRequired
                   name="displayName"
                   label="Nome de usuário"
                 />
@@ -207,7 +214,21 @@ export function Profile() {
                   helperText="(Ele/Dele; Ela/Dela; Eles/Deles)"
                   label="Pronome"
                 />
-                <NumberInputControl sx={labelStyle} name="age" label="Idade" />
+                <SelectControl
+                  sx={labelStyle}
+                  name="age"
+                  label="Idade"
+                  selectProps={{
+                    placeholder: 'Selecione uma idade',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {Array.from({ length: 120 }, (_, index) => (
+                    <option key={index} value={index + 1}>
+                      {index + 1}
+                    </option>
+                  ))}
+                </SelectControl>
               </Stack>
               <Stack direction="row" width="100%" paddingY="6">
                 <Button

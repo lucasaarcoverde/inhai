@@ -47,6 +47,11 @@ export interface Rating {
 
 export interface RatedPlace extends HereItem {
   ratings: Rating[]
+  positiveRating: number
+  negativeRating: number
+  totalRatings: number
+  averageRating: number
+  ratingsQty: number
 }
 
 const validationSchema = Yup.object({
@@ -108,8 +113,8 @@ const RatingsPage = ({
   const handleSubmit = useCallback(
     (values: Rating, actions: FormikHelpers<Rating>) => {
       const { place, ...rating } = values
-      const { id: userId = 'anonymous' } = user ?? {}
       const db = firebase.firestore()
+      const friendly = Number(rating.friendly)
 
       db.collection('places')
         .where('position', '==', values.place.position)
@@ -117,47 +122,81 @@ const RatingsPage = ({
         .then((snap) => {
           const [doc] = snap.docs
           if (doc && doc.exists) {
-            const { id, ratings = [] } = doc.data() as RatedPlace
-
-            const positiveRating = ratings.filter(
-              (rating) => rating.friendly > 3
-            ).length
+            const {
+              id,
+              positiveRating = 0,
+              negativeRating = 0,
+              totalRatings = 0,
+              ratingsQty = 0,
+            } = doc.data() as RatedPlace
 
             db.collection('places')
               .doc(id)
               .update({
-                ratings: [...ratings, { ...rating, placeId: id, userId, user }],
-                positiveRating,
+                positiveRating:
+                  friendly > 3 ? positiveRating + 1 : positiveRating,
+                negativeRating:
+                  friendly < 3 ? negativeRating + 1 : negativeRating,
+                totalRatings: totalRatings + friendly,
+                averageRating: (totalRatings + friendly) / (ratingsQty + 1),
+                ratingsQty: ratingsQty + 1,
               })
-              .then(() => {
-                actions.resetForm()
-                toastSuccess()
-              })
-              .catch(() => toastError())
-              .finally(() => {
-                actions.setSubmitting(false)
-              })
-          } else {
+
             const uuid = v4()
-            db.collection('places')
+
+            db.collection('ratings')
               .doc(uuid)
               .set({
-                ...place,
-                ratings: [{ ...rating, placeId: uuid, userId, user }],
+                ...rating,
+                placeId: id,
+                friendly,
+                user,
                 id: uuid,
-                positiveRating: rating.friendly > 3 ? 1 : 0,
+                timestamp: firebase.firestore.Timestamp.fromDate(new Date()),
+              })
+          } else {
+            const placeId = v4()
+
+            db.collection('places')
+              .doc(placeId)
+              .set({
+                ...place,
+                id: placeId,
+                positiveRating: friendly > 3 ? 1 : 0,
+                negativeRating: friendly < 3 ? 1 : 0,
+                totalRatings: friendly,
+                averageRating: friendly,
+                ratingsQty: 1,
+                timestamp: firebase.firestore.Timestamp.fromDate(new Date()),
               })
               .then(() => {
-                actions.resetForm()
-                toastSuccess()
-              })
-              .catch(() => {
-                toastError()
-              })
-              .finally(() => {
-                actions.setSubmitting(false)
+                const ratingId = v4()
+
+                db.collection('ratings')
+                  .doc(ratingId)
+                  .set({
+                    ...rating,
+                    placeId,
+                    friendly,
+                    user,
+                    id: ratingId,
+                    timestamp: firebase.firestore.Timestamp.fromDate(
+                      new Date()
+                    ),
+                  })
               })
           }
+        })
+        .then(() => {
+          actions.resetForm()
+          toastSuccess()
+        })
+        .catch((e) => {
+          console.log(e)
+          toastError()
+        })
+        .finally(() => {
+          actions.setSubmitting(false)
         })
     },
     [user, firebase]

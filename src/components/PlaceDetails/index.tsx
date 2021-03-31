@@ -17,13 +17,17 @@ import {
   IconButton,
   HStack,
   Divider,
+  Flex,
+  Icon,
+  Skeleton,
 } from '@chakra-ui/react'
 import { SiTwitter, SiFacebook } from 'react-icons/si'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useMediaQueryContext } from '../../contexts'
-import { RatedPlace } from '../../templates/RatingsPage'
+import { RatedPlace, Rating } from '../../templates/RatingsPage'
 import { CommentList } from './components/CommentList'
-
+import { RiStarSFill } from 'react-icons/ri'
+import { useAuth } from '../../contexts/firebase'
 export interface PlaceDetailsProps {
   item: RatedPlace
   isDetailsOpen: boolean
@@ -32,8 +36,36 @@ export interface PlaceDetailsProps {
 
 export function PlaceDetails(props: PlaceDetailsProps) {
   const { isDetailsOpen, onCloseDetails, item } = props
+  const [ratings, setRatings] = useState([] as Rating[])
+  const [loading, setLoading] = useState(true)
+  const { firebase } = useAuth()
+  const { title = '', address, categories, contacts, averageRating } = item
 
-  const { title = '', address, categories, contacts, ratings = [] } = item
+  useEffect(() => {
+    if (!item.id) return
+    setLoading(true)
+    console.log(loading)
+    const db = firebase.firestore()
+    db.collection('ratings')
+      .where('placeId', '==', item.id)
+      .limit(50)
+      .get()
+      .then((snap) => {
+        const docs = snap.docs
+        const ratings =
+          docs.map((doc) => {
+            if (!doc.exists) return
+
+            return doc.data() as Rating
+          }) ?? []
+
+        setRatings(ratings as Rating[])
+      })
+      .finally(() => {
+        setTimeout(() => setLoading(false), 100)
+      })
+      .catch((e) => console.log(e))
+  }, [item])
 
   const positiveRatings = useMemo(
     () => ratings.filter((rating) => rating.friendly >= 3 && rating.comment),
@@ -65,9 +97,19 @@ export function PlaceDetails(props: PlaceDetailsProps) {
         <ModalBody paddingY="0">
           <Stack spacing="3">
             <Stack spacing="2">
-              <Text fontWeight="bold" fontSize="sm">
-                Informações do Local
-              </Text>
+              <Flex align="center" justifyContent="space-between">
+                <Text fontWeight="bold" fontSize="sm">
+                  Informações do Local
+                </Text>
+                {averageRating && (
+                  <Stack align="center" direction="row" spacing={1}>
+                    <Text fontSize="xs" fontWeight="sem">
+                      {averageRating.toFixed(2)}
+                    </Text>
+                    <Icon as={RiStarSFill} boxSize="4" />
+                  </Stack>
+                )}
+              </Flex>
               <Divider />
               <Stack spacing="2">
                 <Text fontSize="sm">{label}</Text>
@@ -113,14 +155,23 @@ export function PlaceDetails(props: PlaceDetailsProps) {
                 </HStack>
               </Stack>
             </Stack>
-            {positiveRatings.length > 0 && (
+            {loading ? (
               <Stack spacing="2">
-                <Text fontWeight="bold" fontSize="sm">
-                  Comentários
-                </Text>
-                <Divider />
-                <CommentList ratings={positiveRatings} />
+                <Skeleton height="14px" width="30%" />
+
+                <Skeleton height="14px" width="100%" />
+                <Skeleton height="14px" width="100%" />
               </Stack>
+            ) : (
+              positiveRatings.length > 0 && (
+                <Stack spacing="2">
+                  <Text fontWeight="bold" fontSize="sm">
+                    Comentárioss
+                  </Text>
+                  <Divider />
+                  <CommentList ratings={positiveRatings} />
+                </Stack>
+              )
             )}
           </Stack>
         </ModalBody>

@@ -39,7 +39,7 @@ const MapPage = ({
     const db = firebase.firestore()
 
     db.collection('places')
-      .where('positiveRating', '>=', 3)
+      .where('averageRating', '>=', 3.5)
       .get()
       .then((snap) => {
         const docs = snap.docs
@@ -50,7 +50,6 @@ const MapPage = ({
             return doc.data() as HereItem
           }) ?? []
 
-        console.log('map items', mapItems)
         setItems(mapItems as HereItem[])
       })
   }, [items])

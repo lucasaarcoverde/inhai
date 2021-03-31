@@ -24,7 +24,6 @@ export function Search(props: SearchProps) {
     }
   }, [queryValue])
 
-  console.log(items)
   return (
     <MobileSearch
       {...props}

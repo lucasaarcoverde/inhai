@@ -145,8 +145,6 @@ export const FirebaseProvider: React.FC = ({ children }) => {
           .limit(1)
           .get()
           .then((res) => {
-            console.log('res', res.empty)
-
             if (!res.empty) {
               const [doc] = res.docs
 
@@ -156,7 +154,6 @@ export const FirebaseProvider: React.FC = ({ children }) => {
                 onSetUser(userDb)
               }
             } else {
-              console.log('eyes eyes')
               const uuid = v4()
               const userDb = {
                 name: authUser.displayName,
