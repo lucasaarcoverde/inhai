@@ -1,18 +1,10 @@
 import * as React from 'react'
-import {
-  Center,
-  ChakraProvider,
-  extendTheme,
-  Heading,
-  Stack,
-  Text,
-  Link,
-  Box,
-} from '@chakra-ui/react'
-import theme from '../theme'
+import { Center, Heading, Stack, Text, Link, Box } from '@chakra-ui/react'
+
 import { graphql, Link as GatsbyLink, useStaticQuery } from 'gatsby'
 import Img from 'gatsby-image'
 import { RouteComponentProps } from '@reach/router'
+import { Fragment } from 'react'
 
 const NotFound = ({
   children,
@@ -32,7 +24,7 @@ const NotFound = ({
   `)
 
   return (
-    <ChakraProvider theme={extendTheme(theme)}>
+    <Fragment>
       {children}
       <Center height="100vh" maxHeight="-webkit-fill-available">
         <Stack width="100%" spacing="6">
@@ -63,7 +55,7 @@ const NotFound = ({
           </Center>
         </Stack>
       </Center>
-    </ChakraProvider>
+    </Fragment>
   )
 }
 

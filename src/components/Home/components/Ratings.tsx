@@ -4,9 +4,9 @@ import { graphql, useStaticQuery } from 'gatsby'
 import Img from 'gatsby-image'
 import { Link } from 'gatsby'
 
-import { Card } from './Card'
+import { Card, CardProps } from './Card'
 
-export function Ratings() {
+export function Ratings(props: Omit<CardProps, 'children'>) {
   const review = useStaticQuery(graphql`
     query {
       file(relativePath: { eq: "location-review2.png" }) {
@@ -22,7 +22,7 @@ export function Ratings() {
   `)
 
   return (
-    <Card label="Avalie um local.">
+    <Card {...props}>
       <LinkOverlay as={Link} to="/app/ratings">
         <Box width="100%">
           <Img fluid={review.file.childImageSharp.fluid} alt="Ratings image" />

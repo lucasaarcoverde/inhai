@@ -48,7 +48,6 @@ export function ProfileDropzone(props: Props) {
       justifyContent="center"
       direction="column"
       align="center"
-      sx={{ outline: 'none' }}
       cursor="pointer"
       {...getRootProps()}
     >
