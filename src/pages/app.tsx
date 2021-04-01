@@ -1,13 +1,11 @@
 import React from 'react'
 import { Router, Redirect } from '@reach/router'
 import MapPage from '../templates/MapPage'
-import NotificationsPage from '../templates/NotificationsPage'
 import RatingsPage from '../templates/RatingsPage'
-import SettingsPage from '../templates/SettingsPage'
 import { FirebaseProvider, MediaQueryProvider } from '../contexts'
 import { useMediaQuery } from '@chakra-ui/react'
 import ProfilePage from '../templates/ProfilePage'
-import { PageWrapper } from '../components'
+import { Seo } from '../components'
 import LoadingPage from '../templates/LoadingPage'
 import HomePage from '../templates/Home'
 import AboutUsPage from '../templates/AboutUsPage'
@@ -19,17 +17,14 @@ const App = () => {
   return (
     <FirebaseProvider>
       <MediaQueryProvider mobile={mobile} desktop={desktop}>
-        <title>App</title>
-        <PageWrapper />
+        <Seo />
         <Router>
           <HomePage path="/app/" />
           <AboutUsPage path="/app/about-us" />
           <LoadingPage path="/app/loading" />
           <MapPage path="/app/map" />
-          <NotificationsPage path="/app/notifications" />
           <RatingsPage path="/app/ratings" />
           <ProfilePage path="/app/profile" />
-          <SettingsPage path="/app/settings" />
           <Redirect noThrow from="*" to="/404" />
         </Router>
       </MediaQueryProvider>

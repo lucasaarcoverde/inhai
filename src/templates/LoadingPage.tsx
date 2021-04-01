@@ -2,20 +2,18 @@ import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
 import {
   Center,
-  ChakraProvider,
   Flex,
   Heading,
   Progress,
   Text,
   Stack,
   Box,
-  extendTheme,
 } from '@chakra-ui/react'
 
 import { useAuth } from '../contexts/firebase'
 import { navigate, useStaticQuery, graphql } from 'gatsby'
 import Img from 'gatsby-image'
-import theme from '../theme'
+import { Fragment } from 'react'
 
 const LoadingPage = ({
   children,
@@ -36,7 +34,7 @@ const LoadingPage = ({
     }
   `)
 
-  const { authToken } = useAuth()
+  const { firebase } = useAuth()
 
   React.useEffect(() => {
     if (!loading) {
@@ -46,16 +44,20 @@ const LoadingPage = ({
 
   React.useEffect(() => {
     setTimeout(() => setLoading(false), 15000)
-    if (authToken) setTimeout(() => navigate('/app'), 1500)
+
+    firebase.auth().onAuthStateChanged((authUser) => {
+      if (authUser) {
+        setTimeout(() => navigate('/app'), 1500)
+      }
+    })
 
     return
-  }, [authToken])
+  }, [firebase])
 
   return (
-    <ChakraProvider theme={extendTheme(theme)}>
+    <Fragment>
       <Flex direction="column" height="100vh" maxH="-webkit-fill-available">
         <Progress size="xs" colorScheme="teal" isIndeterminate />
-        <title>Loading Page</title>
         {children}
         <Center height="100%">
           <Stack spacing={6} width="100%">
@@ -76,7 +78,7 @@ const LoadingPage = ({
           </Stack>
         </Center>
       </Flex>
-    </ChakraProvider>
+    </Fragment>
   )
 }
 

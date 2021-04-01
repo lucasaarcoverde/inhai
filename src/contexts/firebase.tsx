@@ -39,9 +39,7 @@ export interface User {
 export interface FirebaseContextData {
   firebase: typeof firebase
   user?: User
-  authToken?: string
   loading?: boolean
-  setAuthToken: (authToken: string) => void
   setLoading: (loading: boolean) => void
   setUser: (user: User) => void
   logout: () => void
@@ -53,7 +51,6 @@ export interface FirebaseContextData {
 
 export const FirebaseContext = createContext<FirebaseContextData>({
   firebase,
-  setAuthToken: () => {},
   setLoading: () => {},
   setUser: () => {},
   logout: () => {},
@@ -70,12 +67,7 @@ export function useAuth() {
 }
 
 export const FirebaseProvider: React.FC = ({ children }) => {
-  const authToken =
-    typeof window === 'object'
-      ? window.localStorage.getItem('authToken')
-      : undefined
-
-  const initialState = { loading: false, authToken: authToken ?? undefined }
+  const initialState = { loading: false }
 
   const [state, dispatch] = useReducer(authReducer, initialState)
 
@@ -84,19 +76,25 @@ export const FirebaseProvider: React.FC = ({ children }) => {
       .auth()
       .signOut()
       .then(() => {
-        window.localStorage.removeItem('authToken')
         navigate('/login')
       })
   }, [])
 
   const loginWithGoogle = useCallback(() => {
-    const googleProvider = new firebase.auth.GoogleAuthProvider()
-
-    return firebase
+    firebase
       .auth()
-      .signInWithRedirect(googleProvider)
-      .catch(() => {
-        navigate('/login')
+      .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(() => {
+        const googleProvider = new firebase.auth.GoogleAuthProvider()
+        return firebase
+          .auth()
+          .signInWithRedirect(googleProvider)
+          .catch(() => {
+            navigate('/login')
+          })
+          .then(() => {
+            navigate('/app/loading')
+          })
       })
   }, [firebase])
 
@@ -108,11 +106,6 @@ export const FirebaseProvider: React.FC = ({ children }) => {
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig)
   }
-
-  const onSetAuthToken = useCallback((authToken: string) => {
-    dispatch({ type: 'set_authToken', authToken })
-    localStorage.setItem('authToken', authToken)
-  }, [])
 
   const onSetUser = useCallback((user: User) => {
     dispatch({ type: 'set_user', user })
@@ -129,24 +122,12 @@ export const FirebaseProvider: React.FC = ({ children }) => {
   }, [state.user])
 
   useEffect(() => {
-    if (typeof window === 'object' && !authToken) {
-      const token = window.localStorage.getItem('authToken')
-
-      if (token) {
-        onSetAuthToken(token)
-      }
-    }
-  }, [authToken])
-
-  useEffect(() => {
     if (state.user) return
 
     const db = firebase.firestore()
 
     const unsub = firebase.auth().onAuthStateChanged((authUser) => {
       if (authUser) {
-        const { refreshToken } = authUser
-        onSetAuthToken(refreshToken)
         usersRef(db)
           .where('email', '==', authUser.email)
           .limit(1)
@@ -175,20 +156,20 @@ export const FirebaseProvider: React.FC = ({ children }) => {
             }
           })
           .catch((e) => console.log(e))
+      } else {
+        console.log('not logged')
       }
     })
 
     return unsub
-  }, [state.user, usersRef, onSetAuthToken, firebase])
+  }, [state.user, usersRef, firebase])
 
   return (
     <FirebaseContext.Provider
       value={{
         firebase,
-        authToken: state.authToken,
         user: userAuthenticated,
         loading: state.loading,
-        setAuthToken: onSetAuthToken,
         setLoading: onSetLoading,
         setUser: onSetUser,
         usersRef,
@@ -212,9 +193,6 @@ function authReducer(
     case 'set_user': {
       return { ...state, user: action.user }
     }
-    case 'set_authToken': {
-      return { ...state, authToken: action.authToken }
-    }
     default:
       throw new Error('Auth Reducer: Unsupported action type')
   }
@@ -223,7 +201,6 @@ function authReducer(
 export type AuthContextState = {
   loading?: boolean
   user?: User
-  authToken?: string
 }
 
 type Action =
@@ -232,4 +209,3 @@ type Action =
       loading: boolean
     }
   | { type: 'set_user'; user: User }
-  | { type: 'set_authToken'; authToken: string }

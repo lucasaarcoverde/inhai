@@ -3,10 +3,10 @@ import React from 'react'
 import { graphql, Link, useStaticQuery } from 'gatsby'
 import Img from 'gatsby-image'
 
-import { Card } from './Card'
+import { Card, CardProps } from './Card'
 import { Box, LinkOverlay } from '@chakra-ui/react'
 
-export function Search() {
+export function Search(props: Omit<CardProps, 'children'>) {
   const search = useStaticQuery(graphql`
     query {
       file(relativePath: { eq: "location-search2.png" }) {
@@ -22,7 +22,7 @@ export function Search() {
   `)
 
   return (
-    <Card label="Visualize os locais mais bem avaliados como LGBTQI+ friendly.">
+    <Card {...props}>
       <LinkOverlay as={Link} to="/app/map">
         <Box width="100%">
           <Img fluid={search.file.childImageSharp.fluid} alt="Search image" />

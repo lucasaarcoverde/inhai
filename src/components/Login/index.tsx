@@ -46,29 +46,37 @@ export const Login = () => {
   const [passwordShown, setPasswordShown] = useState(false)
   const [signup, setSignup] = useState(false)
   const [error, setError] = useState(false)
-  const { firebase, loginWithGoogle, authToken } = useAuth()
+  const { firebase, loginWithGoogle } = useAuth()
 
   useEffect(() => {
-    if (typeof window === 'object' && !authToken) {
-      window.localStorage.removeItem('authToken')
-      return
-    }
-    navigate('/app')
-  }, [authToken])
+    firebase.auth().onAuthStateChanged((authUser) => {
+      if (authUser) {
+        navigate('/app')
+      }
+    })
+  }, [firebase])
 
   const handleEmailLogin = useCallback(async (values: Values) => {
     try {
       const { email, password } = values
-      const { user } = await firebase
+      await firebase
         .auth()
-        .signInWithEmailAndPassword(email, password)
+        .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => {
+          const user = firebase
+            .auth()
+            .signInWithEmailAndPassword(email, password)
 
-      if (user) {
-        setError(false)
-        navigate('/app/loading')
-      } else {
-        setError(true)
-      }
+          if (user) {
+            setError(false)
+            navigate('/app/loading')
+          } else {
+            setError(true)
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     } catch (e) {
       console.log(e)
       setError(true)
@@ -85,7 +93,10 @@ export const Login = () => {
     try {
       const { user } = await firebase
         .auth()
-        .createUserWithEmailAndPassword(email, password)
+        .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => {
+          return firebase.auth().createUserWithEmailAndPassword(email, password)
+        })
 
       if (user) {
         const uuid = v4()

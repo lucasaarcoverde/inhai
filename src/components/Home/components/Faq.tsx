@@ -3,9 +3,9 @@ import { Box, LinkOverlay } from '@chakra-ui/react'
 import { graphql, useStaticQuery, Link } from 'gatsby'
 import Img from 'gatsby-image'
 
-import { Card } from './Card'
+import { Card, CardProps } from './Card'
 
-export function Faq() {
+export function Faq(props: Omit<CardProps, 'children'>) {
   const faq = useStaticQuery(graphql`
     query {
       file(relativePath: { eq: "faq.png" }) {
@@ -21,7 +21,7 @@ export function Faq() {
   `)
 
   return (
-    <Card label="Quem somos.">
+    <Card {...props}>
       <LinkOverlay as={Link} to="/app/about-us">
         <Box width="100%">
           <Img fluid={faq.file.childImageSharp.fluid} alt="Profile image" />
