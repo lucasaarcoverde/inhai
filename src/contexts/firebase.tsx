@@ -128,7 +128,6 @@ export const FirebaseProvider: React.FC = ({ children }) => {
 
     const unsub = firebase.auth().onAuthStateChanged((authUser) => {
       if (authUser) {
-        const { refreshToken } = authUser
         usersRef(db)
           .where('email', '==', authUser.email)
           .limit(1)
