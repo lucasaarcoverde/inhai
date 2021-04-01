@@ -1,4 +1,4 @@
-import { Center, ChakraProvider, extendTheme } from '@chakra-ui/react'
+import { Center } from '@chakra-ui/react'
 import * as React from 'react'
 
 import { Login, Seo } from '../components'

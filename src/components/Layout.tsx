@@ -38,7 +38,6 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
             paddingTop="56px"
             width="100%"
             height="100%"
-            justifyContent="center"
           >
             {children}
           </Flex>

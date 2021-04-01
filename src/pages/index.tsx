@@ -14,7 +14,7 @@ const IndexPage = () => {
   const [mobile] = useMediaQuery('(max-width: 720px)')
 
   React.useEffect(() => {
-    navigate('/app/')
+    navigate('/app')
   }, [])
 
   return (

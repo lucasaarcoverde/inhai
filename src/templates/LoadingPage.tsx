@@ -34,7 +34,7 @@ const LoadingPage = ({
     }
   `)
 
-  const { authToken } = useAuth()
+  const { firebase } = useAuth()
 
   React.useEffect(() => {
     if (!loading) {
@@ -44,10 +44,15 @@ const LoadingPage = ({
 
   React.useEffect(() => {
     setTimeout(() => setLoading(false), 15000)
-    if (authToken) setTimeout(() => navigate('/app'), 1500)
+
+    firebase.auth().onAuthStateChanged((authUser) => {
+      if (authUser) {
+        setTimeout(() => navigate('/app'), 1500)
+      }
+    })
 
     return
-  }, [authToken])
+  }, [firebase])
 
   return (
     <Fragment>
