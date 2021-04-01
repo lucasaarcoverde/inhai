@@ -11,7 +11,6 @@ import {
   Icon,
   Center,
   Box,
-  List,
   OrderedList,
   ListItem,
 } from '@chakra-ui/react'
@@ -60,9 +59,8 @@ const AboutUsPage = ({
             curso e tem como dois principais objetivos:
             <OrderedList marginTop="2">
               <ListItem>
-                Tornar transparente para a mesmos sem nenhum medo ou receio.
-                comunidade LGBTQI+ que há sim locais em que podemos nos sentir
-                nós.
+                Tornar transparente para a comunidade LGBTQI+ que há sim locais
+                em que podemos nos sentir nós mesmos sem nenhum medo ou receio..
               </ListItem>
               <ListItem>
                 Criar um ambiente colaborativo em que a gente pode avaliar e

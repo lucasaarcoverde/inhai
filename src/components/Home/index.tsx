@@ -2,7 +2,7 @@ export * from './components'
 
 import React from 'react'
 
-import { Stack } from '@chakra-ui/react'
+import { Box, Stack } from '@chakra-ui/react'
 import { Profile, Ratings, Search, Faq } from './components'
 
 export function Home() {
@@ -11,7 +11,9 @@ export function Home() {
       <Search label="Visualize os locais mais bem avaliados como LGBTQI+ friendly" />
       <Ratings label="Avalie um local" />
       <Profile label="Edite seu perfil ou visualize suas informações" />
-      <Faq label="Quem somos" marginBottom="6" />
+      <Box paddingBottom="6" width="100%">
+        <Faq label="Quem somos" />
+      </Box>
     </Stack>
   )
 }

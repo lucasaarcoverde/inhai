@@ -88,7 +88,7 @@ export function MobileSearch(
             <Input
               {...getInputProps()}
               value={searchValue}
-              placeholder="Buscar local LGBT-Friendly"
+              placeholder="Buscar local LGBTQI+ friendly"
             />
           </Box>
           <Stack spacing="0">
@@ -105,6 +105,9 @@ export function MobileSearch(
               <Badge colorScheme="purple">Bar ou Pub</Badge>
               <Badge colorScheme="yellow">Academia</Badge>
               <Badge colorScheme="blue">Salão de Beleza</Badge>
+              <Badge colorScheme="red">Consultório médico</Badge>
+              <Badge colorScheme="green">Padaria</Badge>
+              <Badge colorScheme="purple">Comércio</Badge>
             </Stack>
             <Divider />
           </Stack>
