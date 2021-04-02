@@ -7,17 +7,14 @@ import {
   Stack,
   StackDivider,
   Text,
-  Link,
-  Icon,
   Center,
   Box,
   OrderedList,
   ListItem,
 } from '@chakra-ui/react'
-import { AiFillLinkedin, AiFillMail, AiFillGithub } from 'react-icons/ai'
 import Img from 'gatsby-image'
 
-import { Layout } from '../components'
+import { DefaultFooter, Layout } from '../components'
 import { ReactNode } from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
 
@@ -70,36 +67,13 @@ const AboutUsPage = ({
           </FaqSection>
           <FaqSection title="Locais LGBTQI+ friendly">Vem aí...</FaqSection>
         </Stack>
-        <Center width="100%">
+        <Center width="100%" paddingBottom="72px">
           <Box width="100%" maxWidth="400px">
             <Img fluid={data.file.childImageSharp.fluid} alt="Loading image" />
           </Box>
         </Center>
         <Spacer />
-        <Flex padding="6" justifyContent="center" align="center" width="100%">
-          <Stack direction="row" spacing="3" color="gray.400">
-            <Link
-              href="mailto: lucasaarcoverde@gmail.com"
-              fontWeight="bold"
-              target="_blank"
-            >
-              <Icon boxSize="6" as={AiFillMail} />
-            </Link>
-            <Link
-              href="https://github.com/lucasaarcoverde"
-              fontWeight="bold"
-              target="_blank"
-            >
-              <Icon boxSize="6" as={AiFillGithub} />
-            </Link>
-            <Link
-              href="https://www.linkedin.com/in/lucasaarcoverde/"
-              target="_blank"
-            >
-              <Icon boxSize="6" as={AiFillLinkedin} />
-            </Link>
-          </Stack>
-        </Flex>
+        <DefaultFooter />
       </Flex>
     </Layout>
   )

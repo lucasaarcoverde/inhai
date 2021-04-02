@@ -3,6 +3,8 @@ import { RouteComponentProps } from '@reach/router'
 
 import { Layout } from '../components/Layout'
 import { Profile } from '../components/Profile'
+import { Footer } from '../components'
+import { Link, Text } from '@chakra-ui/react'
 
 const ProfilePage = ({
   children,
@@ -11,6 +13,18 @@ const ProfilePage = ({
     <Layout>
       <Profile justifyContent="center" />
       {children}
+      <Footer justifyContent="center" align="center">
+        <Text fontSize="xs" fontWeight="normal">
+          Não se sentiu representade?{' '}
+          <Link
+            href="mailto: inhaiapp@gmail.com"
+            fontWeight="bold"
+            color="blue.600"
+          >
+            Contate-nos
+          </Link>
+        </Text>
+      </Footer>
     </Layout>
   )
 }

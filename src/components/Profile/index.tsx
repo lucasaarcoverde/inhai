@@ -231,7 +231,12 @@ export function Profile(props: FlexProps) {
                   ))}
                 </SelectControl>
               </Stack>
-              <Stack direction="row" width="100%" paddingY="6">
+              <Stack
+                direction="row"
+                width="100%"
+                paddingTop="6"
+                paddingBottom="72px"
+              >
                 <Button
                   onClick={onOpen}
                   colorScheme="red"

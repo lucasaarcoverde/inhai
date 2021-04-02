@@ -1,5 +1,13 @@
 import { SearchIcon } from '@chakra-ui/icons'
-import { Avatar, Spacer, Icon, Stack, Box, Flex } from '@chakra-ui/react'
+import {
+  Avatar,
+  Spacer,
+  Icon,
+  Stack,
+  Box,
+  Flex,
+  StackProps,
+} from '@chakra-ui/react'
 import React from 'react'
 import { AiOutlineStar } from 'react-icons/ai'
 // import { IoMdNotificationsOutline } from 'react-icons/io'
@@ -62,19 +70,19 @@ export function DesktopSidebar(props: DesktopSidebarProps) {
           Sair
         </NavButton>
         <Spacer />
-        <ProfileCard />
+        <ProfileCard paddingBottom="72px" />
       </Stack>
     </Flex>
   )
 }
 
-function ProfileCard() {
+function ProfileCard(props: StackProps) {
   const { user } = useAuth()
 
   const { name, photo, displayName } = user as User
 
   return (
-    <Stack direction="row" padding="2" marginBottom="6">
+    <Stack direction="row" paddingX="2" {...props}>
       <Avatar size="md" bg="transparent" name={name} src={photo} />
       <Flex direction="column" align="flex-start" justify="center">
         {name && (

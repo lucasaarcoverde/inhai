@@ -6,9 +6,13 @@ import PrivateRoute from './PrivateRoute'
 import { Topbar } from './Topbar'
 import { useMediaQueryContext } from '../contexts'
 import 'focus-visible/dist/focus-visible'
+import { DefaultFooter } from './Footer'
+import { useLocation } from '@reach/router'
 
 export function Layout({ children, onOpenSearch }: LayoutProps) {
   const { desktop } = useMediaQueryContext()
+  const { pathname } = useLocation()
+
   return (
     <PrivateRoute path="/login">
       <Stack
@@ -29,6 +33,7 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
           >
             <Sidebar />
             {children}
+            {!pathname.includes('profile') && <DefaultFooter />}
           </Grid>
         ) : (
           <Flex

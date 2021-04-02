@@ -1,5 +1,7 @@
 import { Box, BoxProps, Fade, Skeleton, useColorMode } from '@chakra-ui/react'
+import { useLocation } from '@reach/router'
 import React, { useEffect, useState } from 'react'
+import { useMediaQueryContext } from '../../contexts'
 import { useMap } from '../../contexts/map'
 import { HereItem } from '../../hooks/useHere'
 import { RatedPlace } from '../../templates/RatingsPage'
@@ -144,15 +146,36 @@ export const Map = ({
     }
   }, [])
 
+  const { pathname } = useLocation()
+  const { desktop } = useMediaQueryContext()
+
   return (
-    <Box width="100%" maxHeight="-webkit-fill-available" {...boxProps}>
+    <Box
+      position="relative"
+      width="100%"
+      maxHeight="-webkit-fill-available"
+      {...boxProps}
+    >
       {loading && (
-        <Box height="100%" width="100%" padding={1}>
-          <Skeleton height="100%" width="100%" />
+        <Box
+          height={pathname.includes('ratings') ? 'calc(40vh - 56px)' : '100%'}
+          width="100%"
+          padding={1}
+        >
+          <Skeleton width="100%" height="100%" />
         </Box>
       )}
       <Fade in={mapOpen}>
-        <Box ref={mapRef} height="95vh" width="100%" {...boxProps} />
+        <Box
+          position="absolute"
+          paddingTop="56px"
+          top="-56px"
+          ref={mapRef}
+          height="100vh"
+          width="100%"
+          paddingBottom={desktop ? '48px' : '0'}
+          {...boxProps}
+        />
       </Fade>
     </Box>
   )
