@@ -223,13 +223,15 @@ const RatingsPage = ({
     <MapProvider>
       <Layout>
         <Flex direction="column" width="100%" height="100%">
-          <Map
-            height="40vh"
-            paddingTop="0px"
-            onOpenDetails={onOpenDetails}
-            searchedItem={searchedItem}
-            setCurrentItem={setCurrentItem}
-          />
+          <Box height="calc(40vh - 56px)">
+            <Map
+              height="40vh"
+              paddingTop="0px"
+              onOpenDetails={onOpenDetails}
+              searchedItem={searchedItem}
+              setCurrentItem={setCurrentItem}
+            />
+          </Box>
           <Box>
             <Formik
               enableReinitialize
