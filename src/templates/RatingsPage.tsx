@@ -32,26 +32,30 @@ import {
   SelectControl,
   TextareaControl,
 } from 'formik-chakra-ui'
+import useFirebase from '../hooks/useFirebase'
 
 export interface Rating {
   comment: string
   safePlace: boolean
   frequentedBy: boolean
   friendly: number
-  place: HereItem
   userId?: string
-  user?: User
+  user?: User | null
   placeId?: string
   anonymous?: boolean
+  id: string
 }
 
 export interface RatedPlace extends HereItem {
-  ratings: Rating[]
   positiveRating: number
   negativeRating: number
   totalRatings: number
   averageRating: number
   ratingsQty: number
+}
+
+export interface RatingForm extends Rating {
+  place: RatedPlace
 }
 
 const validationSchema = Yup.object({
@@ -60,6 +64,12 @@ const validationSchema = Yup.object({
     .required('Este campo é obrigatório.')
     .typeError('Este campo é obrigatório.')
     .min(1, 'Você precisa selecionar uma opcão.'),
+  comment: Yup.string().when('friendly', {
+    is: (friendly: number) => friendly < 3,
+    then: Yup.string().required(
+      'Comentário é obrigatório em caso de avaliações negativas.'
+    ),
+  }),
 })
 
 const RatingsPage = ({
@@ -106,15 +116,24 @@ const RatingsPage = ({
   )
 
   const { firebase, user } = useAuth()
+  const {
+    updatePlace,
+    addRating,
+    addPlace,
+    addCity,
+    updateInfo,
+    db,
+  } = useFirebase()
+
   const [searchedItem, setSearchedItem] = useState<HereItem>({} as HereItem)
 
   const [currentItem, setCurrentItem] = useState<RatedPlace>({} as RatedPlace)
 
   const handleSubmit = useCallback(
-    (values: Rating, actions: FormikHelpers<Rating>) => {
+    (values: RatingForm, actions: FormikHelpers<RatingForm>) => {
       const { place, ...rating } = values
-      const db = firebase.firestore()
       const friendly = Number(rating.friendly)
+      console.log(place)
 
       db.collection('places')
         .where('position', '==', values.place.position)
@@ -130,76 +149,74 @@ const RatingsPage = ({
               ratingsQty = 0,
             } = doc.data() as RatedPlace
 
-            db.collection('places')
-              .doc(id)
-              .update({
-                positiveRating:
-                  friendly > 3 ? positiveRating + 1 : positiveRating,
-                negativeRating:
-                  friendly < 3 ? negativeRating + 1 : negativeRating,
-                totalRatings: totalRatings + friendly,
-                averageRating: (totalRatings + friendly) / (ratingsQty + 1),
-                ratingsQty: ratingsQty + 1,
-              })
+            updatePlace({
+              id,
+              positiveRating:
+                friendly > 3 ? positiveRating + 1 : positiveRating,
+              negativeRating:
+                friendly < 3 ? negativeRating + 1 : negativeRating,
+              totalRatings: totalRatings + friendly,
+              averageRating: (totalRatings + friendly) / (ratingsQty + 1),
+              ratingsQty: ratingsQty + 1,
+            })
 
             const uuid = v4()
-
-            db.collection('ratings')
-              .doc(uuid)
-              .set({
-                ...rating,
-                placeId: id,
-                friendly,
-                user,
-                id: uuid,
-                timestamp: firebase.firestore.Timestamp.fromDate(new Date()),
-              })
+            addRating({
+              ...rating,
+              placeId: id,
+              friendly,
+              user,
+              id: uuid,
+            })
           } else {
             const placeId = v4()
 
-            db.collection('places')
-              .doc(placeId)
-              .set({
-                ...place,
-                id: placeId,
-                positiveRating: friendly > 3 ? 1 : 0,
-                negativeRating: friendly < 3 ? 1 : 0,
-                totalRatings: friendly,
-                averageRating: friendly,
-                ratingsQty: 1,
-                timestamp: firebase.firestore.Timestamp.fromDate(new Date()),
-              })
-              .then(() => {
-                const ratingId = v4()
+            addPlace({
+              ...place,
+              id: placeId,
+              positiveRating: friendly > 3 ? 1 : 0,
+              negativeRating: friendly < 3 ? 1 : 0,
+              totalRatings: friendly,
+              averageRating: friendly,
+              ratingsQty: 1,
+            })?.then(() => {
+              const ratingId = v4()
 
-                db.collection('ratings')
-                  .doc(ratingId)
-                  .set({
-                    ...rating,
-                    placeId,
-                    friendly,
-                    user,
-                    id: ratingId,
-                    timestamp: firebase.firestore.Timestamp.fromDate(
-                      new Date()
-                    ),
-                  })
+              updateInfo({
+                places: firebase.firestore.FieldValue.increment(1),
               })
+
+              db.collection('cities')
+                .doc(place.address.city)
+                .get()
+                .then((doc) => {
+                  if (!doc.exists) {
+                    updateInfo({
+                      cities: firebase.firestore.FieldValue.increment(1),
+                    })
+                    addCity(place.address.city)
+                  }
+                })
+
+              addRating({ ...rating, placeId, friendly, user, id: ratingId })
+            })
           }
         })
         .then(() => {
           actions.resetForm()
           toastSuccess()
+          updateInfo({
+            ratings: firebase.firestore.FieldValue.increment(1),
+          })
         })
-        .catch((e) => {
-          console.log(e)
+        .catch(() => {
           toastError()
         })
         .finally(() => {
           actions.setSubmitting(false)
         })
     },
-    [user, firebase]
+    [user, firebase, db]
   )
 
   return (
@@ -208,6 +225,7 @@ const RatingsPage = ({
         <Flex direction="column" width="100%" height="100%">
           <Map
             height="40vh"
+            paddingTop="0px"
             onOpenDetails={onOpenDetails}
             searchedItem={searchedItem}
             setCurrentItem={setCurrentItem}
@@ -223,7 +241,8 @@ const RatingsPage = ({
                   place: currentItem,
                   friendly: 0,
                   anonymous: false,
-                } as Rating
+                  id: '',
+                } as RatingForm
               }
               onSubmit={handleSubmit}
               validationSchema={validationSchema}

@@ -23,6 +23,7 @@ import { useAuth, User } from '../../contexts/firebase'
 import { ProfileDropzone } from './components/Dropzone'
 import { useMediaQueryContext } from '../../contexts'
 import * as Yup from 'yup'
+import useFirebase from '../../hooks/useFirebase'
 
 const validationSchema = Yup.object({
   name: Yup.string().required('Nome é obrigatório'),
@@ -122,12 +123,17 @@ export function Profile(props: FlexProps) {
   const handleUserDelete = useCallback((user: User) => {
     const { id } = user
     const db = firebase.firestore()
+    const { updateInfo } = useFirebase()
 
     db.collection('users')
       .doc(id)
       .delete()
       .then(() => {
         successDeleting()
+        updateInfo({
+          users: firebase.firestore.FieldValue.increment(-1),
+        })
+
         logout()
       })
       .catch(() => {

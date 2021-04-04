@@ -88,7 +88,7 @@ export function MobileSearch(
             <Input
               {...getInputProps()}
               value={searchValue}
-              placeholder="Buscar local LGBTQI+ friendly"
+              placeholder="Buscar local"
             />
           </Box>
           <Stack spacing="0">

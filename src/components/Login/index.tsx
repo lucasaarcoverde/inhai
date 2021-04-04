@@ -28,6 +28,7 @@ import { EmailIcon, LockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { CgProfile } from 'react-icons/cg'
 import { Formik, Form, Field } from 'formik'
 import { v4 } from 'uuid'
+import useFirebase from '../../hooks/useFirebase'
 
 export type Values = { name: string; email: string; password: string }
 
@@ -47,6 +48,7 @@ export const Login = () => {
   const [signup, setSignup] = useState(false)
   const [error, setError] = useState(false)
   const { firebase, loginWithGoogle } = useAuth()
+  const { updateInfo } = useFirebase()
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((authUser) => {
@@ -109,6 +111,10 @@ export const Login = () => {
         }
 
         usersRef.doc(uuid).set(userDb)
+
+        updateInfo({
+          users: firebase.firestore.FieldValue.increment(1),
+        })
 
         setError(false)
         navigate('/app/loading')
