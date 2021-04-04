@@ -22,7 +22,7 @@ export function Map() {
 
   return (
     <>
-      <ModalHeader color="teal.500">Mapa LGBTQI+</ModalHeader>
+      <ModalHeader color="teal.500">Mapa LGBTI+</ModalHeader>
       <ModalBody>
         <Stack direction="column" spacing="2" height="100%" width="100%">
           <Box minW="100px">
@@ -30,7 +30,7 @@ export function Map() {
           </Box>
           <Text fontSize="sm" fontWeight="semibold">
             Visualize todos os locais bem avaliados pelos nossos usuários como
-            LGBTQI+ friendly.
+            LGBTI+ friendly.
           </Text>
         </Stack>
       </ModalBody>
