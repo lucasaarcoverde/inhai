@@ -9,7 +9,7 @@ import {
   StackProps,
 } from '@chakra-ui/react'
 import React from 'react'
-import { AiOutlineStar } from 'react-icons/ai'
+import { AiOutlineStar, AiOutlineInfoCircle } from 'react-icons/ai'
 
 import { RiLogoutBoxLine } from 'react-icons/ri'
 import { NavButton } from './components/NavButton'
@@ -44,7 +44,7 @@ export function DesktopSidebar(props: DesktopSidebarProps) {
           leftIcon={<SearchIcon boxSize="6" />}
           bg={pathname.includes('/app/map') ? 'gray.50' : 'whiteAlpha'}
         >
-          Mapa LGBTQI+
+          Mapa LGBTI+
         </NavButton>
         <NavButton
           size="lg"
@@ -61,6 +61,14 @@ export function DesktopSidebar(props: DesktopSidebarProps) {
           bg={pathname.includes('/app/profile') ? 'gray.50' : 'whiteAlpha'}
         >
           Perfil
+        </NavButton>
+        <NavButton
+          size="lg"
+          navigateUrl="/app/about-us"
+          leftIcon={<Icon as={AiOutlineInfoCircle} boxSize="6" />}
+          bg={pathname.includes('/app/profile') ? 'gray.50' : 'whiteAlpha'}
+        >
+          Sobre o projeto
         </NavButton>
         <NavButton
           size="lg"

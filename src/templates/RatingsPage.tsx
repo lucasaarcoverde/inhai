@@ -270,7 +270,7 @@ const RatingsPage = ({
                           },
                         }}
                         name="friendly"
-                        label="Para você, o quanto esse local é LGBTQI+ friendly?"
+                        label="Para você, o quanto esse local é LGBTI+ friendly?"
                         selectProps={{
                           placeholder: 'Selecione uma opção',
                           cursor: 'pointer',
@@ -300,7 +300,7 @@ const RatingsPage = ({
                             Me sinto seguro nesse local.
                           </CheckboxSingleControl>
                           <CheckboxSingleControl name="frequentedBy">
-                            Esse local é frequentado pela comunidade LGBTQI+.{' '}
+                            Esse local é frequentado pela comunidade LGBTI+.{' '}
                           </CheckboxSingleControl>
                         </Stack>
                       </FormControl>

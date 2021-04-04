@@ -26,7 +26,7 @@ import {
 
 export function Tutorial() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { user } = useAuth()
+  const { user, setUser } = useAuth()
   const { db } = useFirebase()
 
   const [step, setStep] = useState(0)
@@ -42,6 +42,7 @@ export function Tutorial() {
       .update({ newUser: false })
       .then(() => {
         onClose()
+        if (user) setUser({ ...user, newUser: false })
       })
   }, [user, onClose])
 

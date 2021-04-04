@@ -8,7 +8,7 @@ export const Seo = (props: SeoProps) => {
   const url = 'https://inhai.vercel.app'
 
   const description =
-    'Veja os locais mais bem avaliados como LGBTQI+ friendly e deixe sua avaliação!'
+    'Veja os locais mais bem avaliados como LGBTI+ friendly e deixe sua avaliação!'
 
   return (
     <Helmet
