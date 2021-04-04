@@ -2,7 +2,7 @@ import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
 import { useDisclosure } from '@chakra-ui/react'
 
-import { Search, Map, Layout } from '../components'
+import { Search, Map, Layout, Tutorial } from '../components'
 import { HereItem } from '../hooks/useHere'
 import { useEffect, useState } from 'react'
 import { PlaceDetails } from '../components/PlaceDetails'
@@ -76,6 +76,7 @@ const MapPage = ({
           setSearchedItem={setSearchedItem}
         />
         {children}
+        {desktop && <Tutorial />}
       </Layout>
     </MapProvider>
   )

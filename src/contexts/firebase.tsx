@@ -34,6 +34,7 @@ export interface User {
   genderIdentity?: string
   pronoun?: string
   id: string
+  newUser: boolean
 }
 
 export interface FirebaseContextData {
@@ -182,6 +183,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
                 photo: authUser.photoURL,
                 email: authUser.email,
                 id: uuid,
+                newUser: true,
                 created: firebase.firestore.Timestamp.fromDate(new Date()),
               } as User
 
