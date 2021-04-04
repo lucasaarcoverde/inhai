@@ -173,7 +173,6 @@ export const Map = ({
           ref={mapRef}
           height="100vh"
           width="100%"
-          paddingBottom={desktop ? '48px' : '0'}
           {...boxProps}
         />
       </Fade>

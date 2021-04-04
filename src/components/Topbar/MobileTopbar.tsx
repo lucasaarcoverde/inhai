@@ -65,7 +65,7 @@ export function MobileTopbar(props: TopbarProps) {
             home && (
               <IconButton
                 size="lg"
-                aria-label="Search button"
+                aria-label="Logout button"
                 icon={<Icon as={HiLogout} boxSize="6" />}
                 variant="ghost"
                 colorScheme="teal"

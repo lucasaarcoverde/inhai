@@ -10,11 +10,11 @@ import {
 } from '@chakra-ui/react'
 import React from 'react'
 import { AiOutlineStar } from 'react-icons/ai'
-// import { IoMdNotificationsOutline } from 'react-icons/io'
+
 import { RiLogoutBoxLine } from 'react-icons/ri'
 import { NavButton } from './components/NavButton'
 import { CgProfile } from 'react-icons/cg'
-import { useAuth, User } from '../../contexts/firebase'
+import { useAuth } from '../../contexts/firebase'
 import { useLocation } from '@reach/router'
 
 export interface DesktopSidebarProps {}
@@ -79,7 +79,7 @@ export function DesktopSidebar(props: DesktopSidebarProps) {
 function ProfileCard(props: StackProps) {
   const { user } = useAuth()
 
-  const { name, photo, displayName } = user as User
+  const { name, photo, displayName } = user ?? {}
 
   return (
     <Stack direction="row" paddingX="2" {...props}>

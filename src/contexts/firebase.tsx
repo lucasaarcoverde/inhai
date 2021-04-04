@@ -38,13 +38,25 @@ export interface User {
 
 export interface FirebaseContextData {
   firebase: typeof firebase
-  user?: User
+  user: User | null
   loading?: boolean
   setLoading: (loading: boolean) => void
   setUser: (user: User) => void
   logout: () => void
   loginWithGoogle: () => void
   usersRef?: (
+    db: firebase.firestore.Firestore
+  ) => firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
+  placesRef?: (
+    db: firebase.firestore.Firestore
+  ) => firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
+  ratingsRef?: (
+    db: firebase.firestore.Firestore
+  ) => firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
+  infoRef?: (
+    db: firebase.firestore.Firestore
+  ) => firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
+  citiesRef?: (
     db: firebase.firestore.Firestore
   ) => firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
 }
@@ -55,6 +67,7 @@ export const FirebaseContext = createContext<FirebaseContextData>({
   setUser: () => {},
   logout: () => {},
   loginWithGoogle: () => {},
+  user: null,
 })
 
 export function useAuth() {
@@ -67,7 +80,7 @@ export function useAuth() {
 }
 
 export const FirebaseProvider: React.FC = ({ children }) => {
-  const initialState = { loading: false }
+  const initialState = { loading: false, user: null }
 
   const [state, dispatch] = useReducer(authReducer, initialState)
 
@@ -103,6 +116,26 @@ export const FirebaseProvider: React.FC = ({ children }) => {
     []
   )
 
+  const placesRef = useCallback(
+    (db: firebase.firestore.Firestore) => db.collection('places'),
+    []
+  )
+
+  const infoRef = useCallback(
+    (db: firebase.firestore.Firestore) => db.collection('info'),
+    []
+  )
+
+  const ratingsRef = useCallback(
+    (db: firebase.firestore.Firestore) => db.collection('ratings'),
+    []
+  )
+
+  const citiesRef = useCallback(
+    (db: firebase.firestore.Firestore) => db.collection('cities'),
+    []
+  )
+
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig)
   }
@@ -116,7 +149,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
   }, [])
 
   const userAuthenticated = useMemo(() => {
-    if (!state.user) return {} as User
+    if (!state.user) return null
 
     return state.user
   }, [state.user])
@@ -149,8 +182,19 @@ export const FirebaseProvider: React.FC = ({ children }) => {
                 photo: authUser.photoURL,
                 email: authUser.email,
                 id: uuid,
+                created: firebase.firestore.Timestamp.fromDate(new Date()),
               } as User
-              usersRef(db).doc(uuid).set(userDb)
+
+              usersRef(db)
+                .doc(uuid)
+                .set(userDb)
+                .then(() => {
+                  db.collection('info')
+                    .doc('app-information')
+                    .update({
+                      users: firebase.firestore.FieldValue.increment(1),
+                    })
+                })
 
               onSetUser(userDb)
             }
@@ -173,6 +217,10 @@ export const FirebaseProvider: React.FC = ({ children }) => {
         setLoading: onSetLoading,
         setUser: onSetUser,
         usersRef,
+        placesRef,
+        infoRef,
+        ratingsRef,
+        citiesRef,
         loginWithGoogle,
         logout,
       }}
@@ -200,7 +248,7 @@ function authReducer(
 
 export type AuthContextState = {
   loading?: boolean
-  user?: User
+  user: User | null
 }
 
 type Action =

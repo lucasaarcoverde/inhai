@@ -9,6 +9,7 @@ import { PlaceDetails } from '../components/PlaceDetails'
 import { MapProvider } from '../contexts/map'
 import { useAuth } from '../contexts/firebase'
 import { RatedPlace } from './RatingsPage'
+import { useMediaQueryContext } from '../contexts'
 
 const MapPage = ({
   children,
@@ -24,6 +25,7 @@ const MapPage = ({
     onOpen: onOpenDetails,
     onClose: onCloseDetails,
   } = useDisclosure()
+  const { desktop } = useMediaQueryContext()
 
   const [searchedItem, setSearchedItem] = useState<HereItem>({} as HereItem)
 
@@ -58,6 +60,7 @@ const MapPage = ({
     <MapProvider items={items}>
       <Layout onOpenSearch={onOpenSearch}>
         <Map
+          paddingBottom={desktop ? '48px' : '0'}
           onOpenDetails={onOpenDetails}
           searchedItem={searchedItem}
           setCurrentItem={setCurrentItem}

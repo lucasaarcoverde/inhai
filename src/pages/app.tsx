@@ -9,6 +9,7 @@ import { Seo } from '../components'
 import LoadingPage from '../templates/LoadingPage'
 import HomePage from '../templates/Home'
 import AboutUsPage from '../templates/AboutUsPage'
+import AdminPage from '../templates/AdminPage'
 
 const App = () => {
   const [desktop] = useMediaQuery('(min-width: 1024px)')
@@ -25,6 +26,7 @@ const App = () => {
           <MapPage path="/app/map" />
           <RatingsPage path="/app/ratings" />
           <ProfilePage path="/app/profile" />
+          <AdminPage path="/app/admin" />
           <Redirect noThrow from="*" to="/404" />
         </Router>
       </MediaQueryProvider>
