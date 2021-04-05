@@ -108,6 +108,8 @@ export const Login = () => {
           email,
           displayName: name,
           id: uuid,
+          newUser: true,
+          created: firebase.firestore.Timestamp.fromDate(new Date()),
         }
 
         usersRef.doc(uuid).set(userDb)
