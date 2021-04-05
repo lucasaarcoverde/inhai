@@ -1,7 +1,7 @@
 import { Box, BoxProps, Fade, Skeleton, useColorMode } from '@chakra-ui/react'
 import { useLocation } from '@reach/router'
 import React, { useEffect, useState } from 'react'
-import { useMediaQueryContext } from '../../contexts'
+import { useAuth } from '../../contexts/firebase'
 import { useMap } from '../../contexts/map'
 import { HereItem } from '../../hooks/useHere'
 import { RatedPlace } from '../../templates/RatingsPage'
@@ -27,18 +27,25 @@ export const Map = ({
   ...boxProps
 }: MapProps) => {
   const mapRef = React.useRef(null)
+  const defaultLocation = {
+    lat: -75.223895099999999,
+    lng: -35.8825037,
+  }
+
   const { colorMode } = useColorMode()
 
   const [loading, setLoading] = useState(true)
   const [windowLoading, setWindowLoading] = useState(true)
   const [mapOpen, setMapOpen] = useState(false)
-
+  const { user } = useAuth()
+  const [initialLocation, setInitialLocation] = useState(defaultLocation)
   const { items } = useMap()
 
-  const defaultLocation = {
-    lat: -7.223895099999999,
-    lng: -35.8825037,
-  }
+  useEffect(() => {
+    if (!user) return
+
+    if (user?.currentLocation) setInitialLocation(user.currentLocation)
+  }, [user])
 
   useEffect(() => {
     if (!mapRef.current) return
@@ -57,7 +64,7 @@ export const Map = ({
           : defaultLayers.raster.normal.mapnight
 
       const map = new H.Map(mapRef.current, mapLayer, {
-        center: defaultLocation,
+        center: initialLocation,
         zoom: 14,
         pixelRatio: devicePixelRatio ?? 1,
       })
@@ -129,7 +136,7 @@ export const Map = ({
     }
 
     return
-  }, [windowLoading, searchedItem, items, colorMode])
+  }, [windowLoading, searchedItem, items, colorMode, initialLocation])
 
   useEffect(() => {
     if (loading) {
@@ -147,7 +154,6 @@ export const Map = ({
   }, [])
 
   const { pathname } = useLocation()
-  const { desktop } = useMediaQueryContext()
 
   return (
     <Box

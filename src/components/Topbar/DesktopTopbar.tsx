@@ -14,7 +14,7 @@ export function DesktopTopbar(props: FlexboxProps) {
         justifyContent="center"
         align="center"
         bg="white"
-        zIndex="popover"
+        zIndex="docked"
       >
         <Heading color="teal.500">Inhaí</Heading>
       </Flex>

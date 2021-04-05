@@ -29,7 +29,7 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
             width="100%"
             height="100%"
             templateColumns="1fr 2fr 1fr"
-            bg="whiteAlpha"
+            bg="white"
           >
             <Sidebar />
             {children}

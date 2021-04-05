@@ -2,7 +2,7 @@ export * from './components'
 
 import React from 'react'
 
-import { Box, Stack } from '@chakra-ui/react'
+import { Flex, Stack } from '@chakra-ui/react'
 import { Profile, Ratings, Search, Faq } from './components'
 
 export function Home() {
@@ -11,9 +11,9 @@ export function Home() {
       <Search label="Mapa LGBTI+ friendly" />
       <Ratings label="Avalie um local" />
       <Profile label="Perfil" />
-      <Box paddingBottom="6" width="100%">
+      <Flex paddingBottom="6" justifyContent="center" width="100%">
         <Faq label="Sobre o Projeto" />
-      </Box>
+      </Flex>
     </Stack>
   )
 }

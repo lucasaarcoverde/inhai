@@ -24,7 +24,7 @@ export function MobileTopbar(props: TopbarProps) {
   const home = pathname === '/app/' || pathname === '/app'
 
   return (
-    <Box zIndex="popover">
+    <Box zIndex="docked">
       <Grid
         position="fixed"
         templateColumns="repeat(3, 1fr)"

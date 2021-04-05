@@ -35,6 +35,7 @@ export interface User {
   pronoun?: string
   id: string
   newUser: boolean
+  currentLocation?: { lat: number; lng: number }
 }
 
 export interface FirebaseContextData {

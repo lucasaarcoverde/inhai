@@ -62,7 +62,7 @@ export function MobileSearch(
       direction="right"
       in={isSearchOpen}
       style={{
-        zIndex: 9999,
+        zIndex: 15,
         margin: 0,
         maxWidth: '100vw',
         maxHeight: '-webkit-fill-available',
