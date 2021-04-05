@@ -30,7 +30,7 @@ export function PlaceDetail() {
           </Box>
           <Text fontSize="sm" fontWeight="semibold">
             Clique nos ícones do mapa para visualizar informações sobre o local
-            e as avaliações feitas!
+            e as avaliações feitas.
           </Text>
         </Stack>
       </ModalBody>

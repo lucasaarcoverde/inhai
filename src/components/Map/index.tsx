@@ -28,7 +28,7 @@ export const Map = ({
 }: MapProps) => {
   const mapRef = React.useRef(null)
   const defaultLocation = {
-    lat: -75.223895099999999,
+    lat: -7.223895099999999,
     lng: -35.8825037,
   }
 

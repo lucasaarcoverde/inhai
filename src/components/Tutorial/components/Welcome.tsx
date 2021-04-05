@@ -35,7 +35,7 @@ export function Welcome(props: WelcomeProps) {
           <Text fontSize="sm" fontWeight="semibold">
             Inhaí {displayName}!
             <br />
-            Preparamos um tutorial rápidinho para te mostrar as principais
+            Preparamos um tutorial rapidinho pra te mostrar as principais
             funcionalidades do nosso app.
           </Text>
         </Stack>

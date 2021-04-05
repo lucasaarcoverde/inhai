@@ -29,7 +29,7 @@ export function Rating() {
             <Img fluid={data.file.childImageSharp.fluid} alt="Search image" />
           </Box>
           <Text fontSize="sm" fontWeight="semibold">
-            Avalie um local de sua escolha!
+            Avalie um local de sua escolha.
           </Text>
         </Stack>
       </ModalBody>

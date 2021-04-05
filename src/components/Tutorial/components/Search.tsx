@@ -29,7 +29,7 @@ export function Search() {
             <Img fluid={data.file.childImageSharp.fluid} alt="Search image" />
           </Box>
           <Text fontSize="sm" fontWeight="semibold">
-            Procure por locais perto de você!
+            Procure por locais perto de você.
           </Text>
         </Stack>
       </ModalBody>

@@ -29,7 +29,7 @@ export function Profile() {
             <Img fluid={data.file.childImageSharp.fluid} alt="Search image" />
           </Box>
           <Text fontSize="sm" fontWeight="semibold">
-            Edite o seu perfil e caso não se sinta representade contate-nos!
+            Edite o seu perfil e caso não se sinta representade nos contate.
           </Text>
         </Stack>
       </ModalBody>

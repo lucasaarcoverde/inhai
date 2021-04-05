@@ -21,7 +21,7 @@ const ProfilePage = ({
             fontWeight="bold"
             color="blue.600"
           >
-            Contate-nos
+            Entre em contato
           </Link>
         </Text>
       </Footer>
