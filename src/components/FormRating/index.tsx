@@ -12,7 +12,7 @@ export function FormRating(props: RatingProps) {
   return (
     <FormControl isInvalid={!!meta.touched && !!meta.error}>
       <FormLabel fontSize="xs" fontWeight="semibold">
-        Clique para dar uma nota ao local
+        Clique para dar uma nota
       </FormLabel>
       <StarRating onChange={(e) => helpers.setValue(e)} value={field.value} />
       <FormErrorMessage>{meta.touched && meta.error}</FormErrorMessage>

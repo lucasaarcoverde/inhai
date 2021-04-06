@@ -124,7 +124,7 @@ export function PlaceDetails(props: PlaceDetailsProps) {
             {firstCategory && (
               <WrapItem>
                 <Badge
-                  variant="solid"
+                  variant="subtle"
                   colorScheme={getPalettes(firstCategory.name)}
                 >
                   {firstCategory.name}
@@ -134,7 +134,7 @@ export function PlaceDetails(props: PlaceDetailsProps) {
             {secondCategory && (
               <WrapItem>
                 <Badge
-                  variant="solid"
+                  variant="subtle"
                   colorScheme={getPalettes(secondCategory.name)}
                 >
                   {secondCategory.name}

@@ -46,7 +46,7 @@ export function Comment(props: CommentProps) {
         </Flex>
         {created && (
           <Text fontSize="x-small" color="gray.500">
-            Avaliado em {created.toDate().toLocaleDateString()}
+            Avaliado em {created.toDate().toLocaleDateString('pt-BR')}
           </Text>
         )}
       </HStack>

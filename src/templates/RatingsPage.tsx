@@ -79,13 +79,20 @@ const validationSchema = Yup.object({
   rate: Yup.number()
     .required('Este campo é obrigatório.')
     .typeError('Este campo é obrigatório.')
-    .min(1, 'Você precisa selecionar uma opcão.'),
-  comment: Yup.string().when('rate', {
-    is: (rate: number) => rate < 3,
-    then: Yup.string().required(
-      'Comentário é obrigatório em caso de avaliações negativas.'
-    ),
-  }),
+    .min(1, 'Você precisa atribuir uma nota.'),
+  comment: Yup.string()
+    .when('rate', {
+      is: (rate: number) => rate < 3,
+      then: Yup.string().required(
+        'Campo obrigatório em caso de notas menores de 3.'
+      ),
+    })
+    .when('safePlace', {
+      is: (safePlace: string) => safePlace === 'false',
+      then: Yup.string().required(
+        'Campo obrigatório caso você não se sinta seguro nesse local.'
+      ),
+    }),
 })
 
 const RatingsPage = ({
@@ -147,7 +154,6 @@ const RatingsPage = ({
 
   const handleSubmit = useCallback(
     (values: RatingForm, actions: FormikHelpers<RatingForm>) => {
-      console.log(values)
       const {
         place,
         frequentedBy: formFrequentedBy,
@@ -167,9 +173,6 @@ const RatingsPage = ({
           : formSafePlace === 'true'
           ? true
           : null
-
-      console.log('frequented', isFrequentedBy)
-      console.log('safe', isSafePlace)
 
       db.collection('places')
         .where('position', '==', values.place.position)
@@ -357,7 +360,7 @@ const RatingsPage = ({
                           },
                         }}
                         label="Esse local é frequentado pela comunidade LGBTI+?"
-                        id="frequented-by-comunnity"
+                        id="frequented-by-community"
                       >
                         <Radio value="false" id="frequented-by">
                           Não
@@ -400,7 +403,7 @@ const RatingsPage = ({
                             fontSize: 'xs',
                           },
                           placeholder:
-                            'Compartilhe sua experiência nesse local e ajude o pessoal a conhecer mais sobre os lugares da cidade. Obrigado!',
+                            'Conte sobre sua experiência nesse local e ajude o pessoal a conhecer mais sobre os lugares da cidade. Obrigado!',
                         }}
                         name="comment"
                         label="Comentários"
@@ -454,7 +457,7 @@ function PlaceField(props: PlaceFieldProps) {
   }, [item])
 
   return (
-    <Stack direction="row" paddingX={6} paddingY={2}>
+    <Stack direction="row" paddingX={6} align="center" paddingY={2}>
       <Text
         border="GrayText"
         fontSize="lg"
@@ -472,7 +475,7 @@ function PlaceField(props: PlaceFieldProps) {
           aria-label="open-search"
           icon={<SearchIcon />}
           variant="outline"
-          size="sm"
+          size="xs"
           onClick={onOpenSearch}
         />
       )}
