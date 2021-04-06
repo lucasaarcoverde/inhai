@@ -31,7 +31,7 @@ import {
   RadioGroupControl,
   TextareaControl,
 } from 'formik-chakra-ui'
-import { Rating } from '../components/Rating'
+import { FormRating } from '../components/FormRating'
 import useFirebase from '../hooks/useFirebase'
 import firebase from 'firebase/app'
 
@@ -344,7 +344,7 @@ const RatingsPage = ({
                       >
                         Responder anonimamente
                       </CheckboxSingleControl>
-                      <Rating name="rate" />
+                      <FormRating name="rate" />
                       <RadioGroupControl
                         name="frequentedBy"
                         sx={{
