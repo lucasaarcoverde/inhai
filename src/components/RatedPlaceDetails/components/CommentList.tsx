@@ -39,7 +39,7 @@ export function Comment(props: CommentProps) {
         <Text fontSize="xs">{name}</Text>
       </HStack>
       <HStack align="center" spacing={2}>
-        <Flex>
+        <Flex color="yellow.400">
           {Array.from({ length: rate }, (_, index) => {
             return <Icon as={RiStarSFill} key={index} boxSize="18px" />
           })}
