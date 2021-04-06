@@ -18,7 +18,7 @@ export function Rating(props: RatingProps) {
       <BaseProvider theme={LightTheme}>
         <FormControl isInvalid={!!meta.touched && !!meta.error}>
           <FormLabel fontSize="xs" fontWeight="semibold">
-            Dê uma nota ao local
+            Clique para dar uma nota ao local
           </FormLabel>
           <StarRating
             value={field.value}
