@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
-import { Box, Flex, Heading, Divider, FlexboxProps } from '@chakra-ui/react'
+import { Flex, Heading, Divider, FlexboxProps } from '@chakra-ui/react'
 
 export function DesktopTopbar(props: FlexboxProps) {
   return (
-    <Box>
+    <Fragment>
       <Flex
         {...props}
         position="fixed"
@@ -19,6 +19,6 @@ export function DesktopTopbar(props: FlexboxProps) {
         <Heading color="teal.500">Inhaí</Heading>
       </Flex>
       <Divider width="100%" top="56px" position="fixed" />
-    </Box>
+    </Fragment>
   )
 }
