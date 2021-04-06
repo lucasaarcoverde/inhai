@@ -400,8 +400,9 @@ const RatingsPage = ({
                         textareaProps={{
                           sx: {
                             '::placeholder': { fontSize: 'xs' },
-                            fontSize: 'xs',
                           },
+                          minH: '100px',
+                          fontSize: '16px',
                           placeholder:
                             'Conte sobre sua experiência nesse local e ajude o pessoal a conhecer mais sobre os lugares da cidade. Obrigado!',
                         }}

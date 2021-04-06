@@ -60,10 +60,10 @@ export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
           align="center"
           paddingX="1"
           shadow="sm"
-          zIndex="docked"
           borderBottom="solid"
           borderWidth="1px"
           borderColor="gray.100"
+          zIndex={12}
         >
           <CloseButton onClick={onCloseDetails} />
         </Flex>
