@@ -19,15 +19,12 @@ import {
   Divider,
   Flex,
   Icon,
-  Skeleton,
 } from '@chakra-ui/react'
 import { SiTwitter, SiFacebook } from 'react-icons/si'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useMediaQueryContext } from '../../contexts'
-import { RatedPlace, Rating } from '../../templates/RatingsPage'
-import { CommentList } from './components/CommentList'
+import { RatedPlace } from '../../templates/RatingsPage'
 import { RiStarSFill } from 'react-icons/ri'
-import { useAuth } from '../../contexts/firebase'
 export interface PlaceDetailsProps {
   item: RatedPlace
   isDetailsOpen: boolean
@@ -36,41 +33,7 @@ export interface PlaceDetailsProps {
 
 export function PlaceDetails(props: PlaceDetailsProps) {
   const { isDetailsOpen, onCloseDetails, item } = props
-  const [ratings, setRatings] = useState([] as Rating[])
-  const [loading, setLoading] = useState(true)
-  const { firebase } = useAuth()
   const { title = '', address, categories, contacts, averageRating } = item
-
-  useEffect(() => {
-    if (!item.id) return
-    setLoading(true)
-    console.log(loading)
-    const db = firebase.firestore()
-    db.collection('ratings')
-      .where('placeId', '==', item.id)
-      .limit(50)
-      .get()
-      .then((snap) => {
-        const docs = snap.docs
-        const ratings =
-          docs.map((doc) => {
-            if (!doc.exists) return
-
-            return doc.data() as Rating
-          }) ?? []
-
-        setRatings(ratings as Rating[])
-      })
-      .finally(() => {
-        setTimeout(() => setLoading(false), 100)
-      })
-      .catch((e) => console.log(e))
-  }, [item])
-
-  const positiveRatings = useMemo(
-    () => ratings.filter((rating) => rating.friendly >= 3 && rating.comment),
-    [ratings]
-  )
 
   const label = address?.label
   const firstCategory = categories?.[0]
@@ -88,7 +51,6 @@ export function PlaceDetails(props: PlaceDetailsProps) {
       isOpen={isDetailsOpen}
       onClose={onCloseDetails}
       size={mobile ? 'xs' : 'sm'}
-      isCentered
     >
       <ModalOverlay />
       <ModalContent overflowY="hidden">
@@ -155,24 +117,6 @@ export function PlaceDetails(props: PlaceDetailsProps) {
                 </HStack>
               </Stack>
             </Stack>
-            {loading ? (
-              <Stack spacing="2">
-                <Skeleton height="14px" width="30%" />
-
-                <Skeleton height="14px" width="100%" />
-                <Skeleton height="14px" width="100%" />
-              </Stack>
-            ) : (
-              positiveRatings.length > 0 && (
-                <Stack spacing="2">
-                  <Text fontWeight="bold" fontSize="sm">
-                    Comentários
-                  </Text>
-                  <Divider />
-                  <CommentList ratings={positiveRatings} />
-                </Stack>
-              )
-            )}
           </Stack>
         </ModalBody>
         <ModalFooter justifyContent="flex-start">

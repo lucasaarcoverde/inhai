@@ -59,7 +59,7 @@ export function MobileSearch(
 
   return (
     <Slide
-      direction="right"
+      direction="bottom"
       in={isSearchOpen}
       style={{
         zIndex: 15,

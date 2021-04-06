@@ -208,10 +208,10 @@ function AdminPage(props: React.PropsWithChildren<RouteComponentProps>) {
                           <Text isTruncated>{place.title}</Text>
                         </Td>
                         <Td color="green.500" isNumeric>
-                          {place.positiveRating}
+                          {place.rateDetails.good}
                         </Td>
                         <Td color="red.500" isNumeric>
-                          {place.negativeRating}
+                          {place.rateDetails.bad}
                         </Td>
                         <Td
                           color={
