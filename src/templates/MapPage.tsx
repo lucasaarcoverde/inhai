@@ -5,7 +5,7 @@ import { useDisclosure } from '@chakra-ui/react'
 import { Search, Map, Layout, Tutorial } from '../components'
 import { HereItem } from '../hooks/useHere'
 import { useEffect, useState } from 'react'
-import { PlaceDetails } from '../components/PlaceDetails'
+import { RatedPlaceDetails } from '../components'
 import { MapProvider } from '../contexts/map'
 import { useAuth } from '../contexts/firebase'
 import { RatedPlace } from './RatingsPage'
@@ -65,7 +65,7 @@ const MapPage = ({
           searchedItem={searchedItem}
           setCurrentItem={setCurrentItem}
         />
-        <PlaceDetails
+        <RatedPlaceDetails
           isDetailsOpen={isDetailsOpen}
           onCloseDetails={onCloseDetails}
           item={currentItem}

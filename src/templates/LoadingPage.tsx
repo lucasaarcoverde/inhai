@@ -13,7 +13,6 @@ import {
 import { useAuth } from '../contexts/firebase'
 import { navigate, useStaticQuery, graphql } from 'gatsby'
 import Img from 'gatsby-image'
-import { Fragment } from 'react'
 
 const LoadingPage = ({
   children,
@@ -55,30 +54,33 @@ const LoadingPage = ({
   }, [firebase])
 
   return (
-    <Fragment>
-      <Flex direction="column" height="100vh" maxH="-webkit-fill-available">
-        <Progress size="xs" colorScheme="teal" isIndeterminate />
-        {children}
-        <Center height="100%">
-          <Stack spacing={6} width="100%">
-            <Center>
-              <Heading color="teal.500">Inhaí</Heading>
-            </Center>
-            <Center width="100%">
-              <Box width="100%" maxWidth="1111px">
-                <Img
-                  fluid={data.file.childImageSharp.fluid}
-                  alt="Loading image"
-                />
-              </Box>
-            </Center>
-            <Center>
-              <Text color="blackAlpha">Iniciando sessão...</Text>
-            </Center>
-          </Stack>
-        </Center>
-      </Flex>
-    </Fragment>
+    <Flex
+      direction="column"
+      height="100vh"
+      width="100vw"
+      maxH="-webkit-fill-available"
+    >
+      <Progress size="xs" colorScheme="teal" isIndeterminate />
+      {children}
+      <Center height="100%">
+        <Stack spacing={6} width="100%">
+          <Center>
+            <Heading color="teal.500">Inhaí</Heading>
+          </Center>
+          <Center width="100%">
+            <Box width="100%" maxWidth="1111px">
+              <Img
+                fluid={data.file.childImageSharp.fluid}
+                alt="Loading image"
+              />
+            </Box>
+          </Center>
+          <Center>
+            <Text color="blackAlpha">Iniciando sessão...</Text>
+          </Center>
+        </Stack>
+      </Center>
+    </Flex>
   )
 }
 

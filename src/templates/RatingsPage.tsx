@@ -8,13 +8,12 @@ import {
   Button,
   Divider,
   Flex,
-  FormControl,
-  FormLabel,
   Stack,
   Text,
   useDisclosure,
   createStandaloneToast,
   IconButton,
+  Radio,
 } from '@chakra-ui/react'
 import { v4 } from 'uuid'
 import { Search } from '../components/Search'
@@ -29,47 +28,71 @@ import { useMediaQueryContext } from '../contexts'
 import { SearchIcon } from '@chakra-ui/icons'
 import {
   CheckboxSingleControl,
-  SelectControl,
+  RadioGroupControl,
   TextareaControl,
 } from 'formik-chakra-ui'
+import { FormRating } from '../components/FormRating'
 import useFirebase from '../hooks/useFirebase'
+import firebase from 'firebase/app'
 
 export interface Rating {
   comment: string
   safePlace: boolean
   frequentedBy: boolean
-  friendly: number
+  rate: number
   userId?: string
   user?: User | null
   placeId?: string
   anonymous?: boolean
   id: string
+  like: number
+  created: firebase.firestore.Timestamp
 }
 
 export interface RatedPlace extends HereItem {
-  positiveRating: number
-  negativeRating: number
   totalRatings: number
   averageRating: number
+  totalSafePlace: number
+  totalFrequentedBy: number
+  safePlace: number
+  unsafePlace: number
+  frequentedBy: number
+  notFrequentedBy: number
+  rateDetails: {
+    good: number
+    bad: number
+    excellent: number
+    horrible: number
+    neutral: number
+  }
   ratingsQty: number
 }
 
-export interface RatingForm extends Rating {
+export interface RatingForm extends Omit<Rating, 'frequentedBy' | 'safePlace'> {
   place: RatedPlace
+  frequentedBy: string
+  safePlace: string
 }
 
 const validationSchema = Yup.object({
   place: Yup.object().required(),
-  friendly: Yup.number()
+  rate: Yup.number()
     .required('Este campo é obrigatório.')
     .typeError('Este campo é obrigatório.')
-    .min(1, 'Você precisa selecionar uma opcão.'),
-  comment: Yup.string().when('friendly', {
-    is: (friendly: number) => friendly < 3,
-    then: Yup.string().required(
-      'Comentário é obrigatório em caso de avaliações negativas.'
-    ),
-  }),
+    .min(1, 'Você precisa atribuir uma nota.'),
+  comment: Yup.string()
+    .when('rate', {
+      is: (rate: number) => rate < 3,
+      then: Yup.string().required(
+        'Campo obrigatório em caso de notas menores de 3.'
+      ),
+    })
+    .when('safePlace', {
+      is: (safePlace: string) => safePlace === 'false',
+      then: Yup.string().required(
+        'Campo obrigatório caso você não se sinta seguro nesse local.'
+      ),
+    }),
 })
 
 const RatingsPage = ({
@@ -131,9 +154,25 @@ const RatingsPage = ({
 
   const handleSubmit = useCallback(
     (values: RatingForm, actions: FormikHelpers<RatingForm>) => {
-      const { place, ...rating } = values
-      const friendly = Number(rating.friendly)
-      console.log(place)
+      const {
+        place,
+        frequentedBy: formFrequentedBy,
+        safePlace: formSafePlace,
+        ...rating
+      } = values
+      const rate = Number(rating.rate)
+      const isFrequentedBy =
+        formFrequentedBy === 'false'
+          ? false
+          : formFrequentedBy === 'true'
+          ? true
+          : null
+      const isSafePlace =
+        formSafePlace === 'false'
+          ? false
+          : formSafePlace === 'true'
+          ? true
+          : null
 
       db.collection('places')
         .where('position', '==', values.place.position)
@@ -143,29 +182,53 @@ const RatingsPage = ({
           if (doc && doc.exists) {
             const {
               id,
-              positiveRating = 0,
-              negativeRating = 0,
               totalRatings = 0,
               ratingsQty = 0,
+              safePlace = 0,
+              unsafePlace = 0,
+              frequentedBy = 0,
+              notFrequentedBy = 0,
+              rateDetails: {
+                good = 0,
+                bad = 0,
+                excellent = 0,
+                horrible = 0,
+                neutral = 0,
+              },
             } = doc.data() as RatedPlace
 
             updatePlace({
               id,
-              positiveRating:
-                friendly > 3 ? positiveRating + 1 : positiveRating,
-              negativeRating:
-                friendly < 3 ? negativeRating + 1 : negativeRating,
-              totalRatings: totalRatings + friendly,
-              averageRating: (totalRatings + friendly) / (ratingsQty + 1),
+              totalRatings: totalRatings + rate,
+              averageRating: (totalRatings + rate) / (ratingsQty + 1),
               ratingsQty: ratingsQty + 1,
+              safePlace: isSafePlace === true ? safePlace + 1 : safePlace,
+              frequentedBy:
+                isFrequentedBy === true ? frequentedBy + 1 : frequentedBy,
+              unsafePlace:
+                isSafePlace === false ? unsafePlace + 1 : unsafePlace,
+              notFrequentedBy:
+                isFrequentedBy === false
+                  ? notFrequentedBy + 1
+                  : notFrequentedBy,
+              rateDetails: {
+                horrible: rate === 1 ? horrible + 1 : horrible,
+                bad: rate === 2 ? bad + 1 : bad,
+                neutral: rate === 3 ? neutral + 1 : neutral,
+                good: rate === 4 ? good + 1 : good,
+                excellent: rate === 5 ? excellent + 1 : excellent,
+              },
             })
 
             const uuid = v4()
             addRating({
               ...rating,
+              safePlace: isSafePlace ? true : false,
+              frequentedBy: isFrequentedBy ? true : false,
               placeId: id,
-              friendly,
+              rate,
               user,
+              like: 0,
               id: uuid,
             })
           } else {
@@ -174,11 +237,20 @@ const RatingsPage = ({
             addPlace({
               ...place,
               id: placeId,
-              positiveRating: friendly > 3 ? 1 : 0,
-              negativeRating: friendly < 3 ? 1 : 0,
-              totalRatings: friendly,
-              averageRating: friendly,
+              totalRatings: rate,
+              averageRating: rate,
               ratingsQty: 1,
+              safePlace: isSafePlace === true ? 1 : 0,
+              frequentedBy: isFrequentedBy === true ? 1 : 0,
+              unsafePlace: isSafePlace === false ? 1 : 0,
+              notFrequentedBy: isFrequentedBy === false ? 1 : 0,
+              rateDetails: {
+                horrible: rate === 1 ? 1 : 0,
+                bad: rate === 2 ? 1 : 0,
+                neutral: rate === 3 ? 1 : 0,
+                good: rate === 4 ? 1 : 0,
+                excellent: rate === 5 ? 1 : 0,
+              },
             })?.then(() => {
               const ratingId = v4()
 
@@ -198,7 +270,16 @@ const RatingsPage = ({
                   }
                 })
 
-              addRating({ ...rating, placeId, friendly, user, id: ratingId })
+              addRating({
+                ...rating,
+                safePlace: isSafePlace ? true : false,
+                frequentedBy: isFrequentedBy ? true : false,
+                placeId,
+                rate,
+                user,
+                like: 0,
+                id: ratingId,
+              })
             })
           }
         })
@@ -238,10 +319,10 @@ const RatingsPage = ({
               initialValues={
                 {
                   comment: '',
-                  safePlace: false,
-                  frequentedBy: false,
+                  safePlace: 'false',
+                  frequentedBy: 'false',
                   place: currentItem,
-                  friendly: 0,
+                  rate: 0,
                   anonymous: false,
                   id: '',
                 } as RatingForm
@@ -260,61 +341,73 @@ const RatingsPage = ({
                     <Divider />
 
                     <Stack spacing={2} paddingX={6} paddingY={3}>
-                      <CheckboxSingleControl name="anonymous">
+                      <CheckboxSingleControl
+                        name="anonymous"
+                        sx={{ '> label > span': { fontSize: '14px' } }}
+                      >
                         Responder anonimamente
                       </CheckboxSingleControl>
-                      <SelectControl
+                      <FormRating name="rate" />
+                      <RadioGroupControl
+                        name="frequentedBy"
                         sx={{
-                          maxWidth: 400,
-                          label: {
+                          '> label': {
                             fontSize: 'xs',
                             fontWeight: 'semibold',
                           },
+                          span: {
+                            fontSize: 'xs',
+                          },
                         }}
-                        name="friendly"
-                        label="Para você, o quanto esse local é LGBTI+ friendly?"
-                        selectProps={{
-                          placeholder: 'Selecione uma opção',
-                          cursor: 'pointer',
-                        }}
-                        helperText="Considere 1 (péssimo) e 5 (ótimo)"
+                        label="Esse local é frequentado pela comunidade LGBTI+?"
+                        id="frequented-by-community"
                       >
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                      </SelectControl>
-
-                      <FormControl>
-                        <Stack direction="row" spacing={1}>
-                          <FormLabel
-                            htmlFor="group"
-                            fontSize="xs"
-                            fontWeight="semibold"
-                            marginX={0}
-                          >
-                            Assinale as opções que você concorda.
-                          </FormLabel>
-                        </Stack>
-                        <Stack id="group">
-                          <CheckboxSingleControl name="safePlace">
-                            Me sinto seguro nesse local.
-                          </CheckboxSingleControl>
-                          <CheckboxSingleControl name="frequentedBy">
-                            Esse local é frequentado pela comunidade LGBTI+.{' '}
-                          </CheckboxSingleControl>
-                        </Stack>
-                      </FormControl>
+                        <Radio value="false" id="frequented-by">
+                          Não
+                        </Radio>
+                        <Radio value="true" id="not-frequented-by">
+                          Sim
+                        </Radio>
+                      </RadioGroupControl>
+                      <RadioGroupControl
+                        name="safePlace"
+                        sx={{
+                          '> label': {
+                            fontSize: 'xs',
+                            fontWeight: 'semibold',
+                          },
+                          span: {
+                            fontSize: 'xs',
+                          },
+                        }}
+                        label="Você se sente seguro nesse local?"
+                      >
+                        <Radio value="false" id="safe-place">
+                          Não
+                        </Radio>
+                        <Radio value="true" id="not-safe-place">
+                          Sim
+                        </Radio>
+                      </RadioGroupControl>
+                      ;
                       <TextareaControl
                         sx={{
-                          label: {
+                          '> label': {
                             fontSize: 'xs',
                             fontWeight: 'semibold',
                           },
                         }}
+                        textareaProps={{
+                          sx: {
+                            '::placeholder': { fontSize: 'xs' },
+                          },
+                          minH: '100px',
+                          fontSize: '16px',
+                          placeholder:
+                            'Conte sobre sua experiência nesse local e ajude o pessoal a conhecer mais sobre os lugares da cidade. Obrigado!',
+                        }}
                         name="comment"
-                        label="Comentário"
+                        label="Comentários"
                       />
                       <Button
                         isLoading={props.isSubmitting}
@@ -365,7 +458,7 @@ function PlaceField(props: PlaceFieldProps) {
   }, [item])
 
   return (
-    <Stack direction="row" paddingX={6} paddingY={2}>
+    <Stack direction="row" paddingX={6} align="center" paddingY={2}>
       <Text
         border="GrayText"
         fontSize="lg"
@@ -383,7 +476,7 @@ function PlaceField(props: PlaceFieldProps) {
           aria-label="open-search"
           icon={<SearchIcon />}
           variant="outline"
-          size="sm"
+          size="xs"
           onClick={onOpenSearch}
         />
       )}

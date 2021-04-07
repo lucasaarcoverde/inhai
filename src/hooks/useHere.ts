@@ -25,6 +25,8 @@ export type HereItem = {
     district: string
     street: string
     postalCode: string
+    countryName: string
+    countryCode: string
   }
   categories: Category[]
   resultType: string

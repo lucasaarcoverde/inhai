@@ -17,6 +17,7 @@ export function Layout({ children, onOpenSearch }: LayoutProps) {
     <PrivateRoute path="/login">
       <Stack
         h="100vh"
+        w="100vw"
         maxHeight="-webkit-fill-available"
         direction="column"
         spacing="0"

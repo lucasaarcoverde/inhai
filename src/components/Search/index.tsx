@@ -121,7 +121,8 @@ export function Search(props: SearchProps) {
                             setLoading(false)
                           })
                       }
-                    }
+                    },
+                    () => onClose()
                   )
                 } catch (e) {
                   console.log(e)
