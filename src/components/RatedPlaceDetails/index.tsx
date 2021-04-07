@@ -46,6 +46,7 @@ export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
       style={{
         zIndex: 10,
         margin: 0,
+        top: 0,
         maxWidth: '100vw',
         maxHeight: '-webkit-fill-available',
         height: '100vh',
@@ -63,9 +64,9 @@ export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
           borderBottom="solid"
           borderWidth="1px"
           borderColor="gray.100"
-          zIndex={12}
+          zIndex={13}
         >
-          <CloseButton onClick={onCloseDetails} />
+          <CloseButton zIndex={14} onClick={onCloseDetails} />
         </Flex>
         <Stack spacing="3" paddingTop="32px">
           <RatingsCard {...item} />
