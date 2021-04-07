@@ -1,5 +1,13 @@
 import React from 'react'
-import { Heading, Divider, Stack, Spinner, Center } from '@chakra-ui/react'
+import {
+  Heading,
+  Divider,
+  Stack,
+  Spinner,
+  Center,
+  Flex,
+  Text,
+} from '@chakra-ui/react'
 import { RatedPlace, Rating } from '../../../templates/RatingsPage'
 import { CommentList } from './CommentList'
 import { RatingBar } from './RatingBar'
@@ -23,9 +31,14 @@ export function RatingsDetails(
       borderWidth="1px"
       borderColor="gray.100"
     >
-      <Heading fontSize="lg" color="teal.500">
-        Detalhe das Avaliações
-      </Heading>
+      <Flex justifyContent="space-between" align="center">
+        <Heading fontSize="lg" color="teal.500">
+          Detalhe das Avaliações
+        </Heading>
+        <Text fontSize="sm">
+          {`${ratingsQty} ${ratingsQty === 1 ? 'avaliação' : 'avaliações'}`}
+        </Text>
+      </Flex>
       <Stack spacing={2}>
         <RatingBar label="Excelente" points={excellent} total={ratingsQty} />
         <RatingBar label="Bom" points={good} total={ratingsQty} />
