@@ -9,7 +9,7 @@ import { RatedPlaceDetails } from '../components'
 import { MapProvider } from '../contexts/map'
 import { useAuth } from '../contexts/firebase'
 import { RatedPlace } from './RatingsPage'
-import { useMediaQueryContext } from '../contexts'
+import { useMediaQuery } from '../contexts'
 
 const MapPage = ({
   children,
@@ -25,7 +25,7 @@ const MapPage = ({
     onOpen: onOpenDetails,
     onClose: onCloseDetails,
   } = useDisclosure()
-  const { desktop } = useMediaQueryContext()
+  const { desktop } = useMediaQuery()
 
   const [searchedItem, setSearchedItem] = useState<HereItem>({} as HereItem)
 
@@ -61,6 +61,7 @@ const MapPage = ({
       <Layout onOpenSearch={onOpenSearch}>
         <Map
           paddingBottom={desktop ? '48px' : '0'}
+          minHeight="-webkit-fill-available"
           onOpenDetails={onOpenDetails}
           searchedItem={searchedItem}
           setCurrentItem={setCurrentItem}

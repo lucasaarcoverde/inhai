@@ -14,6 +14,7 @@ import {
   createStandaloneToast,
   IconButton,
   Radio,
+  FlexProps,
 } from '@chakra-ui/react'
 import { v4 } from 'uuid'
 import { Search } from '../components/Search'
@@ -24,7 +25,7 @@ import { Map, PlaceDetails } from '../components'
 import { useCallback, useState } from 'react'
 import { Form, Formik, FormikHelpers, useField } from 'formik'
 import { useAuth, User } from '../contexts/firebase'
-import { useMediaQueryContext } from '../contexts'
+import { useMediaQuery } from '../contexts'
 import { SearchIcon } from '@chakra-ui/icons'
 import {
   CheckboxSingleControl,
@@ -105,7 +106,7 @@ const RatingsPage = ({
   } = useDisclosure()
 
   const toast = useCallback(createStandaloneToast(), [])
-  const { desktop } = useMediaQueryContext()
+  const { desktop } = useMediaQuery()
   const {
     isOpen: isDetailsOpen,
     onOpen: onOpenDetails,
@@ -311,10 +312,19 @@ const RatingsPage = ({
     [user, firebase, db]
   )
 
+  const layoutProps = desktop
+    ? { height: 'calc(100vh - 104px)', overflowY: 'scroll' }
+    : {}
+
   return (
     <MapProvider>
       <Layout>
-        <Flex direction="column" width="100%" height="100%">
+        <Flex
+          direction="column"
+          width="100%"
+          height="100%"
+          {...(layoutProps as FlexProps)}
+        >
           <Box height="calc(40vh - 56px)">
             <Map
               height="40vh"
@@ -454,7 +464,7 @@ export default RatingsPage
 
 function PlaceField(props: PlaceFieldProps) {
   const { item, onOpenSearch } = props
-  const { desktop } = useMediaQueryContext()
+  const { desktop } = useMediaQuery()
 
   const [_, meta, helpers] = useField<HereItem>({
     name: 'place',

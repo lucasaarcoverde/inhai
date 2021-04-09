@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
-import { useMediaQueryContext } from '../../contexts'
+import { useMediaQuery } from '../../contexts'
 import { useAuth } from '../../contexts/firebase'
 import useFirebase from '../../hooks/useFirebase'
 import useHere, { HereItem } from '../../hooks/useHere'
@@ -25,6 +25,7 @@ export function Search(props: SearchProps) {
   const [items, setItems] = useState<HereItem[]>([])
   const [loading, setLoading] = useState(false)
   const { onClose, isOpen, onOpen } = useDisclosure()
+  const { desktop } = useMediaQuery()
   const { user, setUser } = useAuth()
   const { db } = useFirebase()
 
@@ -49,14 +50,14 @@ export function Search(props: SearchProps) {
         q: queryValue,
         at: at,
       })
-        .then(({ items }) => setItems(items))
+        .then(({ items }) => {
+          setItems(items)
+        })
         .catch((e) => console.log('err', e))
     } else {
       setItems([])
     }
   }, [queryValue, user, isSearchOpen, isOpen])
-
-  const { desktop } = useMediaQueryContext()
 
   const handleClose = () => {
     if (user) {

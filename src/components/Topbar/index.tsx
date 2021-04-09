@@ -1,10 +1,10 @@
 import React from 'react'
-import { useMediaQueryContext } from '../../contexts'
+import { useMediaQuery } from '../../contexts'
 import { DesktopTopbar } from './DesktopTopbar'
 import { MobileTopbar } from './MobileTopbar'
 
 export function Topbar(props: TopbarProps) {
-  const { desktop } = useMediaQueryContext()
+  const { desktop } = useMediaQuery()
 
   return desktop ? <DesktopTopbar /> : <MobileTopbar {...props} />
 }

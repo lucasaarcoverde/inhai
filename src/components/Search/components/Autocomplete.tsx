@@ -15,7 +15,7 @@ import { useCombobox } from 'downshift'
 
 import { HereItem } from '../../../hooks/useHere'
 import { SearchProps } from '../index'
-import { useMediaQueryContext } from '../../../contexts'
+import { useMediaQuery } from '../../../contexts'
 
 export function Autocomplete(
   props: SearchProps & {
@@ -33,7 +33,7 @@ export function Autocomplete(
     ...boxProps
   } = props
 
-  const { desktop } = useMediaQueryContext()
+  const { desktop } = useMediaQuery()
 
   const {
     getLabelProps,

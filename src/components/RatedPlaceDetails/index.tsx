@@ -5,12 +5,14 @@ import { RatingsCard } from './components/RatingsCard'
 import { PlaceCard } from './components/PlaceCard'
 import { useAuth } from '../../contexts/firebase'
 import { RatingsDetails } from './components/RatingsDetails'
+import { useMediaQuery } from '../../contexts'
 
 export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
   const { isDetailsOpen, onCloseDetails, item } = props
   const [ratings, setRatings] = useState([] as Rating[])
   const [loading, setLoading] = useState(true)
   const { firebase } = useAuth()
+  const { desktop } = useMediaQuery()
 
   useEffect(() => {
     if (!item.id) return
@@ -41,19 +43,21 @@ export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
 
   return (
     <Slide
-      direction="bottom"
+      direction={desktop ? 'right' : 'bottom'}
       in={isDetailsOpen}
       style={{
-        zIndex: 10,
+        zIndex: 13,
         margin: 0,
         top: 0,
         bottom: 0,
-        maxWidth: '100vw',
+        width: desktop ? '35%' : '100vw',
+        maxWidth: desktop ? '500px' : '100vw',
         maxHeight: '-webkit-fill-available',
         height: '100vh',
       }}
     >
       <Flex
+        maxWidth="500px"
         position="fixed"
         bg="gray.50"
         width="100vw"

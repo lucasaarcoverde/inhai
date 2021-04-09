@@ -4,14 +4,20 @@ import { RouteComponentProps } from '@reach/router'
 import { Layout } from '../components/Layout'
 import { Profile } from '../components/Profile'
 import { Footer } from '../components'
-import { Link, Text } from '@chakra-ui/react'
+import { FlexProps, Link, Text } from '@chakra-ui/react'
+import { useMediaQuery } from '../contexts'
 
 const ProfilePage = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
+  const { desktop } = useMediaQuery()
+  const layoutProps = desktop
+    ? { height: 'calc(100vh - 56px)', overflowY: 'scroll' }
+    : {}
+
   return (
     <Layout>
-      <Profile justifyContent="center" />
+      <Profile justifyContent="center" {...(layoutProps as FlexProps)} />
       {children}
       <Footer justifyContent="center" align="center">
         <Text fontSize="xs" fontWeight="normal">

@@ -21,7 +21,7 @@ import {
 } from '@chakra-ui/react'
 import { SiTwitter, SiFacebook } from 'react-icons/si'
 import React, { useMemo } from 'react'
-import { useMediaQueryContext } from '../../contexts'
+import { useMediaQuery } from '../../contexts'
 import { RatedPlace } from '../../templates/RatingsPage'
 export interface PlaceDetailsProps {
   item: RatedPlace
@@ -38,7 +38,7 @@ export function PlaceDetails(props: PlaceDetailsProps) {
   const secondCategory = categories?.[1]
   const phone = contacts?.[0]?.phone?.[0].value
 
-  const { mobile } = useMediaQueryContext()
+  const { mobile } = useMediaQuery()
   const { site, facebook, twitter } = useMemo(
     () => getUrls(contacts?.[0]?.www),
     [contacts]

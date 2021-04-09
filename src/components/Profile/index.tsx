@@ -21,7 +21,7 @@ import { Form, Formik, FormikHelpers } from 'formik'
 import { InputControl, SelectControl } from 'formik-chakra-ui'
 import { useAuth, User } from '../../contexts/firebase'
 import { ProfileDropzone } from './components/Dropzone'
-import { useMediaQueryContext } from '../../contexts'
+import { useMediaQuery } from '../../contexts'
 import * as Yup from 'yup'
 import useFirebase from '../../hooks/useFirebase'
 
@@ -45,7 +45,7 @@ const labelStyle = {
 export function Profile(props: FlexProps) {
   const { user, logout, setUser, firebase } = useAuth()
   const toast = useCallback(createStandaloneToast(), [])
-  const { desktop } = useMediaQueryContext()
+  const { desktop } = useMediaQuery()
   const { updateInfo } = useFirebase()
 
   const { isOpen, onOpen, onClose } = useDisclosure()

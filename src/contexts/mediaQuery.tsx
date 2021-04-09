@@ -7,10 +7,10 @@ interface MediaQueryProps {
 
 const MediaQueryContext = createContext<MediaQueryProps | null>(null)
 
-export function useMediaQueryContext() {
+export function useMediaQuery() {
   const context = useContext(MediaQueryContext)
 
-  if (!context) throw new Error('Media query fora de contexto')
+  if (!context) throw new Error('useMediaQuery out of context!')
 
   return context
 }

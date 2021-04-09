@@ -4,13 +4,13 @@ import React, { ReactNode } from 'react'
 import { Sidebar } from './Sidebar'
 import PrivateRoute from './PrivateRoute'
 import { Topbar } from './Topbar'
-import { useMediaQueryContext } from '../contexts'
+import { useMediaQuery } from '../contexts'
 import 'focus-visible/dist/focus-visible'
 import { DefaultFooter } from './Footer'
 import { useLocation } from '@reach/router'
 
 export function Layout({ children, onOpenSearch }: LayoutProps) {
-  const { desktop } = useMediaQueryContext()
+  const { desktop } = useMediaQuery()
   const { pathname } = useLocation()
 
   return (

@@ -11,13 +11,14 @@ import {
   Box,
   OrderedList,
   ListItem,
+  FlexProps,
 } from '@chakra-ui/react'
 import Img from 'gatsby-image'
 
 import { DefaultFooter, Layout } from '../components'
 import { ReactNode } from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
-import { useMediaQueryContext } from '../contexts'
+import { useMediaQuery } from '../contexts'
 
 const AboutUsPage = ({
   children,
@@ -35,8 +36,12 @@ const AboutUsPage = ({
       }
     }
   `)
+  const { desktop } = useMediaQuery()
 
-  const { desktop } = useMediaQueryContext()
+  const layoutProps = desktop
+    ? { height: 'calc(100vh - 104px)', overflowY: 'scroll' }
+    : {}
+
   return (
     <Layout>
       <Flex
@@ -47,6 +52,7 @@ const AboutUsPage = ({
         padding="6"
         fontSize="sm"
         fontWeight="medium"
+        {...(layoutProps as FlexProps)}
       >
         {children}
         <Stack spacing="3" divider={<StackDivider />}>
