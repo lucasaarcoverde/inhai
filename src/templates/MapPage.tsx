@@ -41,7 +41,7 @@ const MapPage = ({
     const db = firebase.firestore()
 
     db.collection('places')
-      .where('averageRating', '>=', 3.5)
+      .where('averageRating', '>=', 3)
       .get()
       .then((snap) => {
         const docs = snap.docs

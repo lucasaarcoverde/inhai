@@ -7,16 +7,20 @@ import {
   Center,
   Flex,
   Text,
+  Button,
+  HStack,
 } from '@chakra-ui/react'
 import { RatedPlace, Rating } from '../../../templates/RatingsPage'
 import { CommentList } from './CommentList'
 import { RatingBar } from './RatingBar'
+import { navigate } from 'gatsby'
 
 export function RatingsDetails(
   props: RatedPlace & { ratings: Rating[]; loading: boolean }
 ) {
-  const { ratings, rateDetails, ratingsQty, loading } = props
+  const { ratings, loading, ...ratedPlace } = props
 
+  const { ratingsQty, rateDetails } = ratedPlace
   const { good = 0, bad = 0, horrible = 0, excellent = 0, neutral = 0 } =
     rateDetails ?? {}
 
@@ -32,12 +36,28 @@ export function RatingsDetails(
       borderColor="gray.100"
     >
       <Flex justifyContent="space-between" align="center">
-        <Heading fontSize="lg" color="teal.500">
-          Detalhe das Avaliações
-        </Heading>
-        <Text fontSize="sm">
-          {`${ratingsQty} ${ratingsQty === 1 ? 'avaliação' : 'avaliações'}`}
-        </Text>
+        <HStack spacing="1" align="center">
+          <Heading fontSize="lg" color="teal.500">
+            Avaliações
+          </Heading>
+          <Text fontSize="sm" color="gray.500">
+            ({`${ratingsQty}`})
+          </Text>
+        </HStack>
+        <Button
+          variant="outline"
+          size="xs"
+          colorScheme="teal"
+          onClick={() => {
+            window.localStorage.setItem(
+              'rate-place',
+              JSON.stringify(ratedPlace)
+            )
+            navigate('/app/ratings')
+          }}
+        >
+          Faça uma avaliação
+        </Button>
       </Flex>
       <Stack spacing={2}>
         <RatingBar label="Excelente" points={excellent} total={ratingsQty} />

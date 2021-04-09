@@ -36,7 +36,6 @@ export function PlaceCard(props: RatedPlace) {
     ? `${street}, ${houseNumber}, ${district}, ${city} - ${stateCode}, ${postalCode}, ${countryName}`
     : null
 
-  console.log(address)
   const firstCategory = categories?.[0]
   const secondCategory = categories?.[1]
   const phone = contacts?.[0]?.phone?.[0].value

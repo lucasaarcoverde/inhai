@@ -150,6 +150,17 @@ const RatingsPage = ({
 
   const [searchedItem, setSearchedItem] = useState<HereItem>({} as HereItem)
 
+  React.useEffect(() => {
+    if (window) {
+      const currentPlace = window.localStorage.getItem('rate-place')
+
+      if (currentPlace) {
+        window.localStorage.removeItem('rate-place')
+        setSearchedItem(JSON.parse(currentPlace))
+      }
+    }
+  }, [])
+
   const [currentItem, setCurrentItem] = useState<RatedPlace>({} as RatedPlace)
 
   const handleSubmit = useCallback(

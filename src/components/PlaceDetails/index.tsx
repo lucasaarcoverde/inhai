@@ -18,13 +18,11 @@ import {
   HStack,
   Divider,
   Flex,
-  Icon,
 } from '@chakra-ui/react'
 import { SiTwitter, SiFacebook } from 'react-icons/si'
 import React, { useMemo } from 'react'
 import { useMediaQueryContext } from '../../contexts'
 import { RatedPlace } from '../../templates/RatingsPage'
-import { RiStarSFill } from 'react-icons/ri'
 export interface PlaceDetailsProps {
   item: RatedPlace
   isDetailsOpen: boolean
@@ -33,7 +31,7 @@ export interface PlaceDetailsProps {
 
 export function PlaceDetails(props: PlaceDetailsProps) {
   const { isDetailsOpen, onCloseDetails, item } = props
-  const { title = '', address, categories, contacts, averageRating } = item
+  const { title = '', address, categories, contacts } = item
 
   const label = address?.label
   const firstCategory = categories?.[0]
@@ -63,14 +61,6 @@ export function PlaceDetails(props: PlaceDetailsProps) {
                 <Text fontWeight="bold" fontSize="sm">
                   Informações do Local
                 </Text>
-                {averageRating && (
-                  <Stack align="center" direction="row" spacing={1}>
-                    <Text fontSize="xs" fontWeight="sem">
-                      {averageRating.toFixed(2)}
-                    </Text>
-                    <Icon as={RiStarSFill} boxSize="4" />
-                  </Stack>
-                )}
               </Flex>
               <Divider />
               <Stack spacing="2">

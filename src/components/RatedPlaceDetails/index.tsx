@@ -16,7 +16,7 @@ export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
     if (!item.id) return
 
     setLoading(true)
-    console.log(loading)
+
     const db = firebase.firestore()
     db.collection('ratings')
       .where('placeId', '==', item.id)

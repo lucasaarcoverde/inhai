@@ -1,9 +1,9 @@
 import React from 'react'
-import { Flex, Heading, Text, Divider, Icon, Stack } from '@chakra-ui/react'
-import { RiStarSFill } from 'react-icons/ri'
+import { Flex, Heading, Text, Divider, Stack } from '@chakra-ui/react'
 
 import { RatedPlace } from '../../../templates/RatingsPage'
 import { RatingBar } from './RatingBar'
+import { LGBTIcon } from './LGBTIcon'
 
 export function RatingsCard(props: RatedPlace) {
   const {
@@ -35,8 +35,10 @@ export function RatingsCard(props: RatedPlace) {
       <Flex align="center" justifyContent="space-between">
         {averageRating && (
           <Stack align="center" fontSize="md" direction="row" spacing={1}>
-            <Text fontWeight="semibold">{averageRating.toFixed(2)}</Text>
-            <Icon as={RiStarSFill} boxSize="24px" />
+            <Text fontWeight="semibold" color="black">
+              {averageRating.toFixed(2)}
+            </Text>
+            <LGBTIcon height="18px" width="18px" />
           </Stack>
         )}
         {ratingsQty && (
