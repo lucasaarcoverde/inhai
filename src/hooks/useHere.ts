@@ -10,8 +10,8 @@ export interface Category {
 }
 
 export interface Contact {
-  phone: {value: string}[]
-  www: {value: string}[]
+  phone: { value: string }[]
+  www: { value: string }[]
 }
 
 export type HereItem = {

@@ -84,7 +84,7 @@ const validationSchema = Yup.object({
     .when('rate', {
       is: (rate: number) => rate < 3,
       then: Yup.string().required(
-        'Campo obrigatório em caso de notas menores de 3.'
+        'Campo obrigatório em caso de notas abaixo de 3.'
       ),
     })
     .when('safePlace', {
@@ -458,7 +458,7 @@ function PlaceField(props: PlaceFieldProps) {
   }, [item])
 
   return (
-    <Stack direction="row" paddingX={6} align="center" paddingY={2}>
+    <Stack direction="row" paddingX={6} align="center" height="40px">
       <Text
         border="GrayText"
         fontSize="lg"
@@ -476,7 +476,7 @@ function PlaceField(props: PlaceFieldProps) {
           aria-label="open-search"
           icon={<SearchIcon />}
           variant="outline"
-          size="xs"
+          size="sm"
           onClick={onOpenSearch}
         />
       )}

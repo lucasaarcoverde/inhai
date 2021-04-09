@@ -28,7 +28,7 @@ export function Search(props: SearchProps) {
   const { user, setUser } = useAuth()
   const { db } = useFirebase()
 
-  const { setSearchedItem } = props
+  const { setSearchedItem, isSearchOpen } = props
   const [queryValue] = useDebounce(query, 400)
 
   const { discoverAddress } = useHere()
@@ -36,7 +36,9 @@ export function Search(props: SearchProps) {
   useEffect(() => {
     if (!user) return
 
-    if (!user.currentLocation) onOpen()
+    if (!user.currentLocation && (isSearchOpen || desktop)) return onOpen()
+
+    if (isOpen) return
 
     const at = user.currentLocation
       ? `${user.currentLocation.lat},${user.currentLocation.lng}`
@@ -52,10 +54,28 @@ export function Search(props: SearchProps) {
     } else {
       setItems([])
     }
-  }, [queryValue, user])
+  }, [queryValue, user, isSearchOpen, isOpen])
 
   const { desktop } = useMediaQueryContext()
 
+  const handleClose = () => {
+    if (user) {
+      db.collection('users')
+        .doc(user.id)
+        .update({
+          currentLocation: { lat: -7.23072, lng: -35.8817 },
+        })
+        .then(() => {
+          setUser({
+            ...user,
+            currentLocation: { lat: -7.23072, lng: -35.8817 },
+          })
+          onClose()
+          setLoading(false)
+        })
+        .finally(() => onClose())
+    }
+  }
   return (
     <Box>
       {desktop ? (
@@ -76,17 +96,19 @@ export function Search(props: SearchProps) {
       ) : (
         <MobileSearch
           {...props}
+          isSearchOpen={isSearchOpen}
           setSearch={setQuery}
           searchValue={query}
           searchItems={items}
         />
       )}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered size="xs">
+      <Modal isOpen={isOpen} onClose={handleClose} isCentered size="xs">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Localização</ModalHeader>
           <ModalBody>
             Ter sua localização nos ajudará a realizar uma busca mais precisa.
+            Gostaria de compartilhá-la?
           </ModalBody>
 
           <ModalFooter>
@@ -94,9 +116,9 @@ export function Search(props: SearchProps) {
               colorScheme="teal"
               mr={3}
               variant="outline"
-              onClick={onClose}
+              onClick={handleClose}
             >
-              Fechar
+              Não
             </Button>
             <Button
               colorScheme="teal"

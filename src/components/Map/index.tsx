@@ -176,6 +176,7 @@ export const Map = ({
           position="absolute"
           paddingTop="56px"
           top="-56px"
+          bottom="0"
           ref={mapRef}
           height="100vh"
           width="100%"

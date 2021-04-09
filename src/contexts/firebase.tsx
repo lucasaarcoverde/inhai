@@ -6,7 +6,6 @@ import React, {
   useReducer,
 } from 'react'
 import firebase from 'firebase/app'
-import { v4 } from 'uuid'
 import 'firebase/auth'
 import 'firebase/firestore'
 
@@ -164,7 +163,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
     const unsub = firebase.auth().onAuthStateChanged((authUser) => {
       if (authUser) {
         usersRef(db)
-          .where('email', '==', authUser.email)
+          .where('id', '==', authUser.uid)
           .limit(1)
           .get()
           .then((res) => {
@@ -177,19 +176,18 @@ export const FirebaseProvider: React.FC = ({ children }) => {
                 onSetUser(userDb)
               }
             } else {
-              const uuid = v4()
               const userDb = {
                 name: authUser.displayName,
                 displayName: authUser.displayName,
                 photo: authUser.photoURL,
                 email: authUser.email,
-                id: uuid,
+                id: authUser.uid,
                 newUser: true,
                 created: firebase.firestore.Timestamp.fromDate(new Date()),
               } as User
 
               usersRef(db)
-                .doc(uuid)
+                .doc(authUser.uid)
                 .set(userDb)
                 .then(() => {
                   db.collection('info')

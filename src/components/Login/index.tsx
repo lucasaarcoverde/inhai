@@ -27,7 +27,6 @@ import { useAuth } from '../../contexts/firebase'
 import { EmailIcon, LockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { CgProfile } from 'react-icons/cg'
 import { Formik, Form, Field } from 'formik'
-import { v4 } from 'uuid'
 import useFirebase from '../../hooks/useFirebase'
 
 export type Values = { name: string; email: string; password: string }
@@ -101,18 +100,16 @@ export const Login = () => {
         })
 
       if (user) {
-        const uuid = v4()
-
         const userDb = {
           name,
           email,
           displayName: name,
-          id: uuid,
+          id: user.uid,
           newUser: true,
           created: firebase.firestore.Timestamp.fromDate(new Date()),
         }
 
-        usersRef.doc(uuid).set(userDb)
+        usersRef.doc(user.uid).set(userDb)
 
         updateInfo({
           users: firebase.firestore.FieldValue.increment(1),

@@ -46,6 +46,7 @@ export function Profile(props: FlexProps) {
   const { user, logout, setUser, firebase } = useAuth()
   const toast = useCallback(createStandaloneToast(), [])
   const { desktop } = useMediaQueryContext()
+  const { updateInfo } = useFirebase()
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = React.useRef<HTMLButtonElement>()
@@ -104,7 +105,6 @@ export function Profile(props: FlexProps) {
     (values: User, actions: FormikHelpers<User>) => {
       const { id = 'anon' } = user ?? {}
       const db = firebase.firestore()
-      console.log(values)
       db.collection('users')
         .doc(id)
         .update({ ...values, age: Number(values.age) })
@@ -123,7 +123,6 @@ export function Profile(props: FlexProps) {
   const handleUserDelete = useCallback((user: User) => {
     const { id } = user
     const db = firebase.firestore()
-    const { updateInfo } = useFirebase()
 
     db.collection('users')
       .doc(id)
@@ -133,7 +132,6 @@ export function Profile(props: FlexProps) {
         updateInfo({
           users: firebase.firestore.FieldValue.increment(-1),
         })
-
         logout()
       })
       .catch(() => {
@@ -206,8 +204,10 @@ export function Profile(props: FlexProps) {
                     cursor: 'pointer',
                   }}
                 >
-                  <option value="cis">Cisgênero</option>
-                  <option value="trans">Transgênero</option>
+                  <option value="cis-woman">Mulher cis</option>
+                  <option value="cis-man">Homem cis</option>
+                  <option value="trans-woman">Mulher trans</option>
+                  <option value="trans-man">Homem trans</option>
                   <option value="non-binary">Não-binário</option>
                   <option value="do-not-know">Não sei responder</option>
                   <option value="prefer-not-to-answer">

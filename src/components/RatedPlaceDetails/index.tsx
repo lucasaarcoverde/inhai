@@ -47,6 +47,7 @@ export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
         zIndex: 10,
         margin: 0,
         top: 0,
+        bottom: 0,
         maxWidth: '100vw',
         maxHeight: '-webkit-fill-available',
         height: '100vh',
