@@ -74,6 +74,18 @@ export const Map = ({
 
       const markerIcon = new H.map.Icon(getMarkerIcon())
 
+      map.addEventListener(
+        'pointermove',
+        function (event: MouseEvent) {
+          if (event.target instanceof H.map.Marker) {
+            map.getViewPort().element.style.cursor = 'pointer'
+          } else {
+            map.getViewPort().element.style.cursor = 'auto'
+          }
+        },
+        false
+      )
+
       const markers =
         items?.map((item) => {
           const marker = new H.map.Marker(item.position, {
@@ -87,10 +99,6 @@ export const Map = ({
             const data = evt.target.getData()
 
             setCurrentItem(data as RatedPlace)
-
-            map.getViewModel().setLookAtData({
-              position: data.position,
-            })
 
             setTimeout(onOpenDetails, 50)
           })
@@ -110,10 +118,6 @@ export const Map = ({
           const data = evt.target.getData() as HereItem
 
           setCurrentItem(data as RatedPlace)
-          map.getViewModel().setLookAtData({
-            position: data.position,
-          })
-
           setTimeout(onOpenDetails, 50)
         })
 
