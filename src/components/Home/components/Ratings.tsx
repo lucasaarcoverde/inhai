@@ -9,7 +9,7 @@ import { Card, CardProps } from './Card'
 export function Ratings(props: Omit<CardProps, 'children'>) {
   const review = useStaticQuery(graphql`
     query {
-      file(relativePath: { eq: "location-review2.png" }) {
+      file(relativePath: { eq: "location-review.png" }) {
         childImageSharp {
           # Specify the image processing specifications right in the query.
           # Makes it trivial to update as your page's design changes.

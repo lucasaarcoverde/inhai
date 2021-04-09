@@ -53,22 +53,22 @@ export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
         height: '100vh',
       }}
     >
+      <Flex
+        position="fixed"
+        bg="gray.50"
+        width="100vw"
+        justifyContent="flex-start"
+        align="center"
+        paddingX="1"
+        shadow="sm"
+        borderBottom="solid"
+        borderWidth="1px"
+        borderColor="gray.100"
+        zIndex={13}
+      >
+        <CloseButton zIndex={14} onClick={onCloseDetails} />
+      </Flex>
       <Box bg="gray.50" height="100%" overflowY="scroll" paddingBottom="3">
-        <Flex
-          position="fixed"
-          bg="gray.50"
-          width="100vw"
-          justifyContent="flex-start"
-          align="center"
-          paddingX="1"
-          shadow="sm"
-          borderBottom="solid"
-          borderWidth="1px"
-          borderColor="gray.100"
-          zIndex={13}
-        >
-          <CloseButton zIndex={14} onClick={onCloseDetails} />
-        </Flex>
         <Stack spacing="3" paddingTop="32px">
           <RatingsCard {...item} />
           <PlaceCard {...item} />
