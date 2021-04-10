@@ -5,10 +5,16 @@ import { Seo } from '../components'
 
 // markup
 const NotFoundPage = () => {
+  const browser = typeof window !== 'undefined' && window
+
   return (
     <Fragment>
-      <Seo />
-      <NotFound />
+      {browser && (
+        <Fragment>
+          <Seo />
+          <NotFound />
+        </Fragment>
+      )}
     </Fragment>
   )
 }
