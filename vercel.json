@@ -1,5 +1,6 @@
 {
   "redirects": [
-    { "source": "/login", "destination": "/app" }
+    { "source": "/login", "destination": "/app" },
+    { "source": "/app/loading/*", "destination": "/app/loading" }
   ]
 }
