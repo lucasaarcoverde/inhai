@@ -8,6 +8,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Slide,
   useDisclosure,
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
@@ -18,18 +19,17 @@ import useFirebase from '../../hooks/useFirebase'
 import useHere, { HereItem } from '../../hooks/useHere'
 import { Autocomplete } from './components/Autocomplete'
 
-import { MobileSearch } from './MobileSearch'
-
 export function Search(props: SearchProps) {
   const [query, setQuery] = useState('')
   const [items, setItems] = useState<HereItem[]>([])
+
   const [loading, setLoading] = useState(false)
   const { onClose, isOpen, onOpen } = useDisclosure()
   const { desktop } = useMediaQuery()
   const { user, setUser } = useAuth()
   const { db } = useFirebase()
 
-  const { setSearchedItem, isSearchOpen } = props
+  const { setSearchedItem, isSearchOpen, onCloseSearch } = props
   const [queryValue] = useDebounce(query, 400)
 
   const { discoverAddress } = useHere()
@@ -87,21 +87,36 @@ export function Search(props: SearchProps) {
         >
           <Autocomplete
             setSearchedItem={setSearchedItem}
-            minWidth="300px"
-            maxWidth="350px"
+            height="calc(100vh - 163px)"
+            paddingBottom="48px"
+            marginTop="109px"
             setSearch={setQuery}
             searchValue={query}
             searchItems={items}
+            queryValue={queryValue}
           />
         </Flex>
       ) : (
-        <MobileSearch
-          {...props}
-          isSearchOpen={isSearchOpen}
-          setSearch={setQuery}
-          searchValue={query}
-          searchItems={items}
-        />
+        <Slide
+          direction="bottom"
+          in={isSearchOpen}
+          style={{
+            zIndex: 15,
+            margin: 0,
+            maxWidth: '100vw',
+            maxHeight: '-webkit-fill-available',
+            height: '100vh',
+          }}
+        >
+          <Autocomplete
+            setSearchedItem={setSearchedItem}
+            setSearch={setQuery}
+            searchValue={query}
+            searchItems={items}
+            queryValue={queryValue}
+            onCloseSearch={onCloseSearch}
+          />
+        </Slide>
       )}
       <Modal isOpen={isOpen} onClose={handleClose} isCentered size="xs">
         <ModalOverlay />
@@ -148,7 +163,6 @@ export function Search(props: SearchProps) {
                     () => onClose()
                   )
                 } catch (e) {
-                  console.log(e)
                   onClose()
                   setLoading(false)
                 }

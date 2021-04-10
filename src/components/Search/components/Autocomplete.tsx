@@ -9,12 +9,13 @@ import {
   StackDivider,
   Badge,
   Divider,
-  BoxProps,
+  StackProps,
 } from '@chakra-ui/react'
 import { useCombobox } from 'downshift'
 
 import { HereItem } from '../../../hooks/useHere'
 import { SearchProps } from '../index'
+import { EmptyState } from './EmptyState'
 import { useMediaQuery } from '../../../contexts'
 
 export function Autocomplete(
@@ -22,7 +23,8 @@ export function Autocomplete(
     setSearch: React.Dispatch<React.SetStateAction<string>>
     searchItems: HereItem[]
     searchValue: string
-  } & BoxProps
+    queryValue: string
+  } & StackProps
 ) {
   const {
     onCloseSearch,
@@ -30,7 +32,8 @@ export function Autocomplete(
     searchValue,
     searchItems,
     setSearchedItem,
-    ...boxProps
+    queryValue,
+    ...containerProps
   } = props
 
   const { desktop } = useMediaQuery()
@@ -61,8 +64,17 @@ export function Autocomplete(
   })
 
   return (
-    <Box {...boxProps} paddingX="4" paddingY="2" bg="white" h="100%">
-      <Stack spacing="2">
+    <>
+      <Stack
+        paddingX="4"
+        paddingTop="2"
+        spacing="2"
+        position="fixed"
+        bg="white"
+        maxWidth={[null, null, null, 350]}
+        minWidth={[null, null, null, 350]}
+        width={['100vw', '100vw', '100vw', '100%']}
+      >
         {!desktop && <CloseButton onClick={onCloseSearch} />}
         <Box {...getComboboxProps()}>
           <VisuallyHidden>
@@ -96,29 +108,42 @@ export function Autocomplete(
           </Stack>
           <Divider />
         </Stack>
-        <Stack
-          divider={<StackDivider borderColor="gray.200" />}
-          {...getMenuProps()}
-          height="80vh"
-          overflowY="scroll"
-        >
-          {searchItems.map((item, index) => (
-            <Stack
-              key={index}
-              bg={highlightedIndex === index ? 'gray.50' : 'whiteAlpha'}
-              {...getItemProps({ item, index })}
-              padding="4"
-              cursor="pointer"
-              borderRadius="4px"
-            >
-              <Text fontStyle="bold">{item.title}</Text>
-              <Text fontSize="sm" color="gray.600" isTruncated>
-                {item.address.label}
-              </Text>
-            </Stack>
-          ))}
-        </Stack>
       </Stack>
-    </Box>
+      <Box
+        height="calc(100vh - 149px)"
+        paddingX="4"
+        paddingBottom="2"
+        marginTop="149px"
+        backgroundColor="white"
+        overflowY="scroll"
+        {...containerProps}
+      >
+        {!!queryValue && searchItems.length === 0 ? (
+          <EmptyState {...getMenuProps()} searchValue={queryValue} />
+        ) : (
+          <Stack
+            divider={<StackDivider borderColor="gray.200" />}
+            {...getMenuProps()}
+          >
+            {searchItems.map((item, index) => (
+              <Stack
+                key={index}
+                width="100%"
+                bg={highlightedIndex === index ? 'gray.50' : 'whiteAlpha'}
+                {...getItemProps({ item, index })}
+                padding="4"
+                cursor="pointer"
+                borderRadius="4px"
+              >
+                <Text fontStyle="bold">{item.title}</Text>
+                <Text fontSize="sm" color="gray.600" isTruncated>
+                  {item.address.label}
+                </Text>
+              </Stack>
+            ))}
+          </Stack>
+        )}
+      </Box>
+    </>
   )
 }
