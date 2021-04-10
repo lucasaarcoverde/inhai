@@ -27,7 +27,7 @@ const App = () => {
           <RatingsPage path="/app/ratings" />
           <ProfilePage path="/app/profile" />
           <AdminPage path="/app/admin" />
-          <Redirect noThrow from="*" to="/404" />
+          {/* <Redirect noThrow from="*" to="/404" /> */}
         </Router>
       </MediaQueryProvider>
     </FirebaseProvider>
