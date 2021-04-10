@@ -42,13 +42,7 @@ export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
       >
         <CloseButton zIndex={14} onClick={onCloseDetails} />
       </Flex>
-      <Box
-        bg="gray.50"
-        height="100%"
-        overflowY="scroll"
-        sx={{ '-webkit-overflow-scrolling': 'touch' }}
-        paddingBottom="3"
-      >
+      <Box bg="gray.50" height="100%" overflowY="scroll" paddingBottom="3">
         <Stack spacing="3" paddingTop="32px">
           <RatingsCard {...item} />
           <PlaceCard {...item} />

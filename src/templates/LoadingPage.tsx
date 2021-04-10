@@ -42,15 +42,21 @@ const LoadingPage = ({
   }, [loading])
 
   React.useEffect(() => {
-    setTimeout(() => setLoading(false), 15000)
+    const loadingTimer = setTimeout(() => setLoading(false), 15000)
 
     firebase.auth().onAuthStateChanged((authUser) => {
-      if (authUser) {
-        setTimeout(() => navigate('/app'), 1500)
+      if (!authUser) return
+
+      const navigateTimer = setTimeout(() => navigate('/app'), 1000)
+
+      return () => {
+        clearTimeout(navigateTimer)
       }
     })
 
-    return
+    return () => {
+      clearTimeout(loadingTimer)
+    }
   }, [firebase])
 
   return (

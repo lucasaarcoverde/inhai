@@ -1,6 +1,6 @@
-import { Box, BoxProps, Fade, Skeleton, useColorMode } from '@chakra-ui/react'
+import { Box, BoxProps, Center, Fade, Spinner } from '@chakra-ui/react'
 import { useLocation } from '@reach/router'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useAuth } from '../../contexts/firebase'
 import { useMap } from '../../contexts/map'
 import { HereItem } from '../../hooks/useHere'
@@ -11,7 +11,6 @@ interface MapProps extends BoxProps {
   searchedItem: HereItem
   setCurrentItem: React.Dispatch<React.SetStateAction<RatedPlace>>
   onOpenDetails: () => void
-  items?: RatedPlace[]
 }
 
 declare global {
@@ -32,13 +31,10 @@ export const Map = ({
     lng: -35.8825037,
   }
 
-  const { colorMode } = useColorMode()
-
-  const [loading, setLoading] = useState(true)
-  const [windowLoading, setWindowLoading] = useState(true)
   const [mapOpen, setMapOpen] = useState(false)
-  const { user } = useAuth()
   const [initialLocation, setInitialLocation] = useState(defaultLocation)
+
+  const { user } = useAuth()
   const { items } = useMap()
 
   useEffect(() => {
@@ -47,117 +43,115 @@ export const Map = ({
     if (user?.currentLocation) setInitialLocation(user.currentLocation)
   }, [user])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!mapRef.current) return
 
-    if (!windowLoading) {
-      const { H, devicePixelRatio } = window as Window
-      const client = new H.service.Platform({
-        app_id: process.env.GATSBY_HERE_APP_ID,
-        apikey: process.env.GATSBY_HERE_KEY,
-      })
-      const defaultLayers = client.createDefaultLayers()
+    if (!window) return
 
-      const mapLayer =
-        colorMode === 'light'
-          ? defaultLayers.raster.normal.map
-          : defaultLayers.raster.normal.mapnight
+    const { H, devicePixelRatio } = window as Window
 
-      const map = new H.Map(mapRef.current, mapLayer, {
-        center: initialLocation,
-        zoom: 14,
-        pixelRatio: devicePixelRatio ?? 1,
-      })
+    if (!H) return
 
-      const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map))
-      var ui = H.ui.UI.createDefault(map, defaultLayers, 'pt-BR')
+    const client = new H.service.Platform({
+      apikey: process.env.GATSBY_HERE_KEY,
+    })
 
-      const positiveMarkerIcon = new H.map.Icon(getPositiveMarkerIcon())
-      const negativeMarkerIcon = new H.map.Icon(getNegativeMarkerIcon())
+    const defaultLayers = client.createDefaultLayers()
 
-      map.addEventListener(
-        'pointermove',
-        function (event: MouseEvent) {
-          if (event.target instanceof H.map.Marker) {
-            map.getViewPort().element.style.cursor = 'pointer'
-          } else {
-            map.getViewPort().element.style.cursor = 'auto'
-          }
-        },
-        false
-      )
+    const mapLayer = defaultLayers.raster.normal.map
 
-      const markers =
-        items?.map((item) => {
-          const { averageRating, position } = item
-          const marker = new H.map.Marker(position, {
-            icon: averageRating >= 3 ? positiveMarkerIcon : negativeMarkerIcon,
-          })
+    const map = new H.Map(mapRef.current, mapLayer, {
+      center: initialLocation,
+      zoom: 15,
+      pixelRatio: devicePixelRatio ?? 1,
+    })
 
-          marker.setData(item)
+    window.addEventListener('resize', () => map.getViewPort().resize())
 
-          marker.addEventListener('tap', (evt: any) => {
-            if (!evt) return
-            const data = evt.target.getData()
+    let behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map))
+    let ui = H.ui.UI.createDefault(map, defaultLayers, 'pt-BR')
 
-            setCurrentItem(data as RatedPlace)
+    const positiveMarkerIcon = new H.map.Icon(getPositiveMarkerIcon())
+    const negativeMarkerIcon = new H.map.Icon(getNegativeMarkerIcon())
 
-            setTimeout(onOpenDetails, 50)
-          })
+    if (!map) return
 
-          return marker
-        }) ?? []
+    map.addEventListener(
+      'pointermove',
+      function (event: MouseEvent) {
+        const viewPort = map.getViewPort()
+        const element = viewPort.element
 
-      if (searchedItem?.position) {
-        const marker = new H.map.Marker(searchedItem.position, {
-          icon: positiveMarkerIcon,
-        })
+        if (event.target instanceof H.map.Marker) {
+          if (!element) return
+          element.style.cursor = 'pointer'
+        } else {
+          element.style.cursor = 'auto'
+        }
+      },
+      false
+    )
 
-        marker.setData(searchedItem)
+    map.addEventListener(
+      'tap',
+      function (event: any) {
+        if (event.target instanceof H.map.Marker) {
+          if (!event) return
 
-        marker.addEventListener('tap', (evt: any) => {
-          if (!evt) return
-          const data = evt.target.getData() as HereItem
+          const data = event?.target?.getData()
 
           setCurrentItem(data as RatedPlace)
+
           setTimeout(onOpenDetails, 50)
+        }
+      },
+      false
+    )
+
+    const markers =
+      items?.map((item) => {
+        const { averageRating, position } = item
+        const marker = new H.map.Marker(position, {
+          icon: averageRating >= 3 ? positiveMarkerIcon : negativeMarkerIcon,
         })
 
-        markers.push(marker)
+        marker.setData(item)
 
-        map.setCenter(searchedItem.position)
-      }
+        return marker
+      }) ?? []
 
-      const container = new H.map.Group({
-        objects: markers,
+    if (searchedItem?.position) {
+      const marker = new H.map.Marker(searchedItem.position, {
+        icon: positiveMarkerIcon,
       })
 
-      map.addObject(container)
+      marker.setData(searchedItem)
 
-      window.addEventListener('resize', () => map.getViewPort().resize())
+      markers.push(marker)
 
-      return () => {
-        map.dispose()
-      }
+      map.setCenter(searchedItem.position)
     }
 
-    return
-  }, [windowLoading, searchedItem, items, colorMode, initialLocation])
+    const container = new H.map.Group({
+      objects: markers,
+    })
 
-  useEffect(() => {
-    if (loading) {
-      setTimeout(() => {
-        setLoading(false)
-        setMapOpen(true)
-      }, 1400)
-    }
+    map.addObject(container)
 
-    if (windowLoading) {
-      setTimeout(() => {
-        setWindowLoading(false)
-      }, 600)
+    return () => {
+      map.dispose()
     }
-  }, [])
+  }, [window, searchedItem, items, initialLocation])
+
+  useLayoutEffect(() => {
+    if (!window) return
+
+    const loadingTimer = setTimeout(() => setMapOpen(true), 550)
+
+    return () => {
+      clearTimeout(loadingTimer)
+    }
+  }, [window])
 
   const { pathname } = useLocation()
 
@@ -168,14 +162,14 @@ export const Map = ({
       maxHeight="-webkit-fill-available"
       {...boxProps}
     >
-      {loading && (
-        <Box
+      {!mapOpen && (
+        <Center
           height={pathname.includes('ratings') ? 'calc(40vh - 56px)' : '100%'}
           width="100%"
           padding={1}
         >
-          <Skeleton width="100%" height="100%" />
-        </Box>
+          <Spinner size="xl" color="teal.500" />
+        </Center>
       )}
       <Fade in={mapOpen}>
         <Box
