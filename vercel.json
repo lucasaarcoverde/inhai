@@ -1,6 +1,6 @@
 {
-  "redirects": [
+  "rewrites": [
     { "source": "/login", "destination": "/app" },
-    { "source": "/app/loading/*", "destination": "/app/loading" }
+    { "source": "/app/loading", "destination": "/app/loading" }
   ]
 }
