@@ -1,8 +1,8 @@
 import React, { createContext, useContext } from 'react'
-import { HereItem } from '../hooks/useHere'
+import { RatedPlace } from '../templates/RatingsPage'
 
 interface MapContextProps {
-  items?: HereItem[]
+  items?: RatedPlace[]
 }
 
 const MapContext = createContext<MapContextProps | null>(null)

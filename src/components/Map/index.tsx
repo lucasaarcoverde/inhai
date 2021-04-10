@@ -5,13 +5,13 @@ import { useAuth } from '../../contexts/firebase'
 import { useMap } from '../../contexts/map'
 import { HereItem } from '../../hooks/useHere'
 import { RatedPlace } from '../../templates/RatingsPage'
-import { getMarkerIcon } from './utils'
+import { getPositiveMarkerIcon, getNegativeMarkerIcon } from './utils'
 
 interface MapProps extends BoxProps {
   searchedItem: HereItem
   setCurrentItem: React.Dispatch<React.SetStateAction<RatedPlace>>
   onOpenDetails: () => void
-  items?: HereItem[]
+  items?: RatedPlace[]
 }
 
 declare global {
@@ -72,7 +72,8 @@ export const Map = ({
       const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map))
       var ui = H.ui.UI.createDefault(map, defaultLayers, 'pt-BR')
 
-      const markerIcon = new H.map.Icon(getMarkerIcon())
+      const positiveMarkerIcon = new H.map.Icon(getPositiveMarkerIcon())
+      const negativeMarkerIcon = new H.map.Icon(getNegativeMarkerIcon())
 
       map.addEventListener(
         'pointermove',
@@ -88,8 +89,9 @@ export const Map = ({
 
       const markers =
         items?.map((item) => {
-          const marker = new H.map.Marker(item.position, {
-            icon: markerIcon,
+          const { averageRating, position } = item
+          const marker = new H.map.Marker(position, {
+            icon: averageRating >= 3 ? positiveMarkerIcon : negativeMarkerIcon,
           })
 
           marker.setData(item)
@@ -108,7 +110,7 @@ export const Map = ({
 
       if (searchedItem?.position) {
         const marker = new H.map.Marker(searchedItem.position, {
-          icon: markerIcon,
+          icon: positiveMarkerIcon,
         })
 
         marker.setData(searchedItem)

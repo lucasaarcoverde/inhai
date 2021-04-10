@@ -33,7 +33,7 @@ const MapPage = ({
 
   const { firebase } = useAuth()
 
-  const [items, setItems] = useState<HereItem[]>()
+  const [items, setItems] = useState<RatedPlace[]>()
 
   useEffect(() => {
     if (items) return
@@ -52,7 +52,7 @@ const MapPage = ({
             return doc.data() as HereItem
           }) ?? []
 
-        setItems(mapItems as HereItem[])
+        setItems(mapItems as RatedPlace[])
       })
   }, [items])
 
