@@ -1,45 +1,15 @@
 import { Stack, Flex, Slide, CloseButton, Box } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
-import { RatedPlace, Rating } from '../../templates/RatingsPage'
+import React from 'react'
+import { RatedPlace } from '../../templates/RatingsPage'
 import { RatingsCard } from './components/RatingsCard'
 import { PlaceCard } from './components/PlaceCard'
-import { useAuth } from '../../contexts/firebase'
 import { RatingsDetails } from './components/RatingsDetails'
 import { useMediaQuery } from '../../contexts'
 
 export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
   const { isDetailsOpen, onCloseDetails, item } = props
-  const [ratings, setRatings] = useState([] as Rating[])
-  const [loading, setLoading] = useState(true)
-  const { firebase } = useAuth()
+
   const { desktop } = useMediaQuery()
-
-  useEffect(() => {
-    if (!item.id) return
-
-    setLoading(true)
-
-    const db = firebase.firestore()
-    db.collection('ratings')
-      .where('placeId', '==', item.id)
-      .limit(50)
-      .get()
-      .then((snap) => {
-        const docs = snap.docs
-        const ratings =
-          docs.map((doc) => {
-            if (!doc.exists) return
-
-            return doc.data() as Rating
-          }) ?? []
-
-        setRatings(ratings as Rating[])
-      })
-      .finally(() => {
-        setTimeout(() => setLoading(false), 100)
-      })
-      .catch((e) => console.log(e))
-  }, [item])
 
   return (
     <Slide
@@ -72,11 +42,17 @@ export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
       >
         <CloseButton zIndex={14} onClick={onCloseDetails} />
       </Flex>
-      <Box bg="gray.50" height="100%" overflowY="scroll" paddingBottom="3">
+      <Box
+        bg="gray.50"
+        height="100%"
+        overflowY="scroll"
+        sx={{ '-webkit-overflow-scrolling': 'touch' }}
+        paddingBottom="3"
+      >
         <Stack spacing="3" paddingTop="32px">
           <RatingsCard {...item} />
           <PlaceCard {...item} />
-          <RatingsDetails loading={loading} {...item} ratings={ratings} />
+          <RatingsDetails {...item} />
         </Stack>
       </Box>
     </Slide>

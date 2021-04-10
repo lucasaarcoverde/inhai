@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Heading,
   Divider,
@@ -14,15 +14,81 @@ import { RatedPlace, Rating } from '../../../templates/RatingsPage'
 import { CommentList } from './CommentList'
 import { RatingBar } from './RatingBar'
 import { navigate } from 'gatsby'
+import { useAuth } from '../../../contexts/firebase'
 
-export function RatingsDetails(
-  props: RatedPlace & { ratings: Rating[]; loading: boolean }
-) {
-  const { ratings, loading, ...ratedPlace } = props
+export function RatingsDetails(props: RatedPlace) {
+  const [ratings, setRatings] = useState([] as Rating[])
+  const [lastKey, setLastKey] = useState('')
+  const [loading, setLoading] = useState(true)
 
-  const { ratingsQty, rateDetails } = ratedPlace
+  const { firebase } = useAuth()
+
+  const { id, ratingsQty, rateDetails } = props
   const { good = 0, bad = 0, horrible = 0, excellent = 0, neutral = 0 } =
     rateDetails ?? {}
+
+  useEffect(() => {
+    console.log(props)
+    if (!id) return
+
+    setLoading(true)
+    const db = firebase.firestore()
+    db.collection('ratings')
+      .where('placeId', '==', id)
+      .orderBy('created')
+      .limit(5)
+      .get()
+      .then((snap) => {
+        const docs = snap.docs
+        let lastKey = ''
+        const ratings =
+          docs.map((doc) => {
+            if (!doc.exists) return
+
+            lastKey = doc.data().created
+            return doc.data() as Rating
+          }) ?? []
+
+        setLastKey(lastKey)
+        setRatings(ratings as Rating[])
+      })
+      .finally(() => {
+        setTimeout(() => setLoading(false), 100)
+      })
+      .catch((e) => console.log(e))
+  }, [id])
+
+  const loadMoreRatings = useCallback(
+    (id: string) => {
+      setLoading(true)
+      const db = firebase.firestore()
+      db.collection('ratings')
+        .where('placeId', '==', id)
+        .orderBy('created')
+        .startAfter(lastKey)
+        .limit(10)
+        .get()
+        .then((snap) => {
+          const docs = snap.docs
+          let lastKey = ''
+          const ratings =
+            docs.map((doc) => {
+              if (!doc.exists) return
+
+              lastKey = doc.data().created
+              return doc.data() as Rating
+            }) ?? []
+
+          setLastKey(lastKey)
+          setRatings((prev) => [...prev, ...ratings] as Rating[])
+          setLoading(false)
+        })
+        .catch(() => {
+          setLoading(false)
+        })
+    },
+    [firebase, lastKey]
+  )
 
   return (
     <Stack
@@ -49,10 +115,7 @@ export function RatingsDetails(
           size="xs"
           colorScheme="teal"
           onClick={() => {
-            window.localStorage.setItem(
-              'rate-place',
-              JSON.stringify(ratedPlace)
-            )
+            window.localStorage.setItem('rate-place', JSON.stringify(props))
             navigate('/app/ratings')
           }}
         >
@@ -67,12 +130,17 @@ export function RatingsDetails(
         <RatingBar label="Horrível" points={horrible} total={ratingsQty} />
       </Stack>
       <Divider />
-      {loading ? (
+      {loading && ratings.length === 0 ? (
         <Center>
           <Spinner size="md" color="teal.500" />
         </Center>
       ) : (
-        <CommentList ratings={ratings} />
+        <CommentList
+          loading={loading}
+          onLoadMoreRatings={() => loadMoreRatings(id)}
+          limit={ratings.length >= ratingsQty}
+          ratings={ratings}
+        />
       )}
     </Stack>
   )

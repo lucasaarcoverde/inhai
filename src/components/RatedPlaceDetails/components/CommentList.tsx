@@ -1,17 +1,38 @@
-import { Avatar, Text, HStack, Stack, Icon, Flex } from '@chakra-ui/react'
+import { ChevronDownIcon } from '@chakra-ui/icons'
+import {
+  Avatar,
+  Text,
+  HStack,
+  Stack,
+  Icon,
+  Flex,
+  IconButton,
+} from '@chakra-ui/react'
 import React from 'react'
 import { RiStarSFill } from 'react-icons/ri'
 
 import { Rating } from '../../../templates/RatingsPage'
 
 export function CommentList(props: CommentListProps) {
-  const { ratings } = props
+  const { ratings, limit = false, loading, onLoadMoreRatings } = props
 
   return (
     <Stack spacing="4" overflowX="hidden">
       {ratings.map((rating, index) => {
         return <Comment rating={rating} key={index} />
       })}
+      {!limit && (
+        <IconButton
+          aria-label="Botão para carregar mais avaliações"
+          isLoading={loading}
+          onClick={onLoadMoreRatings}
+          variant="ghost"
+          size="sm"
+          minHeight="32px"
+          icon={<ChevronDownIcon boxSize="6" />}
+          colorScheme="teal"
+        />
+      )}
     </Stack>
   )
 }
@@ -57,6 +78,9 @@ export function Comment(props: CommentProps) {
 
 export interface CommentListProps {
   ratings: Rating[]
+  onLoadMoreRatings: () => void
+  limit: boolean
+  loading: boolean
 }
 
 export interface CommentProps {
