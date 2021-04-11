@@ -116,6 +116,8 @@ export function Autocomplete(
         marginTop="149px"
         backgroundColor="white"
         overflowY="scroll"
+        maxWidth={[null, null, null, 350]}
+        minWidth={[null, null, null, 350]}
         {...containerProps}
       >
         {!!queryValue && searchItems.length === 0 ? (
