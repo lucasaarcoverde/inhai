@@ -23,7 +23,7 @@ export function RatingsDetails(props: RatedPlace) {
 
   const { firebase } = useAuth()
 
-  const { id, ratingsQty, rateDetails } = props
+  const { id, ratingsQty = 0, rateDetails } = props
   const { good = 0, bad = 0, horrible = 0, excellent = 0, neutral = 0 } =
     rateDetails ?? {}
 

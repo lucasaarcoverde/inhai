@@ -34,6 +34,7 @@ export const Map = ({
   const [mapOpen, setMapOpen] = useState(false)
   const [initialLocation, setInitialLocation] = useState(defaultLocation)
 
+  const { pathname } = useLocation()
   const { user } = useAuth()
   const { items } = useMap()
 
@@ -101,7 +102,6 @@ export const Map = ({
           const data = event?.target?.getData()
 
           setCurrentItem(data as RatedPlace)
-
           setTimeout(onOpenDetails, 50)
         }
       },
@@ -152,8 +152,6 @@ export const Map = ({
       clearTimeout(loadingTimer)
     }
   }, [window])
-
-  const { pathname } = useLocation()
 
   return (
     <Box

@@ -7,12 +7,12 @@ import { LGBTIcon } from './LGBTIcon'
 
 export function RatingsCard(props: RatedPlace) {
   const {
-    ratingsQty,
-    averageRating,
-    safePlace,
-    unsafePlace,
-    frequentedBy,
-    notFrequentedBy,
+    ratingsQty = 0,
+    averageRating = 0,
+    safePlace = 0,
+    unsafePlace = 0,
+    frequentedBy = 0,
+    notFrequentedBy = 0,
   } = props
 
   const totalSafePlace = safePlace + unsafePlace
@@ -33,7 +33,7 @@ export function RatingsCard(props: RatedPlace) {
         Pontuações e Avaliações
       </Heading>
       <Flex align="center" justifyContent="space-between">
-        {averageRating && (
+        {averageRating >= 0 && (
           <Stack align="center" fontSize="md" direction="row" spacing={1}>
             <Text fontWeight="semibold" color="black">
               {averageRating.toFixed(2)}
@@ -41,9 +41,9 @@ export function RatingsCard(props: RatedPlace) {
             <LGBTIcon height="18px" width="18px" />
           </Stack>
         )}
-        {ratingsQty && (
+        {ratingsQty >= 0 && (
           <Text marginLeft="2" fontSize="sm">
-            {`${ratingsQty} ${ratingsQty === 1 ? 'avaliação' : 'avaliações'}`}
+            {`${ratingsQty} ${ratingsQty <= 1 ? 'avaliação' : 'avaliações'}`}
           </Text>
         )}
       </Flex>

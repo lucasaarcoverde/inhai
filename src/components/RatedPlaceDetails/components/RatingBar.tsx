@@ -3,6 +3,7 @@ import { Flex, Text, HStack, Progress } from '@chakra-ui/react'
 
 export function RatingBar(props: RatingBarProps) {
   const { label, total, points } = props
+
   return (
     <Flex width="100%" justifyContent="space-between">
       <Text fontSize="xs">{label}</Text>
@@ -11,7 +12,7 @@ export function RatingBar(props: RatingBarProps) {
         <Progress
           width="100px"
           colorScheme="teal"
-          value={(points / total) * 100}
+          value={(points / Math.max(1, total)) * 100}
         />
       </HStack>
     </Flex>
