@@ -45,6 +45,8 @@ export interface FirebaseContextData {
   setUser: (user: User) => void
   logout: () => void
   loginWithGoogle: () => void
+  loginWithFacebook: () => void
+  loginWithTwitter: () => void
   usersRef?: (
     db: firebase.firestore.Firestore
   ) => firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
@@ -68,6 +70,8 @@ export const FirebaseContext = createContext<FirebaseContextData>({
   setUser: () => {},
   logout: () => {},
   loginWithGoogle: () => {},
+  loginWithFacebook: () => {},
+  loginWithTwitter: () => {},
   user: null,
 })
 
@@ -100,15 +104,27 @@ export const FirebaseProvider: React.FC = ({ children }) => {
       .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
       .then(() => {
         const googleProvider = new firebase.auth.GoogleAuthProvider()
-        return firebase
-          .auth()
-          .signInWithRedirect(googleProvider)
-          .catch(() => {
-            navigate('/login')
-          })
-          .then(() => {
-            navigate('/app/loading')
-          })
+        return firebase.auth().signInWithRedirect(googleProvider)
+      })
+  }, [firebase])
+
+  const loginWithTwitter = useCallback(() => {
+    firebase
+      .auth()
+      .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(() => {
+        const twitterProvider = new firebase.auth.TwitterAuthProvider()
+        return firebase.auth().signInWithRedirect(twitterProvider)
+      })
+  }, [firebase])
+
+  const loginWithFacebook = useCallback(() => {
+    firebase
+      .auth()
+      .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(() => {
+        const facebookProvider = new firebase.auth.FacebookAuthProvider()
+        return firebase.auth().signInWithRedirect(facebookProvider)
       })
   }, [firebase])
 
@@ -183,7 +199,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
                 email: authUser.email,
                 id: authUser.uid,
                 newUser: true,
-                created: firebase.firestore.Timestamp.fromDate(new Date()),
+                createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
               } as User
 
               usersRef(db)
@@ -223,6 +239,8 @@ export const FirebaseProvider: React.FC = ({ children }) => {
         ratingsRef,
         citiesRef,
         loginWithGoogle,
+        loginWithFacebook,
+        loginWithTwitter,
         logout,
       }}
     >

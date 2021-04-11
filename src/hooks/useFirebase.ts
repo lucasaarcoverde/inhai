@@ -17,7 +17,7 @@ export default () => {
       .doc(place.id)
       .set({
         ...place,
-        created: firebase.firestore.Timestamp.fromDate(new Date()),
+        createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
       })
   }, [])
 
@@ -30,14 +30,14 @@ export default () => {
       .doc(rating.id)
       .set({
         ...rating,
-        created: firebase.firestore.Timestamp.fromDate(new Date()),
+        createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
       })
   }, [])
 
   const addCity = useCallback((id: string) => {
     return citiesRef?.(db)
       .doc(id)
-      .set({ created: firebase.firestore.Timestamp.fromDate(new Date()) })
+      .set({ createdAt: firebase.firestore.Timestamp.fromDate(new Date()) })
   }, [])
 
   const updateInfo = useCallback((info: any) => {

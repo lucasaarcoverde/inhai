@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Button,
   Spinner,
@@ -15,6 +15,8 @@ import {
   AlertDialogFooter,
   useDisclosure,
   FlexProps,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react'
 import { Form, Formik, FormikHelpers } from 'formik'
 
@@ -43,13 +45,52 @@ const labelStyle = {
   },
 }
 export function Profile(props: FlexProps) {
+  const [emailVerified, setEmailVerified] = useState(true)
+
   const { user, logout, setUser, firebase } = useAuth()
   const toast = useCallback(createStandaloneToast(), [])
   const { desktop } = useMediaQuery()
   const { updateInfo } = useFirebase()
-
   const { isOpen, onOpen, onClose } = useDisclosure()
+
   const cancelRef = React.useRef<HTMLButtonElement>()
+
+  useEffect(() => {
+    const currentUser = firebase.auth().currentUser
+
+    if (!currentUser) return
+
+    setEmailVerified(currentUser.emailVerified)
+  }, [])
+
+  const verifyEmail = useCallback(() => {
+    const currentUser = firebase.auth().currentUser
+
+    if (!currentUser) return
+
+    currentUser
+      .sendEmailVerification()
+      .then(() => {
+        toast({
+          title: 'Verificação de email',
+          description: 'Enviamos um email para você.',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+          position: 'top',
+        })
+      })
+      .catch(() => {
+        toast({
+          title: 'Verificação de email',
+          description: 'Falha ao enviar email de verificação, tente novamente.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+          position: 'top',
+        })
+      })
+  }, [firebase])
 
   const successSaving = useCallback(
     () =>
@@ -174,6 +215,26 @@ export function Profile(props: FlexProps) {
                   label="Email"
                   isRequired
                 />
+                {!emailVerified && (
+                  <Alert
+                    minHeight="32px"
+                    fontSize="xs"
+                    variant="top-accent"
+                    status="warning"
+                  >
+                    <AlertIcon boxSize="4" />
+                    Seu e-mail ainda não foi verificado.{' '}
+                    <Button
+                      variant="link"
+                      size="xs"
+                      fontSize="xs"
+                      color="blue.600"
+                      onClick={verifyEmail}
+                    >
+                      Verificar
+                    </Button>
+                  </Alert>
+                )}
                 <SelectControl
                   sx={labelStyle}
                   name="sexualOrientation"
@@ -193,7 +254,7 @@ export function Profile(props: FlexProps) {
                   <option value="prefer-not-to-answer">
                     Prefiro não responder
                   </option>
-                  <option value="another-orientation">Outros</option>
+                  <option value="other-orientation">Outros</option>
                 </SelectControl>
                 <SelectControl
                   sx={labelStyle}
@@ -213,14 +274,22 @@ export function Profile(props: FlexProps) {
                   <option value="prefer-not-to-answer">
                     Prefiro não responder
                   </option>
-                  <option value="another-gender">Outros</option>
+                  <option value="other-gender">Outros</option>
                 </SelectControl>
-                <InputControl
+                <SelectControl
                   sx={labelStyle}
                   name="pronoun"
-                  helperText="(Ele/Dele; Ela/Dela; Eles/Deles)"
                   label="Pronome"
-                />
+                  selectProps={{
+                    placeholder: 'Selecione uma opção',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <option value="he/him">Ele/Dele</option>
+                  <option value="she/her">Ela/Dela</option>
+                  <option value="They/Them">Eles/Deles</option>
+                  <option value="other-pronoun">Outros</option>
+                </SelectControl>
                 <SelectControl
                   sx={labelStyle}
                   name="age"
@@ -230,9 +299,9 @@ export function Profile(props: FlexProps) {
                     cursor: 'pointer',
                   }}
                 >
-                  {Array.from({ length: 120 }, (_, index) => (
-                    <option key={index} value={index + 1}>
-                      {index + 1}
+                  {Array.from({ length: 100 }, (_, index) => (
+                    <option key={index} value={index + 16}>
+                      {index + 16}
                     </option>
                   ))}
                 </SelectControl>

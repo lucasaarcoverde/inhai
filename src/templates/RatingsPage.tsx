@@ -47,7 +47,7 @@ export interface Rating {
   anonymous?: boolean
   id: string
   like: number
-  created: firebase.firestore.Timestamp
+  createdAt: firebase.firestore.Timestamp
 }
 
 export interface RatedPlace extends HereItem {

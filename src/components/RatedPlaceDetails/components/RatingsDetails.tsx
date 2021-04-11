@@ -35,7 +35,7 @@ export function RatingsDetails(props: RatedPlace) {
     const db = firebase.firestore()
     db.collection('ratings')
       .where('placeId', '==', id)
-      .orderBy('created')
+      .orderBy('createdAt')
       .limit(5)
       .get()
       .then((snap) => {
@@ -45,7 +45,7 @@ export function RatingsDetails(props: RatedPlace) {
           docs.map((doc) => {
             if (!doc.exists) return
 
-            lastKey = doc.data().created
+            lastKey = doc.data().createdAt
             return doc.data() as Rating
           }) ?? []
 
@@ -64,7 +64,7 @@ export function RatingsDetails(props: RatedPlace) {
       const db = firebase.firestore()
       db.collection('ratings')
         .where('placeId', '==', id)
-        .orderBy('created')
+        .orderBy('createdAt')
         .startAfter(lastKey)
         .limit(10)
         .get()
@@ -75,7 +75,7 @@ export function RatingsDetails(props: RatedPlace) {
             docs.map((doc) => {
               if (!doc.exists) return
 
-              lastKey = doc.data().created
+              lastKey = doc.data().createdAt
               return doc.data() as Rating
             }) ?? []
 

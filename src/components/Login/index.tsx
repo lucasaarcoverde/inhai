@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import {
   Button,
-  Divider,
   Flex,
   FormControl,
   Icon,
@@ -12,29 +11,34 @@ import {
   InputRightElement,
   Stack,
   Text,
-  Link,
   Heading,
   Center,
   FormErrorMessage,
   FormLabel,
+  useDisclosure,
+  createStandaloneToast,
+  HStack,
 } from '@chakra-ui/react'
 
 import * as Yup from 'yup'
 import { FcGoogle } from 'react-icons/fc'
-
-import { navigate } from 'gatsby'
-import { useAuth } from '../../contexts/firebase'
-import { EmailIcon, LockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { CgProfile } from 'react-icons/cg'
+import { navigate } from 'gatsby'
+import { EmailIcon, LockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+
+import { useAuth } from '../../contexts/firebase'
 import { Formik, Form, Field } from 'formik'
 import useFirebase from '../../hooks/useFirebase'
+import { PasswordRecovery } from './components/PasswordRecovery'
 
 export type Values = { name: string; email: string; password: string }
 
 const signupValidationSchema = Yup.object({
   name: Yup.string().required('Nome é obrigatório.'),
   email: Yup.string().email('Email inválido.').required('Email é obrigatório'),
-  password: Yup.string().required('Senha é obrigatório.'),
+  password: Yup.string()
+    .required('Senha é obrigatório.')
+    .min(6, 'Sua senha deve ter no mínimo 6 caracteres.'),
 })
 
 const signinValidationSchema = Yup.object({
@@ -45,7 +49,9 @@ const signinValidationSchema = Yup.object({
 export const Login = () => {
   const [passwordShown, setPasswordShown] = useState(false)
   const [signup, setSignup] = useState(false)
-  const [error, setError] = useState(false)
+
+  const toast = useCallback(createStandaloneToast(), [])
+  const { isOpen, onClose, onOpen } = useDisclosure()
   const { firebase, loginWithGoogle } = useAuth()
   const { updateInfo } = useFirebase()
 
@@ -58,30 +64,28 @@ export const Login = () => {
   }, [firebase])
 
   const handleEmailLogin = useCallback(async (values: Values) => {
-    try {
-      const { email, password } = values
-      await firebase
-        .auth()
-        .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-        .then(() => {
-          const user = firebase
-            .auth()
-            .signInWithEmailAndPassword(email, password)
-
-          if (user) {
-            setError(false)
+    const { email, password } = values
+    await firebase
+      .auth()
+      .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(() => {
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(email, password)
+          .then(() => {
             navigate('/app/loading')
-          } else {
-            setError(true)
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    } catch (e) {
-      console.log(e)
-      setError(true)
-    }
+          })
+          .catch(() => {
+            toast({
+              title: 'Erro ao entrar.',
+              description: 'Email ou senha inválidos.',
+              status: 'error',
+              duration: 3000,
+              isClosable: true,
+              position: 'top',
+            })
+          })
+      })
   }, [])
 
   // Method for signing up and logging in.
@@ -91,39 +95,67 @@ export const Login = () => {
 
     const usersRef = db.collection('users')
 
-    try {
-      const { user } = await firebase
-        .auth()
-        .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-        .then(() => {
-          return firebase.auth().createUserWithEmailAndPassword(email, password)
-        })
+    await firebase
+      .auth()
+      .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+      .then(() => {
+        firebase
+          .auth()
+          .createUserWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            const user = userCredential.user
+            if (!user) return
 
-      if (user) {
-        const userDb = {
-          name,
-          email,
-          displayName: name,
-          id: user.uid,
-          newUser: true,
-          created: firebase.firestore.Timestamp.fromDate(new Date()),
-        }
+            const userDb = {
+              name,
+              email,
+              displayName: name,
+              id: user.uid,
+              newUser: true,
+              createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+            }
 
-        usersRef.doc(user.uid).set(userDb)
+            usersRef.doc(user.uid).set(userDb)
 
-        updateInfo({
-          users: firebase.firestore.FieldValue.increment(1),
-        })
+            user.sendEmailVerification().then(() => {
+              toast({
+                title: 'Verificação de email',
+                description: 'Enviamos um email para você.',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+                position: 'top',
+              })
+            })
 
-        setError(false)
-        navigate('/app/loading')
-      } else {
-        setError(true)
-      }
-    } catch (e) {
-      console.log(e)
-      setError(true)
-    }
+            updateInfo({
+              users: firebase.firestore.FieldValue.increment(1),
+            })
+            navigate('/app/loading')
+          })
+          .catch((err) => {
+            if (err.code === 'auth/email-already-in-use') {
+              toast({
+                title: 'Erro ao criar conta.',
+                description: 'Esse email já está em uso.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+                position: 'top',
+              })
+            } else {
+              console.log(err)
+              toast({
+                title: 'Erro ao criar conta.',
+                description: 'Email ou senha inválidos.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+                position: 'top',
+              })
+            }
+          })
+      })
   }, [])
 
   return (
@@ -257,52 +289,61 @@ export const Login = () => {
                   </FormControl>
                 )}
               </Field>
-              {error && (
-                <Text fontSize="sm" color="red.500">
-                  Email ou Senha inválidos
-                </Text>
+              {!signup && (
+                <Flex justify="flex-end">
+                  <Button
+                    variant="link"
+                    size="xs"
+                    color="blue.600"
+                    onClick={onOpen}
+                  >
+                    Esqueci a senha
+                  </Button>
+                  <PasswordRecovery open={isOpen} handleClose={onClose} />
+                </Flex>
               )}
+            </Stack>
+
+            <Stack spacing="2">
+              <Button
+                type="submit"
+                colorScheme="teal"
+                size="md"
+                isLoading={props.isSubmitting}
+              >
+                {signup ? 'Registrar' : 'Entrar'}
+              </Button>
               <Flex justify="center">
                 <Text fontSize="xs" color="blackAlpha" fontWeight="semibold">
-                  {signup ? 'Já possui uma conta?' : 'Novo no nosso app?'}{' '}
-                  <Link
+                  {signup ? 'Já possui uma conta?' : 'Novo no Inhaí?'}{' '}
+                  <Button
+                    variant="link"
+                    size="xs"
                     color="blue.600"
-                    fontSize="xs"
-                    cursor="pointer"
                     onClick={() => setSignup((prev) => !prev)}
                   >
                     {signup ? 'Entrar' : 'Registrar-se'}
-                  </Link>
+                  </Button>
                 </Text>
               </Flex>
             </Stack>
-
-            <Button
-              type="submit"
-              colorScheme="teal"
-              size="lg"
-              isLoading={props.isSubmitting}
-            >
-              {signup ? 'Registrar' : 'Entrar'}
-            </Button>
-            <Stack direction="row" align="center" paddingX={4}>
-              <Divider />
-              <Text textColor="gray.300">ou</Text>
-              <Divider />
-            </Stack>
-            <Button
-              leftIcon={<Icon boxSize={6} as={FcGoogle} />}
-              type="button"
-              variant="ghost"
-              size="lg"
-              color="blackAlpha"
-              onClick={() => {
-                loginWithGoogle()
-                navigate('/app/loading')
-              }}
-            >
-              Entrar com Google
-            </Button>
+            <HStack spacing="2" justifyContent="center">
+              <Text minWidth="100px" textColor="gray.500" fontSize="sm">
+                ou entre com:
+              </Text>
+              <IconButton
+                icon={<Icon boxSize={6} as={FcGoogle} />}
+                shadow="md"
+                colorScheme="whiteAlpha"
+                size="md"
+                borderRadius="full"
+                onClick={() => {
+                  loginWithGoogle()
+                  navigate('/app/loading')
+                }}
+                aria-label="Entrar com google"
+              />
+            </HStack>
           </Stack>
         </Form>
       )}

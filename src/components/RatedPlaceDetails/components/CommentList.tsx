@@ -39,7 +39,7 @@ export function CommentList(props: CommentListProps) {
 
 export function Comment(props: CommentProps) {
   const {
-    rating: { user, comment, anonymous = true, rate, created },
+    rating: { user, comment, anonymous = true, rate, createdAt },
     ...restProps
   } = props
 
@@ -65,9 +65,9 @@ export function Comment(props: CommentProps) {
             return <Icon as={RiStarSFill} key={index} boxSize="18px" />
           })}
         </Flex>
-        {created && (
+        {createdAt && (
           <Text fontSize="x-small" color="gray.500">
-            Avaliado em {created.toDate().toLocaleDateString('pt-BR')}
+            Avaliado em {createdAt.toDate().toLocaleDateString('pt-BR')}
           </Text>
         )}
       </HStack>
