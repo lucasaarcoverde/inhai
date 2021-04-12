@@ -11,6 +11,7 @@ export function DesktopTopbar(props: FlexboxProps) {
         direction="row"
         height="56px"
         width="100%"
+        top="0"
         justifyContent="center"
         align="center"
         bg="white"

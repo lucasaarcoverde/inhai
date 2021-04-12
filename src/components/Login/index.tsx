@@ -339,7 +339,7 @@ export const Login = () => {
                 borderRadius="full"
                 onClick={() => {
                   loginWithGoogle()
-                  navigate('/app/loading')
+                  navigate('/loading')
                 }}
                 aria-label="Entrar com google"
               />

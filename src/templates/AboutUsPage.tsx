@@ -3,19 +3,18 @@ import { RouteComponentProps } from '@reach/router'
 import {
   Flex,
   Heading,
-  Spacer,
   Stack,
   StackDivider,
   Text,
-  Center,
   Box,
   OrderedList,
   ListItem,
   FlexProps,
+  Grid,
 } from '@chakra-ui/react'
 import Img from 'gatsby-image'
 
-import { DefaultFooter, Layout } from '../components'
+import { Sidebar } from '../components'
 import { ReactNode } from 'react'
 import { graphql, useStaticQuery } from 'gatsby'
 import { useMediaQuery } from '../contexts'
@@ -38,21 +37,21 @@ const AboutUsPage = ({
   `)
   const { desktop } = useMediaQuery()
 
-  const layoutProps = desktop
-    ? { height: 'calc(100vh - 104px)', overflowY: 'scroll' }
+  const layoutProps: FlexProps = desktop
+    ? { height: 'calc(100vh - 120px)', overflowY: 'scroll' }
     : {}
 
   return (
-    <Layout>
+    <Grid templateColumns={desktop ? '1fr 2fr 1fr' : '1fr'}>
+      {desktop && <Sidebar />}
       <Flex
         width="100%"
         direction="column"
-        height="calc(100vh - 56px)"
         maxH="-webkit-fill-available"
         padding="6"
         fontSize="sm"
         fontWeight="medium"
-        {...(layoutProps as FlexProps)}
+        {...layoutProps}
       >
         {children}
         <Stack spacing="3" divider={<StackDivider />}>
@@ -108,15 +107,14 @@ const AboutUsPage = ({
             </OrderedList>
           </FaqSection>
         </Stack>
-        <Center width="100%" paddingBottom="72px">
+        <Flex justifyContent="center">
           <Box width="100%" maxWidth="400px">
             <Img fluid={data.file.childImageSharp.fluid} alt="Loading image" />
           </Box>
-        </Center>
-        <Spacer />
-        {!desktop && <DefaultFooter />}
+        </Flex>
+        {/* {!desktop && <DefaultFooter />} */}
       </Flex>
-    </Layout>
+    </Grid>
   )
 }
 

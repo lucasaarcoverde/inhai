@@ -1,30 +1,29 @@
 import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
-import { useDisclosure } from '@chakra-ui/react'
+import { Grid, IconButton, useDisclosure } from '@chakra-ui/react'
 
-import { Search, Map, Layout, Tutorial } from '../components'
+import { Search, Map, Tutorial, Sidebar } from '../components'
 import { HereItem } from '../hooks/useHere'
 import { useEffect, useState } from 'react'
 import { RatedPlaceDetails } from '../components'
-import { MapProvider } from '../contexts/map'
 import { useAuth } from '../contexts/firebase'
 import { RatedPlace } from './RatingsPage'
 import { useMediaQuery } from '../contexts'
+import { useLayout } from '../contexts/layout'
+import { AddIcon } from '@chakra-ui/icons'
+import { navigate } from 'gatsby'
 
 const MapPage = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
-  const {
-    isOpen: isSearchOpen,
-    onOpen: onOpenSearch,
-    onClose: onCloseSearch,
-  } = useDisclosure()
+  const { searchOpen, onCloseSearch } = useLayout()
 
   const {
     isOpen: isDetailsOpen,
     onOpen: onOpenDetails,
     onClose: onCloseDetails,
   } = useDisclosure()
+
   const { desktop } = useMediaQuery()
 
   const [searchedItem, setSearchedItem] = useState<HereItem>({} as HereItem)
@@ -57,29 +56,42 @@ const MapPage = ({
   }, [items])
 
   return (
-    <MapProvider items={items}>
-      <Layout onOpenSearch={onOpenSearch}>
-        <Map
-          paddingBottom={desktop ? '48px' : '0'}
-          minHeight="-webkit-fill-available"
-          onOpenDetails={onOpenDetails}
-          searchedItem={searchedItem}
-          setCurrentItem={setCurrentItem}
+    <Grid templateColumns={desktop ? '1fr 2fr 1fr' : '1fr'}>
+      {desktop && <Sidebar />}
+      <Map
+        items={items}
+        width={desktop ? '100%' : '100vw'}
+        onOpenDetails={onOpenDetails}
+        searchedItem={searchedItem}
+        setCurrentItem={setCurrentItem}
+      />
+      <Search
+        isSearchOpen={searchOpen}
+        onCloseSearch={onCloseSearch}
+        setSearchedItem={setSearchedItem}
+      />
+      <RatedPlaceDetails
+        isDetailsOpen={isDetailsOpen}
+        onCloseDetails={onCloseDetails}
+        item={currentItem}
+      />
+      {children}
+      {!desktop && (
+        <IconButton
+          aria-label="ir para página de avaliações"
+          borderRadius="full"
+          icon={<AddIcon />}
+          position="fixed"
+          right="6"
+          bottom="104px"
+          size="lg"
+          colorScheme="teal"
+          zIndex="docked"
+          onClick={() => navigate('/app/ratings')}
         />
-        <RatedPlaceDetails
-          isDetailsOpen={isDetailsOpen}
-          onCloseDetails={onCloseDetails}
-          item={currentItem}
-        />
-        <Search
-          isSearchOpen={isSearchOpen}
-          onCloseSearch={onCloseSearch}
-          setSearchedItem={setSearchedItem}
-        />
-        {children}
-        {desktop && <Tutorial />}
-      </Layout>
-    </MapProvider>
+      )}
+      {desktop && <Tutorial />}
+    </Grid>
   )
 }
 

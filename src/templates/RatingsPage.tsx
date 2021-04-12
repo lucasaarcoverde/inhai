@@ -2,7 +2,6 @@ import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
 import * as Yup from 'yup'
 
-import { Layout } from '../components/Layout'
 import {
   Box,
   Button,
@@ -15,13 +14,13 @@ import {
   IconButton,
   Radio,
   FlexProps,
+  Grid,
 } from '@chakra-ui/react'
 import { v4 } from 'uuid'
 import { Search } from '../components/Search'
 
 import { HereItem } from '../hooks/useHere'
-import { MapProvider } from '../contexts/map'
-import { Map, PlaceDetails } from '../components'
+import { Map, PlaceDetails, Sidebar } from '../components'
 import { useCallback, useState } from 'react'
 import { Form, Formik, FormikHelpers, useField } from 'formik'
 import { useAuth, User } from '../contexts/firebase'
@@ -312,151 +311,142 @@ const RatingsPage = ({
     [user, firebase, db]
   )
 
-  const layoutProps = desktop
-    ? { height: 'calc(100vh - 104px)', overflowY: 'scroll' }
+  const layoutProps: FlexProps = desktop
+    ? { height: 'calc(100vh - 120px)', overflowY: 'scroll' }
     : {}
 
   return (
-    <MapProvider>
-      <Layout>
-        <Flex
-          direction="column"
-          width="100%"
-          height="100%"
-          {...(layoutProps as FlexProps)}
-        >
-          <Box height="calc(40vh - 56px)">
-            <Map
-              height="40vh"
-              paddingTop="0px"
-              onOpenDetails={onOpenDetails}
-              searchedItem={searchedItem}
-              setCurrentItem={setCurrentItem}
-            />
-          </Box>
-          <Box>
-            <Formik
-              enableReinitialize
-              initialValues={
-                {
-                  comment: '',
-                  safePlace: 'false',
-                  frequentedBy: 'false',
-                  place: currentItem,
-                  rate: 0,
-                  anonymous: false,
-                  id: '',
-                } as RatingForm
-              }
-              onSubmit={handleSubmit}
-              validationSchema={validationSchema}
-            >
-              {(props) => {
-                return (
-                  <Form>
-                    <PlaceField
-                      onOpenSearch={onOpenSearch}
-                      item={searchedItem}
+    <Grid templateColumns={desktop ? '1fr 2fr 1fr' : '1fr'}>
+      {desktop && <Sidebar />}
+      <Flex direction="column" {...layoutProps}>
+        <Box>
+          <Map
+            height="calc(40vh - 56px)"
+            width={desktop ? '100%' : '100vw'}
+            onOpenDetails={onOpenDetails}
+            searchedItem={searchedItem}
+            setCurrentItem={setCurrentItem}
+          />
+        </Box>
+        <Box>
+          <Formik
+            enableReinitialize
+            initialValues={
+              {
+                comment: '',
+                safePlace: 'false',
+                frequentedBy: 'false',
+                place: currentItem,
+                rate: 0,
+                anonymous: false,
+                id: '',
+              } as RatingForm
+            }
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            {(props) => {
+              return (
+                <Form>
+                  <PlaceField onOpenSearch={onOpenSearch} item={searchedItem} />
+
+                  <Divider />
+
+                  <Stack spacing={2} paddingX={6} paddingY={3}>
+                    <CheckboxSingleControl
+                      name="anonymous"
+                      sx={{ '> label > span': { fontSize: '14px' } }}
+                    >
+                      Responder anonimamente
+                    </CheckboxSingleControl>
+                    <FormRating name="rate" />
+                    <RadioGroupControl
+                      name="frequentedBy"
+                      sx={{
+                        '> label': {
+                          fontSize: 'xs',
+                          fontWeight: 'semibold',
+                        },
+                        span: {
+                          fontSize: 'xs',
+                        },
+                      }}
+                      label="Esse local é frequentado pela comunidade LGBTI+?"
+                      id="frequented-by-community"
+                    >
+                      <Radio value="false" id="frequented-by">
+                        Não
+                      </Radio>
+                      <Radio value="true" id="not-frequented-by">
+                        Sim
+                      </Radio>
+                    </RadioGroupControl>
+                    <RadioGroupControl
+                      name="safePlace"
+                      sx={{
+                        '> label': {
+                          fontSize: 'xs',
+                          fontWeight: 'semibold',
+                        },
+                        span: {
+                          fontSize: 'xs',
+                        },
+                      }}
+                      label="Você se sente seguro nesse local?"
+                    >
+                      <Radio value="false" id="safe-place">
+                        Não
+                      </Radio>
+                      <Radio value="true" id="not-safe-place">
+                        Sim
+                      </Radio>
+                    </RadioGroupControl>
+                    ;
+                    <TextareaControl
+                      sx={{
+                        '> label': {
+                          fontSize: 'xs',
+                          fontWeight: 'semibold',
+                        },
+                      }}
+                      textareaProps={{
+                        sx: {
+                          '::placeholder': { fontSize: 'xs' },
+                        },
+                        minH: '100px',
+                        fontSize: '16px',
+                        placeholder:
+                          'Conte sobre sua experiência nesse local e ajude o pessoal a conhecer mais sobre os lugares da cidade. Obrigado!',
+                      }}
+                      name="comment"
+                      label="Comentários"
                     />
-
-                    <Divider />
-
-                    <Stack spacing={2} paddingX={6} paddingY={3}>
-                      <CheckboxSingleControl
-                        name="anonymous"
-                        sx={{ '> label > span': { fontSize: '14px' } }}
-                      >
-                        Responder anonimamente
-                      </CheckboxSingleControl>
-                      <FormRating name="rate" />
-                      <RadioGroupControl
-                        name="frequentedBy"
-                        sx={{
-                          '> label': {
-                            fontSize: 'xs',
-                            fontWeight: 'semibold',
-                          },
-                          span: {
-                            fontSize: 'xs',
-                          },
-                        }}
-                        label="Esse local é frequentado pela comunidade LGBTI+?"
-                        id="frequented-by-community"
-                      >
-                        <Radio value="false" id="frequented-by">
-                          Não
-                        </Radio>
-                        <Radio value="true" id="not-frequented-by">
-                          Sim
-                        </Radio>
-                      </RadioGroupControl>
-                      <RadioGroupControl
-                        name="safePlace"
-                        sx={{
-                          '> label': {
-                            fontSize: 'xs',
-                            fontWeight: 'semibold',
-                          },
-                          span: {
-                            fontSize: 'xs',
-                          },
-                        }}
-                        label="Você se sente seguro nesse local?"
-                      >
-                        <Radio value="false" id="safe-place">
-                          Não
-                        </Radio>
-                        <Radio value="true" id="not-safe-place">
-                          Sim
-                        </Radio>
-                      </RadioGroupControl>
-                      ;
-                      <TextareaControl
-                        sx={{
-                          '> label': {
-                            fontSize: 'xs',
-                            fontWeight: 'semibold',
-                          },
-                        }}
-                        textareaProps={{
-                          sx: {
-                            '::placeholder': { fontSize: 'xs' },
-                          },
-                          minH: '100px',
-                          fontSize: '16px',
-                          placeholder:
-                            'Conte sobre sua experiência nesse local e ajude o pessoal a conhecer mais sobre os lugares da cidade. Obrigado!',
-                        }}
-                        name="comment"
-                        label="Comentários"
-                      />
-                      <Button
-                        isLoading={props.isSubmitting}
-                        type="submit"
-                        colorScheme="teal"
-                      >
-                        Enviar
-                      </Button>
-                    </Stack>
-                  </Form>
-                )
-              }}
-            </Formik>
-          </Box>
-        </Flex>
-        <PlaceDetails
-          isDetailsOpen={isDetailsOpen}
-          onCloseDetails={onCloseDetails}
-          item={currentItem}
-        />
-        <Search
-          isSearchOpen={isSearchOpen}
-          onCloseSearch={onCloseSearch}
-          setSearchedItem={setSearchedItem}
-        />
-        {children}
-      </Layout>
-    </MapProvider>
+                    <Button
+                      isLoading={props.isSubmitting}
+                      type="submit"
+                      colorScheme="teal"
+                    >
+                      Enviar
+                    </Button>
+                  </Stack>
+                </Form>
+              )
+            }}
+          </Formik>
+        </Box>
+      </Flex>
+      <Search
+        isSearchOpen={isSearchOpen}
+        onCloseSearch={onCloseSearch}
+        setSearchedItem={setSearchedItem}
+      />
+      <PlaceDetails
+        isDetailsOpen={isDetailsOpen}
+        onCloseDetails={onCloseDetails}
+        item={currentItem}
+      />
+      {children}
+    </Grid>
   )
 }
 

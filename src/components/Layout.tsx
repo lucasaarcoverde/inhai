@@ -1,54 +1,62 @@
-import { Flex, Stack, Grid } from '@chakra-ui/react'
-import React, { ReactNode } from 'react'
+import { Box } from '@chakra-ui/react'
+import React, { ReactNode, useMemo } from 'react'
 
-import { Sidebar } from './Sidebar'
 import PrivateRoute from './PrivateRoute'
 import { Topbar } from './Topbar'
 import { useMediaQuery } from '../contexts'
 import 'focus-visible/dist/focus-visible'
-import { DefaultFooter } from './Footer'
+import { DefaultFooter, MobileFooter } from './Footer'
 import { useLocation } from '@reach/router'
+import { useAuth } from '../contexts/firebase'
+import { InitialLoading } from './Loading'
 
-export function Layout({ children, onOpenSearch }: LayoutProps) {
+export function Layout({ children }: LayoutProps) {
   const { desktop } = useMediaQuery()
   const { pathname } = useLocation()
+  const { user, loading } = useAuth()
+
+  const photo = useMemo(() => {
+    return user?.photo
+  }, [user?.photo])
 
   return (
     <PrivateRoute path="/login">
-      <Stack
-        h="100vh"
-        w="100vw"
-        maxHeight="-webkit-fill-available"
-        direction="column"
-        spacing="0"
-        overflowY={desktop ? 'hidden' : 'scroll'}
-      >
-        <Topbar onOpenSearch={onOpenSearch} />
-        {desktop ? (
-          <Grid
-            paddingTop="56px"
-            width="100%"
-            height="100%"
-            templateColumns="1fr 2fr 1fr"
-            bg="white"
-          >
-            <Sidebar />
-            {children}
-            {!pathname.includes('profile') && <DefaultFooter />}
-          </Grid>
-        ) : (
-          <Flex
-            as="main"
-            direction="row"
-            bg="whiteAlpha"
-            paddingTop="56px"
-            width="100%"
-            height="100%"
-          >
-            {children}
-          </Flex>
-        )}
-      </Stack>
+      {loading ? (
+        <InitialLoading />
+      ) : (
+        <>
+          <Topbar />
+          {desktop ? (
+            <Box
+              width="100vw"
+              marginTop="56px"
+              maxHeight="-webkit-fill-available"
+              height="calc(100vh - 120px)"
+              bg="white"
+              overflowX="hidden"
+              as="main"
+            >
+              {children}
+              {!pathname.includes('profile') && <DefaultFooter />}
+            </Box>
+          ) : (
+            <Box
+              as="main"
+              paddingTop="56px"
+              height="calc(100vh - 64px)"
+              maxHeight="-webkit-fill-available"
+              overflowY="scroll"
+              bg="white"
+              width="100vw"
+              overflowX="hidden"
+            >
+              {children}
+            </Box>
+          )}
+
+          {!desktop && <MobileFooter photo={photo} />}
+        </>
+      )}
     </PrivateRoute>
   )
 }

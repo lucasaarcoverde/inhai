@@ -191,8 +191,8 @@ export function Profile(props: FlexProps) {
       initialValues={user}
     >
       {({ isSubmitting }) => (
-        <Flex justifyContent="center" width="100%" {...props}>
-          <Box paddingY="6" maxWidth="600px">
+        <Flex paddingY="6" justifyContent="center" width="100%" {...props}>
+          <Box maxWidth="600px">
             <Form>
               <Stack justifyContent="center" align="center">
                 <ProfileDropzone name="photo" user={user} />
@@ -306,12 +306,7 @@ export function Profile(props: FlexProps) {
                   ))}
                 </SelectControl>
               </Stack>
-              <Stack
-                direction="row"
-                width="100%"
-                paddingTop="6"
-                paddingBottom="72px"
-              >
+              <Stack direction="row" width="100%" paddingTop="6">
                 <Button
                   onClick={onOpen}
                   colorScheme="red"
