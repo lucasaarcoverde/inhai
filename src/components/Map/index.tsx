@@ -169,7 +169,7 @@ export const Map = ({
     <Box
       position="relative"
       width="100%"
-      height="calc(100vh - 120px)"
+      height="calc(100vh - 112px)"
       maxHeight="-webkit-fill-available"
       {...boxProps}
     >

@@ -2,10 +2,8 @@
   min-height: 100vh;
   min-height: -webkit-fill-available;
   overflow-y: hidden;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  padding-top: 56px;
+  padding-bottom: 56px;
 }
 
 .html {

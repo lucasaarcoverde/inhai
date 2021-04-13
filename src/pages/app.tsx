@@ -10,7 +10,6 @@ import {
 import { useDisclosure, useMediaQuery } from '@chakra-ui/react'
 import ProfilePage from '../templates/ProfilePage'
 import { Layout, Seo } from '../components'
-import HomePage from '../templates/Home'
 import AboutUsPage from '../templates/AboutUsPage'
 import AdminPage from '../templates/AdminPage'
 
@@ -34,9 +33,8 @@ const App = () => {
           <Layout>
             <Seo />
             <Router>
-              <HomePage path="/app/" />
+              <MapPage path="/app" />
               <AboutUsPage path="/app/about-us" />
-              <MapPage path="/app/map" />
               <RatingsPage path="/app/ratings" />
               <ProfilePage path="/app/profile" />
               <AdminPage path="/app/admin" />

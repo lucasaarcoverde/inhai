@@ -29,11 +29,10 @@ export function Layout({ children }: LayoutProps) {
           {desktop ? (
             <Box
               width="100vw"
-              marginTop="56px"
               maxHeight="-webkit-fill-available"
-              height="calc(100vh - 120px)"
+              height="calc(100vh - 112px)"
               bg="white"
-              overflowX="hidden"
+              overflow="hidden"
               as="main"
             >
               {children}
@@ -42,8 +41,7 @@ export function Layout({ children }: LayoutProps) {
           ) : (
             <Box
               as="main"
-              paddingTop="56px"
-              height="calc(100vh - 64px)"
+              height="calc(100vh - 112px)"
               maxHeight="-webkit-fill-available"
               overflowY="scroll"
               bg="white"

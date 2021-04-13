@@ -72,7 +72,7 @@ export const MobileFooter = (props: { photo?: string }) => {
 
   const { pathname } = useLocation()
 
-  const map = pathname === '/app/map'
+  const map = pathname === '/app'
   const profile = pathname === '/app/profile'
   const about = pathname === '/app/about-us'
 
@@ -84,9 +84,8 @@ export const MobileFooter = (props: { photo?: string }) => {
       bg="white"
       bottom="0"
       width="100vw"
-      height="64px"
-      paddingBottom="4"
-      alignContent="center"
+      height="56px"
+      alignContent="flex-start"
       borderTop="solid"
       borderTopWidth="1px"
       borderTopColor="gray.200"
@@ -106,7 +105,7 @@ export const MobileFooter = (props: { photo?: string }) => {
         icon={<Icon as={FaMapMarkerAlt} boxSize={map ? '7' : '6'} />}
         colorScheme="teal"
         onClick={() => {
-          if (!map) navigate('/app/map')
+          if (!map) navigate('/app')
         }}
       />
       <Button

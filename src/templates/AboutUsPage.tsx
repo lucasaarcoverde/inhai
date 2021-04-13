@@ -38,7 +38,7 @@ const AboutUsPage = ({
   const { desktop } = useMediaQuery()
 
   const layoutProps: FlexProps = desktop
-    ? { height: 'calc(100vh - 120px)', overflowY: 'scroll' }
+    ? { height: 'calc(100vh - 112px)', overflowY: 'scroll' }
     : {}
 
   return (

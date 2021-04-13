@@ -18,7 +18,7 @@ export function MobileTopbar() {
     <Grid
       position="fixed"
       zIndex="docked"
-      templateColumns="repeat(3, 1fr)"
+      templateColumns="repeat(2, 1fr)"
       paddingLeft="1"
       paddingRight="1"
       top="0"
@@ -33,7 +33,6 @@ export function MobileTopbar() {
       <Flex h="100%" paddingLeft="3" align="center" justifyContent="flex-start">
         <Heading color="teal.500">Inhaí</Heading>
       </Flex>
-      <Flex h="100%" align="center" justifyContent={'center'}></Flex>
       <Flex h="100%" align="center" justifyContent="flex-end">
         {pathname.includes('map') ? (
           <IconButton

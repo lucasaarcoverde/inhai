@@ -21,7 +21,7 @@ const LoadingPage = () => {
     firebase.auth().onAuthStateChanged((authUser) => {
       if (!authUser) return
 
-      const navigateTimer = setTimeout(() => navigate('/app/map'), 1000)
+      const navigateTimer = setTimeout(() => navigate('/app'), 1000)
 
       return () => {
         clearTimeout(navigateTimer)

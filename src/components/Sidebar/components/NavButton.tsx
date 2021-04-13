@@ -11,7 +11,7 @@ export function NavButton(props: NavButtonProps) {
   const {
     children,
     onClose,
-    navigateUrl = '/app/map',
+    navigateUrl = '/app',
     leftIcon,
     ...buttonProps
   } = props
