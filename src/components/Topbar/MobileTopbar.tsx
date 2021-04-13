@@ -1,81 +1,75 @@
 import React from 'react'
 import { useLocation } from '@reach/router'
-import {
-  Grid,
-  Flex,
-  IconButton,
-  Heading,
-  Icon,
-  Divider,
-  Box,
-} from '@chakra-ui/react'
+import { Grid, Flex, IconButton, Heading, Icon } from '@chakra-ui/react'
 import { ArrowBackIcon, SearchIcon } from '@chakra-ui/icons'
-import { navigate } from 'gatsby'
 import { HiLogout } from 'react-icons/hi'
 
 import { useAuth } from '../../contexts/firebase'
-import { TopbarProps } from './'
+import { useLayout } from '../../contexts/layout'
+import { navigate } from 'gatsby'
 
-export function MobileTopbar(props: TopbarProps) {
-  const { onOpenSearch } = props
+export function MobileTopbar() {
+  const { onOpenSearch } = useLayout()
   const { pathname } = useLocation()
   const { logout } = useAuth()
 
-  const home = pathname === '/app/' || pathname === '/app'
+  const profile = pathname.includes('profile')
 
   return (
-    <Box zIndex={9}>
-      <Grid
-        position="fixed"
-        templateColumns="repeat(3, 1fr)"
-        paddingLeft="1"
-        paddingRight="1"
-        direction="row"
-        height="56px"
-        width="100vw"
-        bg="white"
-      >
-        <Flex h="100%" align="center" justifyContent="flex-start">
-          {!home && (
+    <Grid
+      position="fixed"
+      zIndex="docked"
+      templateColumns="repeat(2, 1fr)"
+      paddingLeft="1"
+      paddingRight="1"
+      top="0"
+      direction="row"
+      height="56px"
+      width="100vw"
+      bg="white"
+      borderBottom="solid"
+      borderBottomWidth="1px"
+      borderBottomColor="gray.200"
+    >
+      <Flex h="100%" align="center" justifyContent="flex-start">
+        {pathname === '/app/ratings' ? (
+          <IconButton
+            size="lg"
+            aria-label="Voltar para página anterior"
+            icon={<ArrowBackIcon boxSize="6" />}
+            variant="ghost"
+            colorScheme="teal"
+            onClick={() => navigate('/app')}
+          />
+        ) : (
+          <Heading paddingLeft="3" color="teal.500">
+            Inhaí
+          </Heading>
+        )}
+      </Flex>
+      <Flex h="100%" align="center" justifyContent="flex-end">
+        {pathname === '/app' ? (
+          <IconButton
+            size="lg"
+            aria-label="Search button"
+            icon={<SearchIcon />}
+            variant="ghost"
+            colorScheme="teal"
+            onClick={onOpenSearch}
+          />
+        ) : (
+          profile && (
             <IconButton
-              onClick={() => navigate('/app/')}
               size="lg"
-              aria-label="LeftNav button"
-              icon={<ArrowBackIcon boxSize="6" />}
+              aria-label="Logout button"
+              icon={<Icon as={HiLogout} boxSize="6" />}
               variant="ghost"
               colorScheme="teal"
+              onClick={logout}
             />
-          )}
-        </Flex>
-
-        <Flex h="100%" align="center" justifyContent={'center'}>
-          <Heading color="teal.500">Inhaí</Heading>
-        </Flex>
-        <Flex h="100%" align="center" justifyContent="flex-end">
-          {!!onOpenSearch ? (
-            <IconButton
-              size="lg"
-              aria-label="Search button"
-              icon={<SearchIcon />}
-              variant="ghost"
-              colorScheme="teal"
-              onClick={onOpenSearch}
-            />
-          ) : (
-            home && (
-              <IconButton
-                size="lg"
-                aria-label="Logout button"
-                icon={<Icon as={HiLogout} boxSize="6" />}
-                variant="ghost"
-                colorScheme="teal"
-                onClick={logout}
-              />
-            )
-          )}
-        </Flex>
-      </Grid>
-      <Divider w="100vw" top="56px" position="fixed" />
-    </Box>
+          )
+        )}
+      </Flex>
+    </Grid>
   )
 }

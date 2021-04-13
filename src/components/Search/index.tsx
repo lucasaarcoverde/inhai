@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Flex,
   Modal,
@@ -49,11 +48,9 @@ export function Search(props: SearchProps) {
       discoverAddress({
         q: queryValue,
         at: at,
+      }).then(({ items }) => {
+        setItems(items)
       })
-        .then(({ items }) => {
-          setItems(items)
-        })
-        .catch((e) => console.log('err', e))
     } else {
       setItems([])
     }
@@ -78,10 +75,10 @@ export function Search(props: SearchProps) {
     }
   }
   return (
-    <Box>
+    <>
       {desktop ? (
         <Flex
-          width="100%"
+          minWidth="350px"
           justifyContent="flex-start"
           shadow="-3px 4px 6px -4px rgba(0, 0, 0, 0.1), 0 2px 0px -1px rgba(0, 0, 0, 0.06)"
         >
@@ -89,7 +86,6 @@ export function Search(props: SearchProps) {
             setSearchedItem={setSearchedItem}
             height="calc(100vh - 163px)"
             paddingBottom="48px"
-            marginTop="109px"
             setSearch={setQuery}
             searchValue={query}
             searchItems={items}
@@ -173,7 +169,7 @@ export function Search(props: SearchProps) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Box>
+    </>
   )
 }
 

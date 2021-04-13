@@ -34,16 +34,23 @@ import { PasswordRecovery } from './components/PasswordRecovery'
 export type Values = { name: string; email: string; password: string }
 
 const signupValidationSchema = Yup.object({
-  name: Yup.string().required('Nome é obrigatório.'),
-  email: Yup.string().email('Email inválido.').required('Email é obrigatório'),
+  name: Yup.string().trim().required('Nome é obrigatório.'),
+  email: Yup.string()
+    .trim()
+    .email('Email inválido.')
+    .required('Email é obrigatório'),
   password: Yup.string()
+    .trim()
     .required('Senha é obrigatório.')
     .min(6, 'Sua senha deve ter no mínimo 6 caracteres.'),
 })
 
 const signinValidationSchema = Yup.object({
-  email: Yup.string().email('Email inválido.').required('Email é obrigatório'),
-  password: Yup.string().required('Senha é obrigatório.'),
+  email: Yup.string()
+    .trim()
+    .email('Email inválido.')
+    .required('Email é obrigatório'),
+  password: Yup.string().trim().required('Senha é obrigatório.'),
 })
 
 export const Login = () => {
@@ -144,7 +151,6 @@ export const Login = () => {
                 position: 'top',
               })
             } else {
-              console.log(err)
               toast({
                 title: 'Erro ao criar conta.',
                 description: 'Email ou senha inválidos.',
@@ -162,7 +168,6 @@ export const Login = () => {
     <Formik
       initialValues={{ name: '', email: '', password: '' }}
       onSubmit={(values, actions) => {
-        console.log('submit')
         if (signup) {
           handleEmailSignup(values)
         } else {
@@ -339,7 +344,7 @@ export const Login = () => {
                 borderRadius="full"
                 onClick={() => {
                   loginWithGoogle()
-                  navigate('/app/loading')
+                  navigate('/loading')
                 }}
                 aria-label="Entrar com google"
               />

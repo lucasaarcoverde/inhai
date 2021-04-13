@@ -10,11 +10,11 @@ import {
   Box,
 } from '@chakra-ui/react'
 
-import { useAuth } from '../contexts/firebase'
+import { useAuth } from '../../contexts/firebase'
 import { navigate, useStaticQuery, graphql } from 'gatsby'
 import Img from 'gatsby-image'
 
-const LoadingPage = ({
+export const InitialLoading = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
   const [loading, setLoading] = React.useState(true)
@@ -89,5 +89,3 @@ const LoadingPage = ({
     </Flex>
   )
 }
-
-export default LoadingPage

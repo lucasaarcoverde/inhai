@@ -1,6 +1,9 @@
 .body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
+  overflow-y: hidden;
+  padding-top: 56px;
+  padding-bottom: 56px;
 }
 
 .html {

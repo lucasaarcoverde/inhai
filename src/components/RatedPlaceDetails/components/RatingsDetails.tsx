@@ -28,7 +28,6 @@ export function RatingsDetails(props: RatedPlace) {
     rateDetails ?? {}
 
   useEffect(() => {
-    console.log(props)
     if (!id) return
 
     setLoading(true)
@@ -55,7 +54,6 @@ export function RatingsDetails(props: RatedPlace) {
       .finally(() => {
         setTimeout(() => setLoading(false), 100)
       })
-      .catch((e) => console.log(e))
   }, [id])
 
   const loadMoreRatings = useCallback(
@@ -111,7 +109,6 @@ export function RatingsDetails(props: RatedPlace) {
           </Text>
         </HStack>
         <Button
-          variant="outline"
           size="xs"
           colorScheme="teal"
           onClick={() => {
@@ -119,7 +116,7 @@ export function RatingsDetails(props: RatedPlace) {
             navigate('/app/ratings')
           }}
         >
-          Faça uma avaliação
+          Avalie esse local
         </Button>
       </Flex>
       <Stack spacing={2}>

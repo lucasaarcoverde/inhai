@@ -216,9 +216,6 @@ export const FirebaseProvider: React.FC = ({ children }) => {
               onSetUser(userDb)
             }
           })
-          .catch((e) => console.log(e))
-      } else {
-        console.log('not logged')
       }
     })
 

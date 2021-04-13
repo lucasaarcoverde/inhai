@@ -32,9 +32,9 @@ export function DesktopSidebar(props: DesktopSidebarProps) {
       >
         <NavButton
           size="lg"
-          navigateUrl="/app/map"
+          navigateUrl="/app"
           leftIcon={<SearchIcon boxSize="6" />}
-          bg={pathname.includes('/app/map') ? 'gray.50' : 'whiteAlpha'}
+          bg={pathname == '/app' ? 'gray.50' : 'whiteAlpha'}
         >
           Mapa LGBTI+
         </NavButton>

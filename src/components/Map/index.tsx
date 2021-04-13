@@ -1,8 +1,17 @@
-import { Box, BoxProps, Center, Fade, Spinner } from '@chakra-ui/react'
+import { AddIcon } from '@chakra-ui/icons'
+import {
+  Box,
+  BoxProps,
+  Center,
+  Fade,
+  IconButton,
+  Spinner,
+} from '@chakra-ui/react'
 import { useLocation } from '@reach/router'
+import { navigate } from 'gatsby'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { useMediaQuery } from '../../contexts'
 import { useAuth } from '../../contexts/firebase'
-import { useMap } from '../../contexts/map'
 import { HereItem } from '../../hooks/useHere'
 import { RatedPlace } from '../../templates/RatingsPage'
 import { getPositiveMarkerIcon, getNegativeMarkerIcon } from './utils'
@@ -11,6 +20,7 @@ interface MapProps extends BoxProps {
   searchedItem: HereItem
   setCurrentItem: React.Dispatch<React.SetStateAction<RatedPlace>>
   onOpenDetails: () => void
+  items?: RatedPlace[]
 }
 
 declare global {
@@ -23,6 +33,7 @@ export const Map = ({
   searchedItem,
   setCurrentItem,
   onOpenDetails,
+  items = [],
   ...boxProps
 }: MapProps) => {
   const mapRef = React.useRef(null)
@@ -36,7 +47,7 @@ export const Map = ({
 
   const { pathname } = useLocation()
   const { user } = useAuth()
-  const { items } = useMap()
+  const { desktop } = useMediaQuery()
 
   useEffect(() => {
     if (!user) return
@@ -123,6 +134,7 @@ export const Map = ({
     if (searchedItem?.position) {
       const marker = new H.map.Marker(searchedItem.position, {
         icon: positiveMarkerIcon,
+        zIndex: 1,
       })
 
       marker.setData(searchedItem)
@@ -146,7 +158,7 @@ export const Map = ({
   useLayoutEffect(() => {
     if (!window) return
 
-    const loadingTimer = setTimeout(() => setMapOpen(true), 550)
+    const loadingTimer = setTimeout(() => setMapOpen(true), 600)
 
     return () => {
       clearTimeout(loadingTimer)
@@ -157,6 +169,7 @@ export const Map = ({
     <Box
       position="relative"
       width="100%"
+      height="calc(100vh - 112px)"
       maxHeight="-webkit-fill-available"
       {...boxProps}
     >
@@ -172,11 +185,9 @@ export const Map = ({
       <Fade in={mapOpen}>
         <Box
           position="absolute"
-          paddingTop="56px"
-          top="-56px"
-          bottom="0"
+          top="0"
           ref={mapRef}
-          height="100vh"
+          height="100%"
           width="100%"
           {...boxProps}
         />
