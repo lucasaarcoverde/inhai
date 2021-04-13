@@ -109,7 +109,7 @@ export function RatingsDetails(props: RatedPlace) {
           </Text>
         </HStack>
         <Button
-          size="xs"
+          size="sm"
           colorScheme="teal"
           onClick={() => {
             window.localStorage.setItem('rate-place', JSON.stringify(props))

@@ -1,6 +1,12 @@
 import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
-import { Grid, Icon, IconButton, useDisclosure } from '@chakra-ui/react'
+import {
+  Grid,
+  Icon,
+  IconButton,
+  Tooltip,
+  useDisclosure,
+} from '@chakra-ui/react'
 
 import { Search, Map, Tutorial, Sidebar } from '../components'
 import { HereItem } from '../hooks/useHere'
@@ -17,6 +23,13 @@ const MapPage = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
   const { searchOpen, onCloseSearch } = useLayout()
+  const [firstTime, setFirstTime] = useState(false)
+
+  const handleTutorialClose = () => {
+    setFirstTime(true)
+    const timer = setTimeout(() => setFirstTime(false), 4000)
+    return () => clearTimeout(timer)
+  }
 
   const {
     isOpen: isDetailsOpen,
@@ -77,24 +90,33 @@ const MapPage = ({
       />
       {children}
       {!desktop && (
-        <IconButton
-          aria-label="Avaliar local"
-          borderRadius="full"
-          icon={<Icon as={BiLocationPlus} boxSize="8" />}
-          position="fixed"
-          right="8"
-          variant="ghost"
-          shadow="lg"
-          bg="white"
-          bottom="104px"
-          height="56px"
-          width="56px"
-          colorScheme="teal"
-          zIndex="docked"
-          onClick={() => navigate('/app/ratings')}
-        />
+        <Tooltip
+          label="Comece avaliando um local!"
+          placement="top"
+          isOpen={firstTime}
+          fontWeight="semibold"
+          zIndex="9"
+          hasArrow
+        >
+          <IconButton
+            aria-label="Avaliar local"
+            borderRadius="full"
+            icon={<Icon as={BiLocationPlus} boxSize="8" />}
+            position="fixed"
+            right="8"
+            variant="ghost"
+            shadow="lg"
+            bg="white"
+            bottom="104px"
+            height="56px"
+            width="56px"
+            colorScheme="teal"
+            zIndex="docked"
+            onClick={() => navigate('/app/ratings')}
+          />
+        </Tooltip>
       )}
-      <Tutorial />
+      <Tutorial handleClose={handleTutorialClose} />
     </Grid>
   )
 }

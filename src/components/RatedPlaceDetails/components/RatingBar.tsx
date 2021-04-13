@@ -10,7 +10,7 @@ export function RatingBar(props: RatingBarProps) {
       <HStack spacing="2">
         <Text fontSize="xs">({points})</Text>
         <Progress
-          width="100px"
+          width="110px"
           colorScheme="teal"
           value={(points / Math.max(1, total)) * 100}
         />

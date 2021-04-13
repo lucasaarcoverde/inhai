@@ -24,7 +24,8 @@ import {
   Welcome,
 } from './components'
 
-export function Tutorial() {
+export function Tutorial(props: { handleClose: () => void }) {
+  const { handleClose } = props
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { user, setUser } = useAuth()
   const { db } = useFirebase()
@@ -42,6 +43,7 @@ export function Tutorial() {
       .update({ newUser: false })
       .then(() => {
         onClose()
+        handleClose()
         if (user) setUser({ ...user, newUser: false })
       })
   }, [user, onClose])
