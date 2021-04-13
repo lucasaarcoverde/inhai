@@ -10,6 +10,7 @@ import {
   InputLeftElement,
   Modal,
   ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -21,7 +22,10 @@ import * as Yup from 'yup'
 import { useAuth } from '../../../contexts/firebase'
 
 const recoveryPasswordSchema = Yup.object({
-  email: Yup.string().email('Email inválido.').required('Email é obrigatório'),
+  email: Yup.string()
+    .trim()
+    .email('Email inválido.')
+    .required('Email é obrigatório'),
 })
 
 export function PasswordRecovery(props: PasswordRecoveryProps) {
@@ -77,6 +81,7 @@ export function PasswordRecovery(props: PasswordRecoveryProps) {
     <Modal isOpen={open} onClose={handleClose} size="xs">
       <ModalOverlay />
       <ModalContent>
+        <ModalCloseButton />
         <ModalHeader color="teal.500">Recuperar senha</ModalHeader>
         <Formik
           onSubmit={handleSubmit}
@@ -122,14 +127,6 @@ export function PasswordRecovery(props: PasswordRecoveryProps) {
                 </Field>
               </ModalBody>
               <ModalFooter>
-                <Button
-                  colorScheme="teal"
-                  variant="ghost"
-                  mr={3}
-                  onClick={handleClose}
-                >
-                  Fechar
-                </Button>
                 <Button
                   type="submit"
                   colorScheme="teal"

@@ -17,6 +17,8 @@ import {
   FlexProps,
   Alert,
   AlertIcon,
+  Link,
+  Text,
 } from '@chakra-ui/react'
 import { Form, Formik, FormikHelpers } from 'formik'
 
@@ -28,8 +30,8 @@ import * as Yup from 'yup'
 import useFirebase from '../../hooks/useFirebase'
 
 const validationSchema = Yup.object({
-  name: Yup.string().required('Nome é obrigatório'),
-  displayName: Yup.string().required('Nome de usuário é obrigatório'),
+  name: Yup.string().trim().required('Nome é obrigatório'),
+  displayName: Yup.string().trim().required('Nome de usuário é obrigatório'),
 })
 
 const labelStyle = {
@@ -191,8 +193,8 @@ export function Profile(props: FlexProps) {
       initialValues={user}
     >
       {({ isSubmitting }) => (
-        <Flex justifyContent="center" width="100%" {...props}>
-          <Box paddingY="6" maxWidth="600px">
+        <Flex paddingY="6" justifyContent="center" width="100%" {...props}>
+          <Box maxWidth="600px">
             <Form>
               <Stack justifyContent="center" align="center">
                 <ProfileDropzone name="photo" user={user} />
@@ -306,12 +308,7 @@ export function Profile(props: FlexProps) {
                   ))}
                 </SelectControl>
               </Stack>
-              <Stack
-                direction="row"
-                width="100%"
-                paddingTop="6"
-                paddingBottom="72px"
-              >
+              <Stack direction="row" width="100%" paddingTop="6">
                 <Button
                   onClick={onOpen}
                   colorScheme="red"
@@ -361,6 +358,18 @@ export function Profile(props: FlexProps) {
                 </Button>
               </Stack>
             </Form>
+            <Box padding="6">
+              <Text fontSize="xs" fontWeight="normal">
+                Não se sentiu representade?{' '}
+                <Link
+                  href="mailto: inhaiapp@gmail.com"
+                  fontWeight="bold"
+                  color="blue.600"
+                >
+                  Entre em contato
+                </Link>
+              </Text>
+            </Box>
           </Box>
         </Flex>
       )}

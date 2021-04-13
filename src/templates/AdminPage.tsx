@@ -43,8 +43,6 @@ function AdminPage(props: React.PropsWithChildren<RouteComponentProps>) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    console.log(query)
-
     const db = firebase.firestore()
 
     const placesRef = db.collection('places')

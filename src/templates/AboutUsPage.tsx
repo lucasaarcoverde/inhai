@@ -3,56 +3,42 @@ import { RouteComponentProps } from '@reach/router'
 import {
   Flex,
   Heading,
-  Spacer,
   Stack,
   StackDivider,
   Text,
-  Center,
-  Box,
   OrderedList,
   ListItem,
   FlexProps,
+  Grid,
+  Icon,
+  Link,
 } from '@chakra-ui/react'
-import Img from 'gatsby-image'
 
-import { DefaultFooter, Layout } from '../components'
+import { Sidebar } from '../components'
 import { ReactNode } from 'react'
-import { graphql, useStaticQuery } from 'gatsby'
 import { useMediaQuery } from '../contexts'
+import { AiFillGithub, AiFillLinkedin, AiFillMail } from 'react-icons/ai'
 
 const AboutUsPage = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
-  const data = useStaticQuery(graphql`
-    query {
-      file(relativePath: { eq: "well-done.png" }) {
-        childImageSharp {
-          # Specify the image processing specifications right in the query.
-          # Makes it trivial to update as your page's design changes.
-          fluid(maxHeight: 800) {
-            ...GatsbyImageSharpFluid
-          }
-        }
-      }
-    }
-  `)
   const { desktop } = useMediaQuery()
 
-  const layoutProps = desktop
-    ? { height: 'calc(100vh - 104px)', overflowY: 'scroll' }
+  const layoutProps: FlexProps = desktop
+    ? { height: 'calc(100vh - 112px)', overflowY: 'scroll' }
     : {}
 
   return (
-    <Layout>
+    <Grid templateColumns={desktop ? '1fr 2fr 1fr' : '1fr'}>
+      {desktop && <Sidebar />}
       <Flex
         width="100%"
         direction="column"
-        height="calc(100vh - 56px)"
         maxH="-webkit-fill-available"
         padding="6"
         fontSize="sm"
         fontWeight="medium"
-        {...(layoutProps as FlexProps)}
+        {...layoutProps}
       >
         {children}
         <Stack spacing="3" divider={<StackDivider />}>
@@ -90,12 +76,12 @@ const AboutUsPage = ({
             </Text>
             <OrderedList paddingX="6">
               <ListItem>
-                Mostrar pra a comunidade LGBTI+ que há sim locais em que podemos
-                nos sentir nós mesmos sem nenhum medo ou receio
+                Mostrar pra a comunidade LGBTI+ que há sim locais em que é
+                possível se sentir você mesmo sem nenhum medo ou receio
               </ListItem>
               <ListItem>
-                Criar um ambiente colaborativo em que a gente possa avaliar e
-                expor nossa opinião sobre os locais que frequentamos
+                Criar um ambiente colaborativo em que a se possa avaliar os
+                locais que frequentamos
               </ListItem>
               <ListItem>
                 Incentivar os locais a adotar medidas que contribuam para tornar
@@ -108,15 +94,40 @@ const AboutUsPage = ({
             </OrderedList>
           </FaqSection>
         </Stack>
-        <Center width="100%" paddingBottom="72px">
-          <Box width="100%" maxWidth="400px">
-            <Img fluid={data.file.childImageSharp.fluid} alt="Loading image" />
-          </Box>
-        </Center>
-        <Spacer />
-        {!desktop && <DefaultFooter />}
+        {!desktop && (
+          <Flex
+            direction="column"
+            align="center"
+            marginTop="8"
+            paddingBottom="6"
+            justifyContent="center"
+          >
+            <Stack direction="row" spacing="3" color="gray.400">
+              <Link
+                href="mailto: lucasaarcoverde@gmail.com"
+                fontWeight="bold"
+                target="_blank"
+              >
+                <Icon boxSize="6" as={AiFillMail} />
+              </Link>
+              <Link
+                href="https://github.com/lucasaarcoverde"
+                fontWeight="bold"
+                target="_blank"
+              >
+                <Icon boxSize="6" as={AiFillGithub} />
+              </Link>
+              <Link
+                href="https://www.linkedin.com/in/lucasaarcoverde/"
+                target="_blank"
+              >
+                <Icon boxSize="6" as={AiFillLinkedin} />
+              </Link>
+            </Stack>
+          </Flex>
+        )}
       </Flex>
-    </Layout>
+    </Grid>
   )
 }
 
