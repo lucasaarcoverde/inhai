@@ -2,8 +2,8 @@ import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
 
 import { Profile } from '../components/Profile'
-import { Footer, Sidebar } from '../components'
-import { FlexProps, Grid, Link, Text } from '@chakra-ui/react'
+import { Sidebar } from '../components'
+import { Flex, FlexProps, Grid, Link, Text } from '@chakra-ui/react'
 import { useMediaQuery } from '../contexts'
 
 const ProfilePage = ({
@@ -20,7 +20,8 @@ const ProfilePage = ({
       {desktop && <Sidebar />}
       <Profile justifyContent="center" {...layoutProps} />
       {children}
-      <Footer justifyContent="center" align="center">
+
+      <Flex justifyContent="center" paddingBottom="6">
         <Text fontSize="xs" fontWeight="normal">
           Não se sentiu representade?{' '}
           <Link
@@ -31,7 +32,7 @@ const ProfilePage = ({
             Entre em contato
           </Link>
         </Text>
-      </Footer>
+      </Flex>
     </Grid>
   )
 }

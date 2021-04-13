@@ -355,7 +355,12 @@ const RatingsPage = ({
 
                   <Divider />
 
-                  <Stack spacing={2} paddingX={6} paddingY={3}>
+                  <Stack
+                    spacing={2}
+                    paddingX="6"
+                    paddingTop="3"
+                    paddingBottom="6"
+                  >
                     <CheckboxSingleControl
                       name="anonymous"
                       sx={{ '> label > span': { fontSize: '14px' } }}

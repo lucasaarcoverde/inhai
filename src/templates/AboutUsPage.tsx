@@ -6,35 +6,22 @@ import {
   Stack,
   StackDivider,
   Text,
-  Box,
   OrderedList,
   ListItem,
   FlexProps,
   Grid,
+  Icon,
+  Link,
 } from '@chakra-ui/react'
-import Img from 'gatsby-image'
 
 import { Sidebar } from '../components'
 import { ReactNode } from 'react'
-import { graphql, useStaticQuery } from 'gatsby'
 import { useMediaQuery } from '../contexts'
+import { AiFillGithub, AiFillLinkedin, AiFillMail } from 'react-icons/ai'
 
 const AboutUsPage = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
-  const data = useStaticQuery(graphql`
-    query {
-      file(relativePath: { eq: "well-done.png" }) {
-        childImageSharp {
-          # Specify the image processing specifications right in the query.
-          # Makes it trivial to update as your page's design changes.
-          fluid(maxHeight: 800) {
-            ...GatsbyImageSharpFluid
-          }
-        }
-      }
-    }
-  `)
   const { desktop } = useMediaQuery()
 
   const layoutProps: FlexProps = desktop
@@ -107,12 +94,35 @@ const AboutUsPage = ({
             </OrderedList>
           </FaqSection>
         </Stack>
-        <Flex justifyContent="center">
-          <Box width="100%" maxWidth="400px">
-            <Img fluid={data.file.childImageSharp.fluid} alt="Loading image" />
-          </Box>
+        <Flex
+          direction="column"
+          align="center"
+          marginTop="8"
+          justifyContent="center"
+        >
+          <Stack direction="row" spacing="3" color="gray.400">
+            <Link
+              href="mailto: lucasaarcoverde@gmail.com"
+              fontWeight="bold"
+              target="_blank"
+            >
+              <Icon boxSize="6" as={AiFillMail} />
+            </Link>
+            <Link
+              href="https://github.com/lucasaarcoverde"
+              fontWeight="bold"
+              target="_blank"
+            >
+              <Icon boxSize="6" as={AiFillGithub} />
+            </Link>
+            <Link
+              href="https://www.linkedin.com/in/lucasaarcoverde/"
+              target="_blank"
+            >
+              <Icon boxSize="6" as={AiFillLinkedin} />
+            </Link>
+          </Stack>
         </Flex>
-        {/* {!desktop && <DefaultFooter />} */}
       </Flex>
     </Grid>
   )
