@@ -326,7 +326,7 @@ const RatingsPage = ({
       <Flex direction="column" {...layoutProps}>
         <Box>
           <Map
-            height="36vw"
+            height="calc(40vh - 56px)"
             width={desktop ? '100%' : '100vw'}
             onOpenDetails={onOpenDetails}
             searchedItem={searchedItem}

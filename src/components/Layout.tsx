@@ -6,13 +6,12 @@ import { Topbar } from './Topbar'
 import { useMediaQuery } from '../contexts'
 import 'focus-visible/dist/focus-visible'
 import { DefaultFooter, MobileFooter } from './Footer'
-import { useLocation } from '@reach/router'
+
 import { useAuth } from '../contexts/firebase'
 import { InitialLoading } from './Loading'
 
 export function Layout({ children }: LayoutProps) {
   const { desktop } = useMediaQuery()
-  const { pathname } = useLocation()
   const { user, loading } = useAuth()
 
   const photo = useMemo(() => {
@@ -36,7 +35,6 @@ export function Layout({ children }: LayoutProps) {
               as="main"
             >
               {children}
-              {!pathname.includes('profile') && <DefaultFooter />}
             </Box>
           ) : (
             <Box
@@ -52,7 +50,7 @@ export function Layout({ children }: LayoutProps) {
             </Box>
           )}
 
-          {!desktop && <MobileFooter photo={photo} />}
+          {desktop ? <DefaultFooter /> : <MobileFooter photo={photo} />}
         </>
       )}
     </PrivateRoute>

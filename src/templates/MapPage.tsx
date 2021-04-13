@@ -94,7 +94,7 @@ const MapPage = ({
           onClick={() => navigate('/app/ratings')}
         />
       )}
-      {desktop && <Tutorial />}
+      <Tutorial />
     </Grid>
   )
 }

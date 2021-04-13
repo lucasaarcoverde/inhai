@@ -94,35 +94,38 @@ const AboutUsPage = ({
             </OrderedList>
           </FaqSection>
         </Stack>
-        <Flex
-          direction="column"
-          align="center"
-          marginTop="8"
-          justifyContent="center"
-        >
-          <Stack direction="row" spacing="3" color="gray.400">
-            <Link
-              href="mailto: lucasaarcoverde@gmail.com"
-              fontWeight="bold"
-              target="_blank"
-            >
-              <Icon boxSize="6" as={AiFillMail} />
-            </Link>
-            <Link
-              href="https://github.com/lucasaarcoverde"
-              fontWeight="bold"
-              target="_blank"
-            >
-              <Icon boxSize="6" as={AiFillGithub} />
-            </Link>
-            <Link
-              href="https://www.linkedin.com/in/lucasaarcoverde/"
-              target="_blank"
-            >
-              <Icon boxSize="6" as={AiFillLinkedin} />
-            </Link>
-          </Stack>
-        </Flex>
+        {!desktop && (
+          <Flex
+            direction="column"
+            align="center"
+            marginTop="8"
+            paddingBottom="6"
+            justifyContent="center"
+          >
+            <Stack direction="row" spacing="3" color="gray.400">
+              <Link
+                href="mailto: lucasaarcoverde@gmail.com"
+                fontWeight="bold"
+                target="_blank"
+              >
+                <Icon boxSize="6" as={AiFillMail} />
+              </Link>
+              <Link
+                href="https://github.com/lucasaarcoverde"
+                fontWeight="bold"
+                target="_blank"
+              >
+                <Icon boxSize="6" as={AiFillGithub} />
+              </Link>
+              <Link
+                href="https://www.linkedin.com/in/lucasaarcoverde/"
+                target="_blank"
+              >
+                <Icon boxSize="6" as={AiFillLinkedin} />
+              </Link>
+            </Stack>
+          </Flex>
+        )}
       </Flex>
     </Grid>
   )

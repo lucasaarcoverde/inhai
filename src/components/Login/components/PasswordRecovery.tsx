@@ -10,6 +10,7 @@ import {
   InputLeftElement,
   Modal,
   ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -80,6 +81,7 @@ export function PasswordRecovery(props: PasswordRecoveryProps) {
     <Modal isOpen={open} onClose={handleClose} size="xs">
       <ModalOverlay />
       <ModalContent>
+        <ModalCloseButton />
         <ModalHeader color="teal.500">Recuperar senha</ModalHeader>
         <Formik
           onSubmit={handleSubmit}
@@ -125,14 +127,6 @@ export function PasswordRecovery(props: PasswordRecoveryProps) {
                 </Field>
               </ModalBody>
               <ModalFooter>
-                <Button
-                  colorScheme="teal"
-                  variant="ghost"
-                  mr={3}
-                  onClick={handleClose}
-                >
-                  Fechar
-                </Button>
                 <Button
                   type="submit"
                   colorScheme="teal"
