@@ -14,8 +14,8 @@ import {
 import { AiFillGithub, AiFillLinkedin, AiFillMail } from 'react-icons/ai'
 import { BiHelpCircle } from 'react-icons/bi'
 import { navigate } from 'gatsby'
-import { FaMapMarkerAlt } from 'react-icons/fa'
 import { useLocation } from '@reach/router'
+import { SearchIcon } from '@chakra-ui/icons'
 
 export function Footer(props: FlexProps) {
   const { children, ...restProps } = props
@@ -91,7 +91,7 @@ export const MobileFooter = (props: { photo?: string }) => {
       borderTopColor="gray.200"
     >
       <IconButton
-        aria-label="about-us"
+        aria-label="Página de informações"
         variant="ghost"
         icon={<Icon as={BiHelpCircle} boxSize={about ? '7' : '6'} />}
         colorScheme="teal"
@@ -101,8 +101,8 @@ export const MobileFooter = (props: { photo?: string }) => {
       />
       <IconButton
         variant="ghost"
-        aria-label="home"
-        icon={<Icon as={FaMapMarkerAlt} boxSize={map ? '7' : '6'} />}
+        aria-label="Página do mapa LGBTI+ friendly"
+        icon={<SearchIcon boxSize={map ? '7' : '6'} />}
         colorScheme="teal"
         onClick={() => {
           if (!map) navigate('/app')
@@ -110,7 +110,7 @@ export const MobileFooter = (props: { photo?: string }) => {
       />
       <Button
         variant="ghost"
-        aria-label="home"
+        aria-label="Página do perfil"
         colorScheme="teal"
         onClick={() => {
           if (!profile) navigate('/app/profile')

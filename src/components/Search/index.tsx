@@ -48,11 +48,9 @@ export function Search(props: SearchProps) {
       discoverAddress({
         q: queryValue,
         at: at,
+      }).then(({ items }) => {
+        setItems(items)
       })
-        .then(({ items }) => {
-          setItems(items)
-        })
-        .catch((e) => console.log('err', e))
     } else {
       setItems([])
     }

@@ -17,6 +17,8 @@ import {
   FlexProps,
   Alert,
   AlertIcon,
+  Link,
+  Text,
 } from '@chakra-ui/react'
 import { Form, Formik, FormikHelpers } from 'formik'
 
@@ -356,6 +358,18 @@ export function Profile(props: FlexProps) {
                 </Button>
               </Stack>
             </Form>
+            <Box padding="6">
+              <Text fontSize="xs" fontWeight="normal">
+                Não se sentiu representade?{' '}
+                <Link
+                  href="mailto: inhaiapp@gmail.com"
+                  fontWeight="bold"
+                  color="blue.600"
+                >
+                  Entre em contato
+                </Link>
+              </Text>
+            </Box>
           </Box>
         </Flex>
       )}

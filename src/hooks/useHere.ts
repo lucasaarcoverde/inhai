@@ -94,7 +94,6 @@ export default () => {
           },
           (data: HereDiscoverReturn) => resolve(data),
           (error: any) => {
-            console.log(error)
             reject(error)
           }
         )

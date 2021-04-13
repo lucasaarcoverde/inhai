@@ -299,6 +299,8 @@ const RatingsPage = ({
         })
         .then(() => {
           actions.resetForm()
+          setSearchedItem({} as RatedPlace)
+          setCurrentItem({} as RatedPlace)
           toastSuccess()
           updateInfo({
             ratings: firebase.firestore.FieldValue.increment(1),
@@ -324,7 +326,7 @@ const RatingsPage = ({
       <Flex direction="column" {...layoutProps}>
         <Box>
           <Map
-            height="calc(40vh - 56px)"
+            height="36vw"
             width={desktop ? '100%' : '100vw'}
             onOpenDetails={onOpenDetails}
             searchedItem={searchedItem}
@@ -339,7 +341,7 @@ const RatingsPage = ({
                 comment: '',
                 safePlace: 'false',
                 frequentedBy: 'false',
-                place: currentItem,
+                place: {},
                 rate: 0,
                 anonymous: false,
                 id: '',

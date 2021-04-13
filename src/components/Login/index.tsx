@@ -151,7 +151,6 @@ export const Login = () => {
                 position: 'top',
               })
             } else {
-              console.log(err)
               toast({
                 title: 'Erro ao criar conta.',
                 description: 'Email ou senha inválidos.',
@@ -169,7 +168,6 @@ export const Login = () => {
     <Formik
       initialValues={{ name: '', email: '', password: '' }}
       onSubmit={(values, actions) => {
-        console.log('submit')
         if (signup) {
           handleEmailSignup(values)
         } else {

@@ -3,7 +3,7 @@ import { RouteComponentProps } from '@reach/router'
 
 import { Profile } from '../components/Profile'
 import { Sidebar } from '../components'
-import { Flex, FlexProps, Grid, Link, Text } from '@chakra-ui/react'
+import { FlexProps, Grid } from '@chakra-ui/react'
 import { useMediaQuery } from '../contexts'
 
 const ProfilePage = ({
@@ -20,19 +20,6 @@ const ProfilePage = ({
       {desktop && <Sidebar />}
       <Profile justifyContent="center" {...layoutProps} />
       {children}
-
-      <Flex justifyContent="center" paddingBottom="6">
-        <Text fontSize="xs" fontWeight="normal">
-          Não se sentiu representade?{' '}
-          <Link
-            href="mailto: inhaiapp@gmail.com"
-            fontWeight="bold"
-            color="blue.600"
-          >
-            Entre em contato
-          </Link>
-        </Text>
-      </Flex>
     </Grid>
   )
 }

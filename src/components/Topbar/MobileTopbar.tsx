@@ -1,11 +1,12 @@
 import React from 'react'
 import { useLocation } from '@reach/router'
 import { Grid, Flex, IconButton, Heading, Icon } from '@chakra-ui/react'
-import { SearchIcon } from '@chakra-ui/icons'
+import { ArrowBackIcon, SearchIcon } from '@chakra-ui/icons'
 import { HiLogout } from 'react-icons/hi'
 
 import { useAuth } from '../../contexts/firebase'
 import { useLayout } from '../../contexts/layout'
+import { navigate } from 'gatsby'
 
 export function MobileTopbar() {
   const { onOpenSearch } = useLayout()
@@ -30,8 +31,21 @@ export function MobileTopbar() {
       borderBottomWidth="1px"
       borderBottomColor="gray.200"
     >
-      <Flex h="100%" paddingLeft="3" align="center" justifyContent="flex-start">
-        <Heading color="teal.500">Inhaí</Heading>
+      <Flex h="100%" align="center" justifyContent="flex-start">
+        {pathname === '/app/ratings' ? (
+          <IconButton
+            size="lg"
+            aria-label="Voltar para página anterior"
+            icon={<ArrowBackIcon boxSize="6" />}
+            variant="ghost"
+            colorScheme="teal"
+            onClick={() => navigate('/app')}
+          />
+        ) : (
+          <Heading paddingLeft="3" color="teal.500">
+            Inhaí
+          </Heading>
+        )}
       </Flex>
       <Flex h="100%" align="center" justifyContent="flex-end">
         {pathname === '/app' ? (

@@ -76,12 +76,12 @@ const AboutUsPage = ({
             </Text>
             <OrderedList paddingX="6">
               <ListItem>
-                Mostrar pra a comunidade LGBTI+ que há sim locais em que podemos
-                nos sentir nós mesmos sem nenhum medo ou receio
+                Mostrar pra a comunidade LGBTI+ que há sim locais em que é
+                possível se sentir você mesmo sem nenhum medo ou receio
               </ListItem>
               <ListItem>
-                Criar um ambiente colaborativo em que a gente possa avaliar e
-                expor nossa opinião sobre os locais que frequentamos
+                Criar um ambiente colaborativo em que a se possa avaliar os
+                locais que frequentamos
               </ListItem>
               <ListItem>
                 Incentivar os locais a adotar medidas que contribuam para tornar

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { RouteComponentProps } from '@reach/router'
-import { Grid, IconButton, useDisclosure } from '@chakra-ui/react'
+import { Grid, Icon, IconButton, useDisclosure } from '@chakra-ui/react'
 
 import { Search, Map, Tutorial, Sidebar } from '../components'
 import { HereItem } from '../hooks/useHere'
@@ -10,8 +10,8 @@ import { useAuth } from '../contexts/firebase'
 import { RatedPlace } from './RatingsPage'
 import { useMediaQuery } from '../contexts'
 import { useLayout } from '../contexts/layout'
-import { AddIcon } from '@chakra-ui/icons'
 import { navigate } from 'gatsby'
+import { BiLocationPlus } from 'react-icons/bi'
 
 const MapPage = ({
   children,
@@ -78,13 +78,17 @@ const MapPage = ({
       {children}
       {!desktop && (
         <IconButton
-          aria-label="ir para página de avaliações"
+          aria-label="Avaliar local"
           borderRadius="full"
-          icon={<AddIcon />}
+          icon={<Icon as={BiLocationPlus} boxSize="8" />}
           position="fixed"
-          right="6"
+          right="8"
+          variant="ghost"
+          shadow="lg"
+          bg="white"
           bottom="104px"
-          size="lg"
+          height="56px"
+          width="56px"
           colorScheme="teal"
           zIndex="docked"
           onClick={() => navigate('/app/ratings')}

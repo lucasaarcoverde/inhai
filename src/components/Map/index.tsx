@@ -158,7 +158,7 @@ export const Map = ({
   useLayoutEffect(() => {
     if (!window) return
 
-    const loadingTimer = setTimeout(() => setMapOpen(true), 550)
+    const loadingTimer = setTimeout(() => setMapOpen(true), 600)
 
     return () => {
       clearTimeout(loadingTimer)
