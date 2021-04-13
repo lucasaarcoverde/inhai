@@ -34,7 +34,7 @@ export function MobileTopbar() {
         <Heading color="teal.500">Inhaí</Heading>
       </Flex>
       <Flex h="100%" align="center" justifyContent="flex-end">
-        {pathname.includes('map') ? (
+        {pathname === '/app' ? (
           <IconButton
             size="lg"
             aria-label="Search button"
