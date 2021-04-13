@@ -28,8 +28,8 @@ import * as Yup from 'yup'
 import useFirebase from '../../hooks/useFirebase'
 
 const validationSchema = Yup.object({
-  name: Yup.string().required('Nome é obrigatório'),
-  displayName: Yup.string().required('Nome de usuário é obrigatório'),
+  name: Yup.string().trim().required('Nome é obrigatório'),
+  displayName: Yup.string().trim().required('Nome de usuário é obrigatório'),
 })
 
 const labelStyle = {

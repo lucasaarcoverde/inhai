@@ -21,7 +21,10 @@ import * as Yup from 'yup'
 import { useAuth } from '../../../contexts/firebase'
 
 const recoveryPasswordSchema = Yup.object({
-  email: Yup.string().email('Email inválido.').required('Email é obrigatório'),
+  email: Yup.string()
+    .trim()
+    .email('Email inválido.')
+    .required('Email é obrigatório'),
 })
 
 export function PasswordRecovery(props: PasswordRecoveryProps) {
