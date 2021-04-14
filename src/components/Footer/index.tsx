@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { AiFillGithub, AiFillLinkedin, AiFillMail } from 'react-icons/ai'
 import { BiHelpCircle } from 'react-icons/bi'
+import { FiBell } from 'react-icons/fi'
 import { navigate } from 'gatsby'
 import { useLocation } from '@reach/router'
 import { SearchIcon } from '@chakra-ui/icons'
@@ -75,10 +76,11 @@ export const MobileFooter = (props: { photo?: string }) => {
   const map = pathname === '/app'
   const profile = pathname === '/app/profile'
   const about = pathname === '/app/about-us'
+  const announcements = pathname === '/app/announcements'
 
   return (
     <Grid
-      templateColumns="repeat(3, 1fr)"
+      templateColumns="repeat(4, 1fr)"
       position="fixed"
       zIndex="docked"
       bg="white"
@@ -106,6 +108,15 @@ export const MobileFooter = (props: { photo?: string }) => {
         colorScheme="teal"
         onClick={() => {
           if (!map) navigate('/app')
+        }}
+      />
+      <IconButton
+        variant="ghost"
+        aria-label="Página do mapa LGBTI+ friendly"
+        icon={<Icon as={FiBell} boxSize={announcements ? '7' : '6'} />}
+        colorScheme="teal"
+        onClick={() => {
+          if (!announcements) navigate('/app/announcements')
         }}
       />
       <Button

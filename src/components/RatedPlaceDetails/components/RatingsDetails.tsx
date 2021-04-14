@@ -43,9 +43,11 @@ export function RatingsDetails(props: RatedPlace) {
         const ratings =
           docs.map((doc) => {
             if (!doc.exists) return
-
             lastKey = doc.data().createdAt
-            return doc.data() as Rating
+            const rating = doc.data() as Rating
+            const { anonymous } = rating
+
+            return !anonymous ? rating : { ...rating, user: {} }
           }) ?? []
 
         setLastKey(lastKey)

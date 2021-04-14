@@ -12,6 +12,7 @@ import ProfilePage from '../templates/ProfilePage'
 import { Layout, Seo } from '../components'
 import AboutUsPage from '../templates/AboutUsPage'
 import AdminPage from '../templates/AdminPage'
+import AnnouncementsPage from '../templates/AnnouncementsPage'
 
 const App = () => {
   const [desktop] = useMediaQuery('(min-width: 1024px)')
@@ -37,6 +38,7 @@ const App = () => {
               <AboutUsPage path="/app/about-us" />
               <RatingsPage path="/app/ratings" />
               <ProfilePage path="/app/profile" />
+              <AnnouncementsPage path="/app/announcements" />
               <AdminPage path="/app/admin" />
               <Redirect noThrow from="*" to="/404" />
             </Router>
