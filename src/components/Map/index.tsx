@@ -1,16 +1,6 @@
-import { AddIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  BoxProps,
-  Center,
-  Fade,
-  IconButton,
-  Spinner,
-} from '@chakra-ui/react'
+import { Box, BoxProps, Center, Fade, Spinner } from '@chakra-ui/react'
 import { useLocation } from '@reach/router'
-import { navigate } from 'gatsby'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { useMediaQuery } from '../../contexts'
 import { useAuth } from '../../contexts/firebase'
 import { HereItem } from '../../hooks/useHere'
 import { RatedPlace } from '../../templates/RatingsPage'
@@ -47,7 +37,6 @@ export const Map = ({
 
   const { pathname } = useLocation()
   const { user } = useAuth()
-  const { desktop } = useMediaQuery()
 
   useEffect(() => {
     if (!user) return

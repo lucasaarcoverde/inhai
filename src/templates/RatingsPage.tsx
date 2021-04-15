@@ -411,7 +411,6 @@ const RatingsPage = ({
                         Sim
                       </Radio>
                     </RadioGroupControl>
-                    ;
                     <TextareaControl
                       sx={{
                         '> label': {
