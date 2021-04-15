@@ -84,8 +84,9 @@ export function Search(props: SearchProps) {
         >
           <Autocomplete
             setSearchedItem={setSearchedItem}
-            height="calc(100vh - 163px)"
+            height="calc(100vh - 120px)"
             paddingBottom="48px"
+            marginTop="120px"
             setSearch={setQuery}
             searchValue={query}
             searchItems={items}
