@@ -44,8 +44,8 @@ export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
       </Flex>
       <Box bg="gray.50" height="100%" overflowY="scroll" paddingBottom="3">
         <Stack spacing="3" paddingTop="32px">
-          <PlaceCard {...item} />
           <RatingsCard {...item} />
+          <PlaceCard {...item} />
           <RatingsDetails {...item} />
         </Stack>
       </Box>
