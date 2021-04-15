@@ -12,6 +12,7 @@ import ProfilePage from '../templates/ProfilePage'
 import { Layout, Seo } from '../components'
 import AboutUsPage from '../templates/AboutUsPage'
 import AdminPage from '../templates/AdminPage'
+import { VerifiedContextProvider } from '../contexts/verified'
 
 const App = () => {
   const [desktop] = useMediaQuery('(min-width: 1024px)')
@@ -24,25 +25,27 @@ const App = () => {
 
   return (
     <FirebaseProvider>
-      <MediaQueryProvider mobile={mobile} desktop={desktop}>
-        <LayoutProvider
-          onOpenSearch={onOpenSearch}
-          searchOpen={searchOpen}
-          onCloseSearch={onCloseSearch}
-        >
-          <Layout>
-            <Seo />
-            <Router>
-              <MapPage path="/app" />
-              <AboutUsPage path="/app/about-us" />
-              <RatingsPage path="/app/ratings" />
-              <ProfilePage path="/app/profile" />
-              <AdminPage path="/app/admin" />
-              <Redirect noThrow from="*" to="/404" />
-            </Router>
-          </Layout>
-        </LayoutProvider>
-      </MediaQueryProvider>
+      <VerifiedContextProvider>
+        <MediaQueryProvider mobile={mobile} desktop={desktop}>
+          <LayoutProvider
+            onOpenSearch={onOpenSearch}
+            searchOpen={searchOpen}
+            onCloseSearch={onCloseSearch}
+          >
+            <Layout>
+              <Seo />
+              <Router>
+                <MapPage path="/app" />
+                <AboutUsPage path="/app/about-us" />
+                <RatingsPage path="/app/ratings" />
+                <ProfilePage path="/app/profile" />
+                <AdminPage path="/app/admin" />
+                <Redirect noThrow from="*" to="/404" />
+              </Router>
+            </Layout>
+          </LayoutProvider>
+        </MediaQueryProvider>
+      </VerifiedContextProvider>
     </FirebaseProvider>
   )
 }

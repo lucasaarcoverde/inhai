@@ -34,7 +34,6 @@ export function RatingsDetails(props: RatedPlace) {
     const db = firebase.firestore()
     db.collection('ratings')
       .where('placeId', '==', id)
-      .orderBy('createdAt')
       .limit(5)
       .get()
       .then((snap) => {
@@ -47,7 +46,9 @@ export function RatingsDetails(props: RatedPlace) {
             const rating = doc.data() as Rating
             const { anonymous } = rating
 
-            return !anonymous ? rating : { ...rating, user: {} }
+            const rateReturn = !anonymous ? rating : { ...rating, user: {} }
+
+            return rateReturn
           }) ?? []
 
         setLastKey(lastKey)
@@ -135,6 +136,7 @@ export function RatingsDetails(props: RatedPlace) {
         </Center>
       ) : (
         <CommentList
+          {...props}
           loading={loading}
           onLoadMoreRatings={() => loadMoreRatings(id)}
           limit={ratings.length >= ratingsQty}

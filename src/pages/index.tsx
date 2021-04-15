@@ -19,11 +19,13 @@ const IndexPage = () => {
 
   return (
     <FirebaseProvider>
-      <MediaQueryProvider mobile={mobile} desktop={desktop}>
-        <Layout>
-          <Seo />
-        </Layout>
-      </MediaQueryProvider>
+      <VerifiedContextProvider>
+        <MediaQueryProvider mobile={mobile} desktop={desktop}>
+          <Layout>
+            <Seo />
+          </Layout>
+        </MediaQueryProvider>
+      </VerifiedContextProvider>
     </FirebaseProvider>
   )
 }
