@@ -92,10 +92,10 @@ const validationSchema = Yup.object({
   comment: Yup.string()
     .trim()
     .when('rate', {
-      is: (rate: number) => rate < 3,
+      is: (rate: number) => rate <= 3,
       then: Yup.string()
         .trim()
-        .required('Campo obrigatório em caso de notas abaixo de 3.'),
+        .required('Campo obrigatório em caso de notas menor ou igual a 3.'),
     })
     .when('safePlace', {
       is: (safePlace: string) => safePlace === 'false',
