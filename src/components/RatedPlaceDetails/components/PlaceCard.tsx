@@ -34,7 +34,11 @@ export function PlaceCard(props: RatedPlace) {
   } = address ?? {}
 
   const label = address
-    ? `${street}, ${houseNumber}, ${district}, ${city} - ${stateCode}, ${postalCode}, ${countryName}`
+    ? `${street ? `${street}, ` : ''}${houseNumber ? `${houseNumber}, ` : ''}${
+        district ? `${district}, ` : ''
+      }${city && stateCode ? `${city} - ${stateCode}, ` : ''}${
+        postalCode ? `${postalCode}, ` : ''
+      }${countryName ?? 'Brasil'}`
     : null
 
   const firstCategory = categories?.[0]

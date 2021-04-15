@@ -34,6 +34,7 @@ export function RatingsDetails(props: RatedPlace) {
     const db = firebase.firestore()
     db.collection('ratings')
       .where('placeId', '==', id)
+      .orderBy('createdAt')
       .limit(5)
       .get()
       .then((snap) => {
