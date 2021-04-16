@@ -123,10 +123,10 @@ export function Comment(props: CommentProps) {
       .then((doc) => {
         if (!doc.exists) return
 
-        const rating = doc.data() as Rating
-        if (rating?.visible !== false) {
+        const ratingData = doc.data() as Rating
+        if (ratingData?.visible !== false) {
           db.collection('ratings')
-            .doc(rating.id)
+            .doc(ratingData.id)
             .update({ visible: false })
             .then(() => {
               updatePlace({
@@ -134,40 +134,40 @@ export function Comment(props: CommentProps) {
                 totalRatings: Math.max(0, place.totalRatings - rate),
                 averageRating:
                   Math.max(0, place.totalRatings - rate) /
-                  Math.max(0, place.ratingsQty - 1),
+                  Math.max(1, place.ratingsQty - 1),
                 ratingsQty: Math.max(0, place.ratingsQty - 1),
                 safePlace:
-                  rating.safePlace === true
-                    ? place.safePlace - 1
+                  ratingData.safePlace === true
+                    ? Math.max(0, place.safePlace - 1)
                     : place.safePlace,
-                frequentedBy: rating.frequentedBy
+                frequentedBy: ratingData.frequentedBy
                   ? Math.max(0, place.frequentedBy - 1)
                   : place.frequentedBy,
-                unsafePlace: !rating.safePlace
+                unsafePlace: !ratingData.safePlace
                   ? Math.max(0, place.unsafePlace - 1)
                   : place.unsafePlace,
-                notFrequentedBy: !rating.frequentedBy
+                notFrequentedBy: !ratingData.frequentedBy
                   ? Math.max(0, place.notFrequentedBy - 1)
                   : place.notFrequentedBy,
                 rateDetails: {
                   horrible:
-                    rate === 1
+                    ratingData.rate === 1
                       ? Math.max(0, rateDetails.horrible - 1)
                       : rateDetails.horrible,
                   bad:
-                    rate === 2
+                    ratingData.rate === 2
                       ? Math.max(0, rateDetails.bad - 1)
                       : rateDetails.bad,
                   neutral:
-                    rate === 3
+                    ratingData.rate === 3
                       ? Math.max(0, rateDetails.neutral - 1)
                       : rateDetails.neutral,
                   good:
-                    rate === 4
+                    ratingData.rate === 4
                       ? Math.max(0, rateDetails.good - 1)
                       : rateDetails.good,
                   excellent:
-                    rate === 5
+                    ratingData.rate === 5
                       ? Math.max(0, rateDetails.good - 1)
                       : rateDetails.excellent,
                 },
