@@ -104,7 +104,7 @@ const AboutUsPage = ({
           >
             <Stack direction="row" spacing="3" color="gray.400">
               <Link
-                href="mailto: inhaiapp@gmail.com"
+                href="mailto: inhaiapp@gmail.com?subject=Contato Inhaí"
                 fontWeight="bold"
                 target="_blank"
               >

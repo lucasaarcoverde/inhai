@@ -11,7 +11,13 @@ export function CommentList(props: CommentListProps) {
   return (
     <Stack spacing="4" overflowX="hidden">
       {ratings.map((rating, index) => {
-        return <Comment place={place} rating={rating} key={index} />
+        return (
+          <Comment
+            place={place}
+            rating={rating}
+            key={`${rating.id}-comment-${index}`}
+          />
+        )
       })}
       {!limit && (
         <IconButton

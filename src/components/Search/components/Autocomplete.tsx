@@ -129,7 +129,7 @@ export function Autocomplete(
           >
             {searchItems.map((item, index) => (
               <Stack
-                key={index}
+                key={`search-place-${index}`}
                 width="100%"
                 bg={highlightedIndex === index ? 'gray.50' : 'whiteAlpha'}
                 {...getItemProps({ item, index })}

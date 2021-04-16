@@ -295,7 +295,7 @@ export function Profile(props: FlexProps) {
                   }}
                 >
                   {Array.from({ length: 100 }, (_, index) => (
-                    <option key={index} value={index + 16}>
+                    <option key={`profile-age-${index}`} value={index + 16}>
                       {index + 16}
                     </option>
                   ))}
@@ -355,7 +355,7 @@ export function Profile(props: FlexProps) {
               <Text fontSize="xs" fontWeight="normal">
                 Não se sentiu representade?{' '}
                 <Link
-                  href="mailto: inhaiapp@gmail.com"
+                  href="mailto: inhaiapp@gmail.com?subject=Representatividade Inhaí"
                   fontWeight="bold"
                   color="blue.600"
                 >

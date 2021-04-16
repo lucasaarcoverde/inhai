@@ -112,7 +112,7 @@ export const Map = ({
       items?.map((item) => {
         const { averageRating, position } = item
         const marker = new H.map.Marker(position, {
-          icon: averageRating >= 3 ? positiveMarkerIcon : negativeMarkerIcon,
+          icon: averageRating >= 3.5 ? positiveMarkerIcon : negativeMarkerIcon,
         })
 
         marker.setData(item)

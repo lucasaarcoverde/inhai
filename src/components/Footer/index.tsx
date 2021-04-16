@@ -43,7 +43,7 @@ export function DefaultFooter(props: FlexProps) {
     <Footer justifyContent="center" align="center" {...props}>
       <Stack direction="row" spacing="3" color="gray.400">
         <Link
-          href="mailto: lucasaarcoverde@gmail.com"
+          href="mailto: inhaiapp@gmail.com?subject=Contato Inhaí"
           fontWeight="bold"
           target="_blank"
         >

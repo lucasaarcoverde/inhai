@@ -119,7 +119,7 @@ export function PlaceCard(props: RatedPlace) {
           <Link
             fontSize="xs"
             color="blue.600"
-            href="mailto: inhaiapp@gmail.com?subject=Proprietário estabelecimento"
+            href={`mailto: inhaiapp@gmail.com?subject=Proprietário ${title}`}
             fontWeight="bold"
             target="_blank"
           >

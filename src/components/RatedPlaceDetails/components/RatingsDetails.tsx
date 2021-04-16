@@ -30,6 +30,7 @@ export function RatingsDetails(props: RatedPlace) {
   useEffect(() => {
     if (!id) return
 
+    setRatings([])
     setLoading(true)
     const db = firebase.firestore()
     db.collection('ratings')

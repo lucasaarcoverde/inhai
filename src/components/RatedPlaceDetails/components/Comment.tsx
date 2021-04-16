@@ -38,11 +38,11 @@ export function Comment(props: CommentProps) {
     comment,
     anonymous = true,
     rate,
-    reportedBy: initialReportedBy = [],
     createdAt,
   } = rating
+
   const toast = useCallback(createStandaloneToast(), [])
-  const [reportedBy, setReportedBy] = useState(initialReportedBy)
+  const [reportedBy, setReportedBy] = useState<string[]>([])
 
   const { firebase, user: currentUser } = useAuth()
   const { updatePlace } = useFirebase()
@@ -109,6 +109,11 @@ export function Comment(props: CommentProps) {
     },
     [firebase, id, reportedBy, reports, currentUser, onClose]
   )
+
+  useEffect(() => {
+    if (!rating.reportedBy) return
+    setReportedBy(rating.reportedBy)
+  }, [rating?.reportedBy])
 
   useEffect(() => {
     if (!reportedBy || reportedBy.length <= 50) return
@@ -193,7 +198,13 @@ export function Comment(props: CommentProps) {
         <HStack align="center" spacing={2}>
           <Flex color="yellow.400">
             {Array.from({ length: rate }, (_, index) => {
-              return <Icon as={RiStarSFill} key={index} boxSize="18px" />
+              return (
+                <Icon
+                  as={RiStarSFill}
+                  key={`rating-star-${index}`}
+                  boxSize="18px"
+                />
+              )
             })}
           </Flex>
           {createdAt && (
