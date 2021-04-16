@@ -269,7 +269,7 @@ export function Comment(props: CommentProps) {
                           sx={{ '> label > span': { fontSize: 'xs' } }}
                           name="aggressive"
                         >
-                          Comentário agressivo.
+                          Comentário ofensivo.
                         </CheckboxSingleControl>
                       </Stack>
                     </ModalBody>
