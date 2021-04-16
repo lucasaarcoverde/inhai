@@ -30,6 +30,7 @@ export function RatingsDetails(props: RatedPlace) {
   useEffect(() => {
     if (!id) return
 
+    setRatings([])
     setLoading(true)
     const db = firebase.firestore()
     db.collection('ratings')
@@ -41,12 +42,18 @@ export function RatingsDetails(props: RatedPlace) {
         const docs = snap.docs
         let lastKey = ''
         const ratings =
-          docs.map((doc) => {
-            if (!doc.exists) return
+          docs
+            .map((doc) => {
+              if (!doc.exists) return
+              lastKey = doc.data().createdAt
+              const rating = doc.data() as Rating
+              const { anonymous } = rating
 
-            lastKey = doc.data().createdAt
-            return doc.data() as Rating
-          }) ?? []
+              const rateReturn = !anonymous ? rating : { ...rating, user: {} }
+
+              return rateReturn
+            })
+            .filter((rating) => rating?.visible !== false) ?? []
 
         setLastKey(lastKey)
         setRatings(ratings as Rating[])
@@ -133,6 +140,7 @@ export function RatingsDetails(props: RatedPlace) {
         </Center>
       ) : (
         <CommentList
+          {...props}
           loading={loading}
           onLoadMoreRatings={() => loadMoreRatings(id)}
           limit={ratings.length >= ratingsQty}

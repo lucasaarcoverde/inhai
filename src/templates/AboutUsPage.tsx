@@ -80,8 +80,8 @@ const AboutUsPage = ({
                 possível se sentir você mesmo sem nenhum medo ou receio
               </ListItem>
               <ListItem>
-                Criar um ambiente colaborativo em que a se possa avaliar os
-                locais que frequentamos
+                Criar um ambiente colaborativo em que se possa avaliar os locais
+                que frequentamos
               </ListItem>
               <ListItem>
                 Incentivar os locais a adotar medidas que contribuam para tornar
@@ -104,7 +104,7 @@ const AboutUsPage = ({
           >
             <Stack direction="row" spacing="3" color="gray.400">
               <Link
-                href="mailto: lucasaarcoverde@gmail.com"
+                href="mailto: inhaiapp@gmail.com?subject=Contato Inhaí"
                 fontWeight="bold"
                 target="_blank"
               >

@@ -1,4 +1,3 @@
-export * from './Welcome'
 export * from './Helmet'
 export * from './Search'
 export * from './Map'

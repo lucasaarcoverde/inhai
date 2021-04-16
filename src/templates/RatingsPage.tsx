@@ -46,7 +46,17 @@ export interface Rating {
   anonymous?: boolean
   id: string
   like: number
+  term: boolean
+  reports: Report[]
+  reportedBy: string[]
   createdAt: firebase.firestore.Timestamp
+  visible?: boolean
+}
+
+export interface Report {
+  notRelated: boolean
+  aggressive: boolean
+  userId: string
 }
 
 export interface RatedPlace extends HereItem {
@@ -83,10 +93,10 @@ const validationSchema = Yup.object({
   comment: Yup.string()
     .trim()
     .when('rate', {
-      is: (rate: number) => rate < 3,
+      is: (rate: number) => rate <= 3,
       then: Yup.string()
         .trim()
-        .required('Campo obrigatório em caso de notas abaixo de 3.'),
+        .required('Campo obrigatório em caso de nota menor ou igual a 3.'),
     })
     .when('safePlace', {
       is: (safePlace: string) => safePlace === 'false',
@@ -96,6 +106,7 @@ const validationSchema = Yup.object({
           'Campo obrigatório caso você não se sinta seguro nesse local.'
         ),
     }),
+  term: Yup.boolean().isTrue('Campo obrigatório.'),
 })
 
 const RatingsPage = ({
@@ -175,18 +186,9 @@ const RatingsPage = ({
         ...rating
       } = values
       const rate = Number(rating.rate)
-      const isFrequentedBy =
-        formFrequentedBy === 'false'
-          ? false
-          : formFrequentedBy === 'true'
-          ? true
-          : null
-      const isSafePlace =
-        formSafePlace === 'false'
-          ? false
-          : formSafePlace === 'true'
-          ? true
-          : null
+      const isFrequentedBy = formFrequentedBy === 'true' ? true : false
+
+      const isSafePlace = formSafePlace === 'true' ? true : false
 
       db.collection('places')
         .where('position', '==', values.place.position)
@@ -216,15 +218,12 @@ const RatingsPage = ({
               totalRatings: totalRatings + rate,
               averageRating: (totalRatings + rate) / (ratingsQty + 1),
               ratingsQty: ratingsQty + 1,
-              safePlace: isSafePlace === true ? safePlace + 1 : safePlace,
-              frequentedBy:
-                isFrequentedBy === true ? frequentedBy + 1 : frequentedBy,
-              unsafePlace:
-                isSafePlace === false ? unsafePlace + 1 : unsafePlace,
-              notFrequentedBy:
-                isFrequentedBy === false
-                  ? notFrequentedBy + 1
-                  : notFrequentedBy,
+              safePlace: isSafePlace ? safePlace + 1 : safePlace,
+              frequentedBy: isFrequentedBy ? frequentedBy + 1 : frequentedBy,
+              unsafePlace: !isSafePlace ? unsafePlace + 1 : unsafePlace,
+              notFrequentedBy: !isFrequentedBy
+                ? notFrequentedBy + 1
+                : notFrequentedBy,
               rateDetails: {
                 horrible: rate === 1 ? horrible + 1 : horrible,
                 bad: rate === 2 ? bad + 1 : bad,
@@ -244,6 +243,7 @@ const RatingsPage = ({
               user,
               like: 0,
               id: uuid,
+              visible: true,
             })
           } else {
             const placeId = v4()
@@ -254,10 +254,10 @@ const RatingsPage = ({
               totalRatings: rate,
               averageRating: rate,
               ratingsQty: 1,
-              safePlace: isSafePlace === true ? 1 : 0,
-              frequentedBy: isFrequentedBy === true ? 1 : 0,
-              unsafePlace: isSafePlace === false ? 1 : 0,
-              notFrequentedBy: isFrequentedBy === false ? 1 : 0,
+              safePlace: isSafePlace ? 1 : 0,
+              frequentedBy: isFrequentedBy ? 1 : 0,
+              unsafePlace: !isSafePlace ? 1 : 0,
+              notFrequentedBy: !isFrequentedBy ? 1 : 0,
               rateDetails: {
                 horrible: rate === 1 ? 1 : 0,
                 bad: rate === 2 ? 1 : 0,
@@ -293,6 +293,7 @@ const RatingsPage = ({
                 user,
                 like: 0,
                 id: ratingId,
+                visible: true,
               })
             })
           }
@@ -343,6 +344,7 @@ const RatingsPage = ({
                 frequentedBy: 'false',
                 place: {},
                 rate: 0,
+                term: false,
                 anonymous: false,
                 id: '',
               } as RatingForm
@@ -354,9 +356,7 @@ const RatingsPage = ({
               return (
                 <Form>
                   <PlaceField onOpenSearch={onOpenSearch} item={searchedItem} />
-
                   <Divider />
-
                   <Stack
                     spacing={2}
                     paddingX="6"
@@ -367,7 +367,7 @@ const RatingsPage = ({
                       name="anonymous"
                       sx={{ '> label > span': { fontSize: '14px' } }}
                     >
-                      Responder anonimamente
+                      Exibir avaliação anonimamente
                     </CheckboxSingleControl>
                     <FormRating name="rate" />
                     <RadioGroupControl
@@ -411,7 +411,6 @@ const RatingsPage = ({
                         Sim
                       </Radio>
                     </RadioGroupControl>
-                    ;
                     <TextareaControl
                       sx={{
                         '> label': {
@@ -431,7 +430,21 @@ const RatingsPage = ({
                       name="comment"
                       label="Comentários"
                     />
+                    <CheckboxSingleControl
+                      name="term"
+                      sx={{
+                        '> label > span': { fontSize: '10px' },
+                        marginBottom: '6',
+                      }}
+                    >
+                      Certifico que essa avaliação é baseada em minha própria
+                      experiência e é minha opinião sincera sobre este local e
+                      que não possuo nenhuma relação pessoal ou comercial com
+                      esse estabelecimento, não tendo recebido incentivo ou
+                      pagamento algum do estabelecimento para escrevê-la.
+                    </CheckboxSingleControl>
                     <Button
+                      size="sm"
                       isLoading={props.isSubmitting}
                       type="submit"
                       colorScheme="teal"

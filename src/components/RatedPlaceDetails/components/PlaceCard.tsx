@@ -12,6 +12,7 @@ import {
   WrapItem,
   Badge,
   Icon,
+  Link,
 } from '@chakra-ui/react'
 import { SiTwitter, SiFacebook } from 'react-icons/si'
 import { FiMapPin } from 'react-icons/fi'
@@ -33,7 +34,11 @@ export function PlaceCard(props: RatedPlace) {
   } = address ?? {}
 
   const label = address
-    ? `${street}, ${houseNumber}, ${district}, ${city} - ${stateCode}, ${postalCode}, ${countryName}`
+    ? `${street ? `${street}, ` : ''}${houseNumber ? `${houseNumber}, ` : ''}${
+        district ? `${district}, ` : ''
+      }${city && stateCode ? `${city} - ${stateCode}, ` : ''}${
+        postalCode ? `${postalCode}, ` : ''
+      }${countryName ?? 'Brasil'}`
     : null
 
   const firstCategory = categories?.[0]
@@ -108,6 +113,19 @@ export function PlaceCard(props: RatedPlace) {
             />
           )}
         </HStack>
+        <Text fontSize="xs">
+          Caso você seja proprietário desse estabelecimento e deseja se
+          manifestar de alguma forma,{' '}
+          <Link
+            fontSize="xs"
+            color="blue.600"
+            href={`mailto: inhaiapp@gmail.com?subject=Proprietário ${title}`}
+            fontWeight="bold"
+            target="_blank"
+          >
+            clique aqui para entrar em contato
+          </Link>
+        </Text>
         <Divider />
         <Wrap>
           {firstCategory && (

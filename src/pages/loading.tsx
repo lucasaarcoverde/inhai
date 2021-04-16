@@ -3,6 +3,7 @@ import { FirebaseProvider, useAuth } from '../contexts/firebase'
 
 import { InitialLoading } from '../components/Loading'
 import { navigate } from 'gatsby'
+import { VerifiedContextProvider } from '../contexts/verified'
 
 const LoadingPage = () => {
   const [loading, setLoading] = React.useState(true)
@@ -35,7 +36,9 @@ const LoadingPage = () => {
 
   return (
     <FirebaseProvider>
-      <InitialLoading />
+      <VerifiedContextProvider>
+        <InitialLoading />
+      </VerifiedContextProvider>
     </FirebaseProvider>
   )
 }

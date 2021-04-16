@@ -24,6 +24,7 @@ const MapPage = ({
 }: React.PropsWithChildren<RouteComponentProps>) => {
   const { searchOpen, onCloseSearch } = useLayout()
   const [firstTime, setFirstTime] = useState(false)
+  const { user } = useAuth()
 
   const handleTutorialClose = () => {
     setFirstTime(true)
@@ -50,10 +51,14 @@ const MapPage = ({
   useEffect(() => {
     if (items) return
 
+    if (!user) return
+
+    const avgRating = user.id === process.env.GATSBY_FIREBASE_ADMIN_ID ? 1 : 3.5
+
     const db = firebase.firestore()
 
     db.collection('places')
-      .where('averageRating', '>=', 3)
+      .where('averageRating', '>=', avgRating)
       .get()
       .then((snap) => {
         const docs = snap.docs
@@ -66,7 +71,7 @@ const MapPage = ({
 
         setItems(mapItems as RatedPlace[])
       })
-  }, [items])
+  }, [items, user])
 
   return (
     <Grid templateColumns={desktop ? '1fr 2fr 1fr' : '1fr'}>

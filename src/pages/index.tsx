@@ -7,6 +7,7 @@ import { MediaQueryProvider } from '../contexts'
 import { FirebaseProvider } from '../contexts/firebase'
 import 'firebase/firestore'
 import { navigate } from 'gatsby'
+import { VerifiedContextProvider } from '../contexts/verified'
 
 // markup
 const IndexPage = () => {
@@ -19,11 +20,13 @@ const IndexPage = () => {
 
   return (
     <FirebaseProvider>
-      <MediaQueryProvider mobile={mobile} desktop={desktop}>
-        <Layout>
-          <Seo />
-        </Layout>
-      </MediaQueryProvider>
+      <VerifiedContextProvider>
+        <MediaQueryProvider mobile={mobile} desktop={desktop}>
+          <Layout>
+            <Seo />
+          </Layout>
+        </MediaQueryProvider>
+      </VerifiedContextProvider>
     </FirebaseProvider>
   )
 }

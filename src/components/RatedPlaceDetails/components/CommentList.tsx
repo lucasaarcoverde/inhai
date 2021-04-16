@@ -1,25 +1,23 @@
 import { ChevronDownIcon } from '@chakra-ui/icons'
-import {
-  Avatar,
-  Text,
-  HStack,
-  Stack,
-  Icon,
-  Flex,
-  IconButton,
-} from '@chakra-ui/react'
+import { Stack, IconButton } from '@chakra-ui/react'
 import React from 'react'
-import { RiStarSFill } from 'react-icons/ri'
 
-import { Rating } from '../../../templates/RatingsPage'
+import { RatedPlace, Rating } from '../../../templates/RatingsPage'
+import { Comment } from './Comment'
 
 export function CommentList(props: CommentListProps) {
-  const { ratings, limit = false, loading, onLoadMoreRatings } = props
+  const { ratings, limit = false, loading, onLoadMoreRatings, ...place } = props
 
   return (
     <Stack spacing="4" overflowX="hidden">
       {ratings.map((rating, index) => {
-        return <Comment rating={rating} key={index} />
+        return (
+          <Comment
+            place={place}
+            rating={rating}
+            key={`${rating.id}-comment-${index}`}
+          />
+        )
       })}
       {!limit && (
         <IconButton
@@ -37,52 +35,9 @@ export function CommentList(props: CommentListProps) {
   )
 }
 
-export function Comment(props: CommentProps) {
-  const {
-    rating: { user, comment, anonymous = true, rate, createdAt },
-    ...restProps
-  } = props
-
-  const photo = anonymous ? '' : user?.photo
-  const name = anonymous ? 'anônimo' : user?.displayName
-
-  return (
-    <Stack
-      fontSize="xs"
-      direction="column"
-      spacing={2}
-      {...restProps}
-      width="100%"
-      justifyContent="center"
-    >
-      <HStack spacing="2">
-        <Avatar size="sm" src={photo} alt={name} />
-        <Text fontSize="xs">{name}</Text>
-      </HStack>
-      <HStack align="center" spacing={2}>
-        <Flex color="yellow.400">
-          {Array.from({ length: rate }, (_, index) => {
-            return <Icon as={RiStarSFill} key={index} boxSize="18px" />
-          })}
-        </Flex>
-        {createdAt && (
-          <Text fontSize="x-small" color="gray.500">
-            Avaliado em {createdAt.toDate().toLocaleDateString('pt-BR')}
-          </Text>
-        )}
-      </HStack>
-      <Text fontWeight="normal">{comment && comment}</Text>
-    </Stack>
-  )
-}
-
-export interface CommentListProps {
+export interface CommentListProps extends RatedPlace {
   ratings: Rating[]
   onLoadMoreRatings: () => void
   limit: boolean
   loading: boolean
-}
-
-export interface CommentProps {
-  rating: Rating
 }

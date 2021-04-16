@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import {
   Button,
   Spinner,
@@ -28,6 +28,7 @@ import { ProfileDropzone } from './components/Dropzone'
 import { useMediaQuery } from '../../contexts'
 import * as Yup from 'yup'
 import useFirebase from '../../hooks/useFirebase'
+import { useVerified } from '../../contexts/verified'
 
 const validationSchema = Yup.object({
   name: Yup.string().trim().required('Nome é obrigatório'),
@@ -46,24 +47,16 @@ const labelStyle = {
     },
   },
 }
-export function Profile(props: FlexProps) {
-  const [emailVerified, setEmailVerified] = useState(true)
 
+export function Profile(props: FlexProps) {
   const { user, logout, setUser, firebase } = useAuth()
   const toast = useCallback(createStandaloneToast(), [])
   const { desktop } = useMediaQuery()
   const { updateInfo } = useFirebase()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { verified } = useVerified()
 
   const cancelRef = React.useRef<HTMLButtonElement>()
-
-  useEffect(() => {
-    const currentUser = firebase.auth().currentUser
-
-    if (!currentUser) return
-
-    setEmailVerified(currentUser.emailVerified)
-  }, [])
 
   const verifyEmail = useCallback(() => {
     const currentUser = firebase.auth().currentUser
@@ -217,7 +210,7 @@ export function Profile(props: FlexProps) {
                   label="Email"
                   isRequired
                 />
-                {!emailVerified && (
+                {!verified && (
                   <Alert
                     minHeight="32px"
                     fontSize="xs"
@@ -302,7 +295,7 @@ export function Profile(props: FlexProps) {
                   }}
                 >
                   {Array.from({ length: 100 }, (_, index) => (
-                    <option key={index} value={index + 16}>
+                    <option key={`profile-age-${index}`} value={index + 16}>
                       {index + 16}
                     </option>
                   ))}
@@ -362,7 +355,7 @@ export function Profile(props: FlexProps) {
               <Text fontSize="xs" fontWeight="normal">
                 Não se sentiu representade?{' '}
                 <Link
-                  href="mailto: inhaiapp@gmail.com"
+                  href="mailto: inhaiapp@gmail.com?subject=Representatividade Inhaí"
                   fontWeight="bold"
                   color="blue.600"
                 >
