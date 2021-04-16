@@ -50,6 +50,7 @@ export interface Rating {
   reports: Report[]
   reportedBy: string[]
   createdAt: firebase.firestore.Timestamp
+  visible?: boolean
 }
 
 export interface Report {
@@ -219,8 +220,8 @@ const RatingsPage = ({
               ratingsQty: ratingsQty + 1,
               safePlace: isSafePlace ? safePlace + 1 : safePlace,
               frequentedBy: isFrequentedBy ? frequentedBy + 1 : frequentedBy,
-              unsafePlace: isSafePlace ? unsafePlace + 1 : unsafePlace,
-              notFrequentedBy: isFrequentedBy
+              unsafePlace: !isSafePlace ? unsafePlace + 1 : unsafePlace,
+              notFrequentedBy: !isFrequentedBy
                 ? notFrequentedBy + 1
                 : notFrequentedBy,
               rateDetails: {
@@ -242,6 +243,7 @@ const RatingsPage = ({
               user,
               like: 0,
               id: uuid,
+              visible: true,
             })
           } else {
             const placeId = v4()
@@ -254,8 +256,8 @@ const RatingsPage = ({
               ratingsQty: 1,
               safePlace: isSafePlace ? 1 : 0,
               frequentedBy: isFrequentedBy ? 1 : 0,
-              unsafePlace: isSafePlace ? 1 : 0,
-              notFrequentedBy: isFrequentedBy ? 1 : 0,
+              unsafePlace: !isSafePlace ? 1 : 0,
+              notFrequentedBy: !isFrequentedBy ? 1 : 0,
               rateDetails: {
                 horrible: rate === 1 ? 1 : 0,
                 bad: rate === 2 ? 1 : 0,
@@ -291,6 +293,7 @@ const RatingsPage = ({
                 user,
                 like: 0,
                 id: ratingId,
+                visible: true,
               })
             })
           }

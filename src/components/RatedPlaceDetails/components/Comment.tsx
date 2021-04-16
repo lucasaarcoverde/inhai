@@ -111,63 +111,69 @@ export function Comment(props: CommentProps) {
   )
 
   useEffect(() => {
-    if (!reportedBy || reportedBy.length <= 3) return
+    if (!reportedBy || reportedBy.length <= 50) return
 
     const db = firebase.firestore()
-    const { safePlace, rate, frequentedBy } = rating
+    const { rate } = rating
     const { rateDetails } = place
 
-    db.collection('reported-ratings')
+    db.collection('ratings')
       .doc(rating.id)
-      .set(rating)
-      .then(() => {
-        db.collection('ratings')
-          .doc(rating.id)
-          .delete()
-          .then(() => {
-            updatePlace({
-              id: place.id,
-              totalRatings: Math.max(0, place.totalRatings - rate),
-              averageRating:
-                Math.max(0, place.totalRatings - rate) /
-                Math.max(0, place.ratingsQty - 1),
-              ratingsQty: Math.max(0, place.ratingsQty - 1),
-              safePlace:
-                safePlace === true ? place.safePlace - 1 : place.safePlace,
-              frequentedBy: rating.frequentedBy
-                ? Math.max(0, place.frequentedBy - 1)
-                : place.frequentedBy,
-              unsafePlace: rating.safePlace
-                ? Math.max(0, place.unsafePlace - 1)
-                : place.unsafePlace,
-              notFrequentedBy:
-                frequentedBy === false
+      .get()
+      .then((doc) => {
+        if (!doc.exists) return
+
+        const rating = doc.data() as Rating
+        if (rating?.visible !== false) {
+          db.collection('ratings')
+            .doc(rating.id)
+            .update({ visible: false })
+            .then(() => {
+              updatePlace({
+                id: place.id,
+                totalRatings: Math.max(0, place.totalRatings - rate),
+                averageRating:
+                  Math.max(0, place.totalRatings - rate) /
+                  Math.max(0, place.ratingsQty - 1),
+                ratingsQty: Math.max(0, place.ratingsQty - 1),
+                safePlace:
+                  rating.safePlace === true
+                    ? place.safePlace - 1
+                    : place.safePlace,
+                frequentedBy: rating.frequentedBy
+                  ? Math.max(0, place.frequentedBy - 1)
+                  : place.frequentedBy,
+                unsafePlace: !rating.safePlace
+                  ? Math.max(0, place.unsafePlace - 1)
+                  : place.unsafePlace,
+                notFrequentedBy: !rating.frequentedBy
                   ? Math.max(0, place.notFrequentedBy - 1)
                   : place.notFrequentedBy,
-              rateDetails: {
-                horrible:
-                  rate === 1
-                    ? Math.max(0, rateDetails.horrible - 1)
-                    : rateDetails.horrible,
-                bad:
-                  rate === 2
-                    ? Math.max(0, rateDetails.bad - 1)
-                    : rateDetails.bad,
-                neutral:
-                  rate === 3
-                    ? Math.max(0, rateDetails.neutral - 1)
-                    : rateDetails.neutral,
-                good:
-                  rate === 4
-                    ? Math.max(0, rateDetails.good - 1)
-                    : rateDetails.good,
-                excellent:
-                  rate === 5
-                    ? Math.max(0, rateDetails.good - 1)
-                    : rateDetails.excellent,
-              },
+                rateDetails: {
+                  horrible:
+                    rate === 1
+                      ? Math.max(0, rateDetails.horrible - 1)
+                      : rateDetails.horrible,
+                  bad:
+                    rate === 2
+                      ? Math.max(0, rateDetails.bad - 1)
+                      : rateDetails.bad,
+                  neutral:
+                    rate === 3
+                      ? Math.max(0, rateDetails.neutral - 1)
+                      : rateDetails.neutral,
+                  good:
+                    rate === 4
+                      ? Math.max(0, rateDetails.good - 1)
+                      : rateDetails.good,
+                  excellent:
+                    rate === 5
+                      ? Math.max(0, rateDetails.good - 1)
+                      : rateDetails.excellent,
+                },
+              })
             })
-          })
+        }
       })
   }, [reportedBy, rating, place, updatePlace])
 
@@ -228,7 +234,6 @@ export function Comment(props: CommentProps) {
                 aggressive: false,
               }}
               onSubmit={(values, actions) => {
-                console.log(values)
                 actions.setSubmitting(true)
                 if (values.aggressive || values.notRelated) {
                   handleReport(values, actions)

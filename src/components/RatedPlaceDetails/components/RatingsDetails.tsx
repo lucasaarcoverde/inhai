@@ -41,16 +41,18 @@ export function RatingsDetails(props: RatedPlace) {
         const docs = snap.docs
         let lastKey = ''
         const ratings =
-          docs.map((doc) => {
-            if (!doc.exists) return
-            lastKey = doc.data().createdAt
-            const rating = doc.data() as Rating
-            const { anonymous } = rating
+          docs
+            .map((doc) => {
+              if (!doc.exists) return
+              lastKey = doc.data().createdAt
+              const rating = doc.data() as Rating
+              const { anonymous } = rating
 
-            const rateReturn = !anonymous ? rating : { ...rating, user: {} }
+              const rateReturn = !anonymous ? rating : { ...rating, user: {} }
 
-            return rateReturn
-          }) ?? []
+              return rateReturn
+            })
+            .filter((rating) => rating?.visible !== false) ?? []
 
         setLastKey(lastKey)
         setRatings(ratings as Rating[])
