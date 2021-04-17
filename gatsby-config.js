@@ -29,6 +29,10 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-plugin-create-client-paths`,
+      options: { prefixes: [`/app/*`] },
+    },
+    {
       resolve: 'gatsby-plugin-offline',
       options: {
         workboxConfig: {

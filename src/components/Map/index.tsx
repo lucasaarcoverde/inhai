@@ -1,9 +1,11 @@
-import { Box, BoxProps, Center, Fade, Spinner } from '@chakra-ui/react'
+import type { BoxProps } from '@chakra-ui/react'
+import { Box, Center, Fade, Spinner } from '@chakra-ui/react'
 import { useLocation } from '@reach/router'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
+
 import { useAuth } from '../../contexts/firebase'
-import { HereItem } from '../../hooks/useHere'
-import { RatedPlace } from '../../templates/RatingsPage'
+import type { HereItem } from '../../hooks/useHere'
+import type { RatedPlace } from '../../templates/RatingsPage'
 import { getPositiveMarkerIcon, getNegativeMarkerIcon } from './utils'
 
 interface MapProps extends BoxProps {
@@ -69,8 +71,8 @@ export const Map = ({
 
     window.addEventListener('resize', () => map.getViewPort().resize())
 
-    let behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map))
-    let ui = H.ui.UI.createDefault(map, defaultLayers, 'pt-BR')
+    const behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map))
+    const ui = H.ui.UI.createDefault(map, defaultLayers, 'pt-BR')
 
     const positiveMarkerIcon = new H.map.Icon(getPositiveMarkerIcon())
     const negativeMarkerIcon = new H.map.Icon(getNegativeMarkerIcon())
@@ -81,7 +83,7 @@ export const Map = ({
       'pointermove',
       function (event: MouseEvent) {
         const viewPort = map.getViewPort()
-        const element = viewPort.element
+        const { element } = viewPort
 
         if (event.target instanceof H.map.Marker) {
           if (!element) return

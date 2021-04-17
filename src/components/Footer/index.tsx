@@ -1,10 +1,9 @@
 import React from 'react'
-
+import type { FlexProps } from '@chakra-ui/react'
 import {
   Avatar,
   Button,
   Flex,
-  FlexProps,
   Grid,
   Icon,
   IconButton,
@@ -19,6 +18,7 @@ import { SearchIcon } from '@chakra-ui/icons'
 
 export function Footer(props: FlexProps) {
   const { children, ...restProps } = props
+
   return (
     <Flex
       borderTop="solid"
@@ -74,7 +74,7 @@ export const MobileFooter = (props: { photo?: string }) => {
 
   const map = pathname === '/app'
   const profile = pathname === '/app/profile'
-  const about = pathname === '/app/about-us'
+  const about = pathname === '/app/about'
 
   return (
     <Grid
@@ -96,7 +96,7 @@ export const MobileFooter = (props: { photo?: string }) => {
         icon={<Icon as={BiHelpCircle} boxSize={about ? '7' : '6'} />}
         colorScheme="teal"
         onClick={() => {
-          if (!about) navigate('/app/about-us')
+          if (!about) navigate('/app/about')
         }}
       />
       <IconButton

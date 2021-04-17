@@ -1,7 +1,7 @@
 import React from 'react'
 import { Flex, Heading, Text, Divider, Stack } from '@chakra-ui/react'
 
-import { RatedPlace } from '../../../templates/RatingsPage'
+import type { RatedPlace } from '../../../templates/RatingsPage'
 import { RatingBar } from './RatingBar'
 import { LGBTIcon } from './LGBTIcon'
 

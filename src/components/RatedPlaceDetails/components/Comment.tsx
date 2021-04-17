@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-
 import {
   Avatar,
   Button,
@@ -19,14 +18,16 @@ import {
   createStandaloneToast,
   IconButton,
 } from '@chakra-ui/react'
+import type { FormikHelpers } from 'formik'
+import { Form, Formik } from 'formik'
+import { CheckboxSingleControl } from 'formik-chakra-ui'
+import { RiStarSFill } from 'react-icons/ri'
+import { AiTwotoneFlag } from 'react-icons/ai'
+
 import useFirebase from '../../../hooks/useFirebase'
 import { useAuth } from '../../../contexts/firebase'
 import { useVerified } from '../../../contexts/verified'
-import { Form, Formik, FormikHelpers } from 'formik'
-import { CheckboxSingleControl } from 'formik-chakra-ui'
-import { RatedPlace, Rating } from '../../../templates/RatingsPage'
-import { RiStarSFill } from 'react-icons/ri'
-import { AiTwotoneFlag } from 'react-icons/ai'
+import type { RatedPlace, Rating } from '../../../templates/RatingsPage'
 
 export function Comment(props: CommentProps) {
   const { rating, place } = props
@@ -45,7 +46,7 @@ export function Comment(props: CommentProps) {
   const [reportedBy, setReportedBy] = useState<string[]>([])
 
   const { firebase, user: currentUser } = useAuth()
-  const { updatePlace } = useFirebase()
+  const { updatePlaceRating } = useFirebase()
 
   const photo = anonymous ? '' : user?.photo
   const name = anonymous ? 'anônimo' : user?.displayName
@@ -60,6 +61,7 @@ export function Comment(props: CommentProps) {
       if (!currentUser) return
 
       const currentUserId = currentUser.id
+
       if (reportedBy.includes(currentUserId)) {
         toast({
           description: 'Você já denunciou essa avaliação.',
@@ -71,10 +73,12 @@ export function Comment(props: CommentProps) {
         actions.setSubmitting(false)
         actions.resetForm()
         setTimeout(() => onClose(), 200)
+
         return
       }
 
       const updatedReportsBy = [...reportedBy, currentUserId]
+
       db.collection('ratings')
         .doc(id)
         .update({
@@ -119,8 +123,6 @@ export function Comment(props: CommentProps) {
     if (!reportedBy || reportedBy.length <= 50) return
 
     const db = firebase.firestore()
-    const { rate } = rating
-    const { rateDetails } = place
 
     db.collection('ratings')
       .doc(rating.id)
@@ -129,58 +131,17 @@ export function Comment(props: CommentProps) {
         if (!doc.exists) return
 
         const ratingData = doc.data() as Rating
+
         if (ratingData?.visible !== false) {
           db.collection('ratings')
             .doc(ratingData.id)
             .update({ visible: false })
             .then(() => {
-              updatePlace({
-                id: place.id,
-                totalRatings: Math.max(0, place.totalRatings - rate),
-                averageRating:
-                  Math.max(0, place.totalRatings - rate) /
-                  Math.max(1, place.ratingsQty - 1),
-                ratingsQty: Math.max(0, place.ratingsQty - 1),
-                safePlace:
-                  ratingData.safePlace === true
-                    ? Math.max(0, place.safePlace - 1)
-                    : place.safePlace,
-                frequentedBy: ratingData.frequentedBy
-                  ? Math.max(0, place.frequentedBy - 1)
-                  : place.frequentedBy,
-                unsafePlace: !ratingData.safePlace
-                  ? Math.max(0, place.unsafePlace - 1)
-                  : place.unsafePlace,
-                notFrequentedBy: !ratingData.frequentedBy
-                  ? Math.max(0, place.notFrequentedBy - 1)
-                  : place.notFrequentedBy,
-                rateDetails: {
-                  horrible:
-                    ratingData.rate === 1
-                      ? Math.max(0, rateDetails.horrible - 1)
-                      : rateDetails.horrible,
-                  bad:
-                    ratingData.rate === 2
-                      ? Math.max(0, rateDetails.bad - 1)
-                      : rateDetails.bad,
-                  neutral:
-                    ratingData.rate === 3
-                      ? Math.max(0, rateDetails.neutral - 1)
-                      : rateDetails.neutral,
-                  good:
-                    ratingData.rate === 4
-                      ? Math.max(0, rateDetails.good - 1)
-                      : rateDetails.good,
-                  excellent:
-                    ratingData.rate === 5
-                      ? Math.max(0, rateDetails.good - 1)
-                      : rateDetails.excellent,
-                },
-              })
+              updatePlaceRating(place, rating, false)
             })
         }
       })
-  }, [reportedBy, rating, place, updatePlace])
+  }, [reportedBy, rating, place, updatePlaceRating])
 
   return (
     <Stack
@@ -224,8 +185,10 @@ export function Comment(props: CommentProps) {
                 isClosable: true,
                 position: 'top',
               })
+
               return
             }
+
             onOpen()
           }}
           icon={<Icon as={AiTwotoneFlag} />}
@@ -248,10 +211,12 @@ export function Comment(props: CommentProps) {
                 actions.setSubmitting(true)
                 if (values.aggressive || values.notRelated) {
                   handleReport(values, actions)
-                } else actions.setSubmitting(false)
+                } else {
+                  actions.setSubmitting(false)
+                }
               }}
             >
-              {(props) => {
+              {(formikProps) => {
                 return (
                   <Form>
                     <ModalBody>
@@ -275,12 +240,13 @@ export function Comment(props: CommentProps) {
                     </ModalBody>
                     <ModalFooter>
                       <Button
-                        isLoading={props.isSubmitting}
+                        isLoading={formikProps.isSubmitting}
                         type="submit"
                         colorScheme="teal"
                         variant="ghost"
                         isDisabled={
-                          !props.values.notRelated && !props.values.aggressive
+                          !formikProps.values.notRelated &&
+                          !formikProps.values.aggressive
                         }
                       >
                         Realizar denúncia

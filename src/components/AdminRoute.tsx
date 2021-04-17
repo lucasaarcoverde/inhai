@@ -1,6 +1,6 @@
 import * as React from 'react'
-
 import { navigate } from 'gatsby'
+
 import { useAuth } from '../contexts/firebase'
 
 interface PrivateRouteProps {

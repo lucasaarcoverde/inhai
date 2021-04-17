@@ -10,10 +10,11 @@ import {
   Button,
   HStack,
 } from '@chakra-ui/react'
-import { RatedPlace, Rating } from '../../../templates/RatingsPage'
+import { navigate } from 'gatsby'
+
+import type { RatedPlace, Rating } from '../../../templates/RatingsPage'
 import { CommentList } from './CommentList'
 import { RatingBar } from './RatingBar'
-import { navigate } from 'gatsby'
 import { useAuth } from '../../../contexts/firebase'
 
 export function RatingsDetails(props: RatedPlace) {
@@ -33,19 +34,20 @@ export function RatingsDetails(props: RatedPlace) {
     setRatings([])
     setLoading(true)
     const db = firebase.firestore()
+
     db.collection('ratings')
       .where('placeId', '==', id)
       .orderBy('createdAt')
       .limit(5)
       .get()
       .then((snap) => {
-        const docs = snap.docs
-        let lastKey = ''
-        const ratings =
+        const { docs } = snap
+        let currentLastKey = ''
+        const currentRatings =
           docs
             .map((doc) => {
               if (!doc.exists) return
-              lastKey = doc.data().createdAt
+              currentLastKey = doc.data().createdAt
               const rating = doc.data() as Rating
               const { anonymous } = rating
 
@@ -55,8 +57,8 @@ export function RatingsDetails(props: RatedPlace) {
             })
             .filter((rating) => rating?.visible !== false) ?? []
 
-        setLastKey(lastKey)
-        setRatings(ratings as Rating[])
+        setLastKey(currentLastKey)
+        setRatings(currentRatings as Rating[])
       })
       .finally(() => {
         setTimeout(() => setLoading(false), 100)
@@ -64,28 +66,30 @@ export function RatingsDetails(props: RatedPlace) {
   }, [id])
 
   const loadMoreRatings = useCallback(
-    (id: string) => {
+    (placeId: string) => {
       setLoading(true)
       const db = firebase.firestore()
+
       db.collection('ratings')
-        .where('placeId', '==', id)
+        .where('placeId', '==', placeId)
         .orderBy('createdAt')
         .startAfter(lastKey)
         .limit(10)
         .get()
         .then((snap) => {
-          const docs = snap.docs
-          let lastKey = ''
-          const ratings =
+          const { docs } = snap
+          let currentLastKey = ''
+          const currentRatings =
             docs.map((doc) => {
               if (!doc.exists) return
 
-              lastKey = doc.data().createdAt
+              currentLastKey = doc.data().createdAt
+
               return doc.data() as Rating
             }) ?? []
 
-          setLastKey(lastKey)
-          setRatings((prev) => [...prev, ...ratings] as Rating[])
+          setLastKey(currentLastKey)
+          setRatings((prev) => [...prev, ...currentRatings] as Rating[])
           setLoading(false)
         })
         .catch(() => {

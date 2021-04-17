@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { RouteComponentProps } from '@reach/router'
+import type { RouteComponentProps } from '@reach/router'
 import * as Yup from 'yup'
-
+import type { FlexProps } from '@chakra-ui/react'
 import {
   Box,
   Button,
@@ -13,27 +13,28 @@ import {
   createStandaloneToast,
   IconButton,
   Radio,
-  FlexProps,
   Grid,
 } from '@chakra-ui/react'
 import { v4 } from 'uuid'
-import { Search } from '../components/Search'
-
-import { HereItem } from '../hooks/useHere'
-import { Map, PlaceDetails, Sidebar } from '../components'
 import { useCallback, useState } from 'react'
-import { Form, Formik, FormikHelpers, useField } from 'formik'
-import { useAuth, User } from '../contexts/firebase'
-import { useMediaQuery } from '../contexts'
+import type { FormikHelpers } from 'formik'
+import { Form, Formik, useField } from 'formik'
 import { SearchIcon } from '@chakra-ui/icons'
 import {
   CheckboxSingleControl,
   RadioGroupControl,
   TextareaControl,
 } from 'formik-chakra-ui'
+import firebase from 'firebase/app'
+
+import { Search } from '../components/Search'
+import type { HereItem } from '../hooks/useHere'
+import { Map, PlaceDetails, Sidebar } from '../components'
+import type { User, Timestamp } from '../contexts/firebase'
+import { useAuth } from '../contexts/firebase'
+import { useMediaQuery } from '../contexts'
 import { FormRating } from '../components/FormRating'
 import useFirebase from '../hooks/useFirebase'
-import firebase from 'firebase/app'
 
 export interface Rating {
   comment: string
@@ -49,7 +50,7 @@ export interface Rating {
   term: boolean
   reports: Report[]
   reportedBy: string[]
-  createdAt: firebase.firestore.Timestamp
+  createdAt: Timestamp
   visible?: boolean
 }
 
@@ -152,12 +153,12 @@ const RatingsPage = ({
     [toast, desktop]
   )
 
-  const { firebase, user } = useAuth()
+  const { user } = useAuth()
   const {
-    updatePlace,
     addRating,
     addPlace,
     addCity,
+    updatePlaceRating,
     updateInfo,
     db,
   } = useFirebase()
@@ -183,90 +184,47 @@ const RatingsPage = ({
         place,
         frequentedBy: formFrequentedBy,
         safePlace: formSafePlace,
-        ...rating
+        ...restValues
       } = values
-      const rate = Number(rating.rate)
-      const isFrequentedBy = formFrequentedBy === 'true' ? true : false
 
-      const isSafePlace = formSafePlace === 'true' ? true : false
+      const rate = Number(restValues.rate)
+      const isFrequentedBy = formFrequentedBy === 'true'
+
+      const isSafePlace = formSafePlace === 'true'
+
+      const uuid = v4()
+
+      const rating = {
+        ...restValues,
+        safePlace: isSafePlace,
+        frequentedBy: isFrequentedBy,
+        rate,
+        user,
+        like: 0,
+        id: uuid,
+        visible: true,
+      }
 
       db.collection('places')
         .where('position', '==', values.place.position)
         .get()
         .then((snap) => {
           const [doc] = snap.docs
-          if (doc && doc.exists) {
-            const {
-              id,
-              totalRatings = 0,
-              ratingsQty = 0,
-              safePlace = 0,
-              unsafePlace = 0,
-              frequentedBy = 0,
-              notFrequentedBy = 0,
-              rateDetails: {
-                good = 0,
-                bad = 0,
-                excellent = 0,
-                horrible = 0,
-                neutral = 0,
-              },
-            } = doc.data() as RatedPlace
 
-            updatePlace({
-              id,
-              totalRatings: totalRatings + rate,
-              averageRating: (totalRatings + rate) / (ratingsQty + 1),
-              ratingsQty: ratingsQty + 1,
-              safePlace: isSafePlace ? safePlace + 1 : safePlace,
-              frequentedBy: isFrequentedBy ? frequentedBy + 1 : frequentedBy,
-              unsafePlace: !isSafePlace ? unsafePlace + 1 : unsafePlace,
-              notFrequentedBy: !isFrequentedBy
-                ? notFrequentedBy + 1
-                : notFrequentedBy,
-              rateDetails: {
-                horrible: rate === 1 ? horrible + 1 : horrible,
-                bad: rate === 2 ? bad + 1 : bad,
-                neutral: rate === 3 ? neutral + 1 : neutral,
-                good: rate === 4 ? good + 1 : good,
-                excellent: rate === 5 ? excellent + 1 : excellent,
-              },
-            })
+          if (doc?.exists) {
+            const ratedPlace = doc.data() as RatedPlace
 
-            const uuid = v4()
-            addRating({
-              ...rating,
-              safePlace: isSafePlace ? true : false,
-              frequentedBy: isFrequentedBy ? true : false,
-              placeId: id,
-              rate,
-              user,
-              like: 0,
-              id: uuid,
-              visible: true,
-            })
+            updatePlaceRating(ratedPlace, rating)?.then(() =>
+              addRating({ ...rating, placeId: ratedPlace.id })
+            )
           } else {
             const placeId = v4()
 
-            addPlace({
-              ...place,
-              id: placeId,
-              totalRatings: rate,
-              averageRating: rate,
-              ratingsQty: 1,
-              safePlace: isSafePlace ? 1 : 0,
-              frequentedBy: isFrequentedBy ? 1 : 0,
-              unsafePlace: !isSafePlace ? 1 : 0,
-              notFrequentedBy: !isFrequentedBy ? 1 : 0,
-              rateDetails: {
-                horrible: rate === 1 ? 1 : 0,
-                bad: rate === 2 ? 1 : 0,
-                neutral: rate === 3 ? 1 : 0,
-                good: rate === 4 ? 1 : 0,
-                excellent: rate === 5 ? 1 : 0,
-              },
-            })?.then(() => {
-              const ratingId = v4()
+            addPlace({ ...place, id: placeId }, rating)?.then(() => {
+              addRating({
+                ...rating,
+                placeId,
+              })
 
               updateInfo({
                 places: firebase.firestore.FieldValue.increment(1),
@@ -275,26 +233,14 @@ const RatingsPage = ({
               db.collection('cities')
                 .doc(place.address.city)
                 .get()
-                .then((doc) => {
-                  if (!doc.exists) {
+                .then((cityDoc) => {
+                  if (!cityDoc.exists) {
                     updateInfo({
                       cities: firebase.firestore.FieldValue.increment(1),
                     })
                     addCity(place.address.city)
                   }
                 })
-
-              addRating({
-                ...rating,
-                safePlace: isSafePlace ? true : false,
-                frequentedBy: isFrequentedBy ? true : false,
-                placeId,
-                rate,
-                user,
-                like: 0,
-                id: ratingId,
-                visible: true,
-              })
             })
           }
         })
@@ -479,7 +425,7 @@ function PlaceField(props: PlaceFieldProps) {
   const { item, onOpenSearch } = props
   const { desktop } = useMediaQuery()
 
-  const [_, meta, helpers] = useField<HereItem>({
+  const [, meta, helpers] = useField<HereItem>({
     name: 'place',
     validate: (value: HereItem) =>
       !value?.title ? 'Escolha um local antes' : undefined,

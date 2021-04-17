@@ -1,11 +1,6 @@
 import * as React from 'react'
-import {
-  Flex,
-  HStack,
-  Icon,
-  IconButton,
-  IconButtonProps,
-} from '@chakra-ui/react'
+import type { IconButtonProps } from '@chakra-ui/react'
+import { Flex, HStack, Icon, IconButton } from '@chakra-ui/react'
 import { RiStarLine, RiStarFill } from 'react-icons/ri'
 
 interface StarRatingProps {
@@ -72,6 +67,7 @@ function StarButton(
   }
 ) {
   const { hoverIndex, index, ...restProps } = props
+
   return (
     <IconButton
       {...restProps}

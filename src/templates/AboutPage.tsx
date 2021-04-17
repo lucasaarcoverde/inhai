@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { RouteComponentProps } from '@reach/router'
+import type { RouteComponentProps } from '@reach/router'
+import type { FlexProps } from '@chakra-ui/react'
 import {
   Flex,
   Heading,
@@ -8,18 +9,17 @@ import {
   Text,
   OrderedList,
   ListItem,
-  FlexProps,
   Grid,
   Icon,
   Link,
 } from '@chakra-ui/react'
-
-import { Sidebar } from '../components'
-import { ReactNode } from 'react'
-import { useMediaQuery } from '../contexts'
+import type { ReactNode } from 'react'
 import { AiFillGithub, AiFillLinkedin, AiFillMail } from 'react-icons/ai'
 
-const AboutUsPage = ({
+import { Sidebar } from '../components'
+import { useMediaQuery } from '../contexts'
+
+const AboutPage = ({
   children,
 }: React.PropsWithChildren<RouteComponentProps>) => {
   const { desktop } = useMediaQuery()
@@ -149,4 +149,4 @@ interface FaqProps {
   title: string
 }
 
-export default AboutUsPage
+export default AboutPage

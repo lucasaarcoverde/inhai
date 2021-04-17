@@ -10,8 +10,8 @@ export interface Category {
 }
 
 export interface Contact {
-  phone: { value: string }[]
-  www: { value: string }[]
+  phone: Array<{ value: string }>
+  www: Array<{ value: string }>
 }
 
 export type HereItem = {
@@ -49,6 +49,7 @@ export default () => {
   useEffect(() => {
     if (!loading) {
       const { H } = window as Window
+
       try {
         hereClient.current = new H.service.Platform({
           app_id: process.env.GATSBY_HERE_APP_ID,

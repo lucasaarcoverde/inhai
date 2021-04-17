@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { StarRating } from './StarRating'
-
 import { useField } from 'formik'
 import { FormControl, FormErrorMessage, FormLabel } from '@chakra-ui/react'
+
+import { StarRating } from './StarRating'
 
 export function FormRating(props: RatingProps) {
   const { name } = props
