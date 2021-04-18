@@ -12,8 +12,6 @@ export default () => {
 
   const updatePlaceRating = useCallback(
     (place: RatedPlace, rating: Rating, increment = true) => {
-      // eslint-disable-next-line no-console
-      console.log('place', place)
       const placeRating = handlePlaceRating(place, rating, increment)
 
       return collectionRef?.(db, 'places').doc(place.id).update(placeRating)
