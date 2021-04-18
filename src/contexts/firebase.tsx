@@ -4,12 +4,11 @@ import React, {
   useContext,
   useMemo,
   useReducer,
+  useEffect,
 } from 'react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
-
-import { useEffect } from 'react'
 import { navigate } from 'gatsby'
 
 const firebaseConfig = {
@@ -22,6 +21,10 @@ const firebaseConfig = {
   projectId: process.env.GATSBY_FIREBASE_PROJECTID,
   storageBucket: process.env.GATSBY_FIREBASE_STORAGEBUCKET,
 }
+
+export type Timestamp = firebase.firestore.Timestamp
+
+export type Collection = 'ratings' | 'places' | 'users' | 'cities' | 'info'
 
 export interface User {
   age?: number
@@ -47,20 +50,9 @@ export interface FirebaseContextData {
   loginWithGoogle: () => void
   loginWithFacebook: () => void
   loginWithTwitter: () => void
-  usersRef?: (
-    db: firebase.firestore.Firestore
-  ) => firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
-  placesRef?: (
-    db: firebase.firestore.Firestore
-  ) => firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
-  ratingsRef?: (
-    db: firebase.firestore.Firestore
-  ) => firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
-  infoRef?: (
-    db: firebase.firestore.Firestore
-  ) => firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
-  citiesRef?: (
-    db: firebase.firestore.Firestore
+  collectionRef?: (
+    db: firebase.firestore.Firestore,
+    collection: Collection
   ) => firebase.firestore.CollectionReference<firebase.firestore.DocumentData>
 }
 
@@ -78,8 +70,9 @@ export const FirebaseContext = createContext<FirebaseContextData>({
 export function useAuth() {
   const context = useContext(FirebaseContext)
 
-  if (!context)
+  if (!context) {
     throw Error('You are trying to use firebase outside of context!')
+  }
 
   return context
 }
@@ -104,6 +97,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
       .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
       .then(() => {
         const googleProvider = new firebase.auth.GoogleAuthProvider()
+
         return firebase.auth().signInWithRedirect(googleProvider)
       })
   }, [firebase])
@@ -114,6 +108,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
       .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
       .then(() => {
         const twitterProvider = new firebase.auth.TwitterAuthProvider()
+
         return firebase.auth().signInWithRedirect(twitterProvider)
       })
   }, [firebase])
@@ -124,6 +119,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
       .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
       .then(() => {
         const facebookProvider = new firebase.auth.FacebookAuthProvider()
+
         return firebase.auth().signInWithRedirect(facebookProvider)
       })
   }, [firebase])
@@ -133,23 +129,9 @@ export const FirebaseProvider: React.FC = ({ children }) => {
     []
   )
 
-  const placesRef = useCallback(
-    (db: firebase.firestore.Firestore) => db.collection('places'),
-    []
-  )
-
-  const infoRef = useCallback(
-    (db: firebase.firestore.Firestore) => db.collection('info'),
-    []
-  )
-
-  const ratingsRef = useCallback(
-    (db: firebase.firestore.Firestore) => db.collection('ratings'),
-    []
-  )
-
-  const citiesRef = useCallback(
-    (db: firebase.firestore.Firestore) => db.collection('cities'),
+  const collectionRef = useCallback(
+    (db: firebase.firestore.Firestore, collection: Collection) =>
+      db.collection(collection),
     []
   )
 
@@ -230,11 +212,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
         loading: state.loading,
         setLoading: onSetLoading,
         setUser: onSetUser,
-        usersRef,
-        placesRef,
-        infoRef,
-        ratingsRef,
-        citiesRef,
+        collectionRef,
         loginWithGoogle,
         loginWithFacebook,
         loginWithTwitter,
@@ -254,9 +232,11 @@ function authReducer(
     case 'set_loading': {
       return { ...state, loading: action.loading }
     }
+
     case 'set_user': {
       return { ...state, user: action.user }
     }
+
     default:
       throw new Error('Auth Reducer: Unsupported action type')
   }

@@ -1,12 +1,12 @@
+import type { ReactNode } from 'react'
+import React, { useMemo } from 'react'
 import { Box } from '@chakra-ui/react'
-import React, { ReactNode, useMemo } from 'react'
 
 import PrivateRoute from './PrivateRoute'
 import { Topbar } from './Topbar'
 import { useMediaQuery } from '../contexts'
 import 'focus-visible/dist/focus-visible'
 import { DefaultFooter, MobileFooter } from './Footer'
-
 import { useAuth } from '../contexts/firebase'
 import { InitialLoading } from './Loading'
 
@@ -56,6 +56,7 @@ export function Layout({ children }: LayoutProps) {
     </PrivateRoute>
   )
 }
+
 export interface LayoutProps {
   children?: ReactNode
   onOpenSearch?: () => void

@@ -1,12 +1,11 @@
 import { useMediaQuery } from '@chakra-ui/react'
 import * as React from 'react'
-import { Seo } from '../components'
+import { navigate } from 'gatsby'
 
+import { Seo } from '../components'
 import { Layout } from '../components/Layout'
 import { MediaQueryProvider } from '../contexts'
 import { FirebaseProvider } from '../contexts/firebase'
-import 'firebase/firestore'
-import { navigate } from 'gatsby'
 import { VerifiedContextProvider } from '../contexts/verified'
 
 // markup

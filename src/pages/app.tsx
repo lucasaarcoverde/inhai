@@ -1,5 +1,7 @@
 import React from 'react'
 import { Router, Redirect } from '@reach/router'
+import { useDisclosure, useMediaQuery } from '@chakra-ui/react'
+
 import MapPage from '../templates/MapPage'
 import RatingsPage from '../templates/RatingsPage'
 import {
@@ -7,10 +9,9 @@ import {
   LayoutProvider,
   MediaQueryProvider,
 } from '../contexts'
-import { useDisclosure, useMediaQuery } from '@chakra-ui/react'
 import ProfilePage from '../templates/ProfilePage'
 import { Layout, Seo } from '../components'
-import AboutUsPage from '../templates/AboutUsPage'
+import AboutPage from '../templates/AboutPage'
 import AdminPage from '../templates/AdminPage'
 import { VerifiedContextProvider } from '../contexts/verified'
 
@@ -36,7 +37,7 @@ const App = () => {
               <Seo />
               <Router>
                 <MapPage path="/app" />
-                <AboutUsPage path="/app/about-us" />
+                <AboutPage path="/app/about" />
                 <RatingsPage path="/app/ratings" />
                 <ProfilePage path="/app/profile" />
                 <AdminPage path="/app/admin" />

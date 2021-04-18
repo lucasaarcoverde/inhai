@@ -17,14 +17,14 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react'
-import { RouteComponentProps } from '@reach/router'
+import type { RouteComponentProps } from '@reach/router'
 import { navigate } from 'gatsby'
-
 import React, { useEffect, useState } from 'react'
+
 import AdminRoute from '../components/AdminRoute'
 import { Topbar } from '../components/Topbar'
 import { useAuth } from '../contexts/firebase'
-import { RatedPlace } from './RatingsPage'
+import type { RatedPlace } from './RatingsPage'
 
 interface AppInfo {
   users: number
@@ -52,15 +52,15 @@ function AdminPage(props: React.PropsWithChildren<RouteComponentProps>) {
         .limit(25)
         .get()
         .then((snap) => {
-          const docs = snap.docs
-          const places =
+          const { docs } = snap
+          const fetchedPlaces =
             docs.map((doc) => {
               if (!doc.exists) return
 
               return doc.data() as RatedPlace
             }) ?? []
 
-          setPlaces(places as RatedPlace[])
+          setPlaces(fetchedPlaces as RatedPlace[])
         })
     } else {
       placesRef
@@ -68,15 +68,15 @@ function AdminPage(props: React.PropsWithChildren<RouteComponentProps>) {
         .limit(25)
         .get()
         .then((snap) => {
-          const docs = snap.docs
-          const places =
+          const { docs } = snap
+          const fetchedPlaces =
             docs.map((doc) => {
               if (!doc.exists) return
 
               return doc.data() as RatedPlace
             }) ?? []
 
-          setPlaces(places as RatedPlace[])
+          setPlaces(fetchedPlaces as RatedPlace[])
         })
     }
 

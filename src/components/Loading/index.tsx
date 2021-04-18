@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { RouteComponentProps } from '@reach/router'
+import type { RouteComponentProps } from '@reach/router'
 import {
   Center,
   Flex,
@@ -9,10 +9,10 @@ import {
   Stack,
   Box,
 } from '@chakra-ui/react'
-
-import { useAuth } from '../../contexts/firebase'
 import { navigate, useStaticQuery, graphql } from 'gatsby'
 import Img from 'gatsby-image'
+
+import { useAuth } from '../../contexts/firebase'
 
 export const InitialLoading = ({
   children,

@@ -1,15 +1,16 @@
 import { SearchIcon } from '@chakra-ui/icons'
-import { Avatar, Icon, Stack, Box, Flex, StackProps } from '@chakra-ui/react'
+import type { StackProps } from '@chakra-ui/react'
+import { Avatar, Icon, Stack, Box, Flex } from '@chakra-ui/react'
 import React from 'react'
 import { AiOutlineStar, AiOutlineInfoCircle } from 'react-icons/ai'
-
 import { RiLogoutBoxLine } from 'react-icons/ri'
-import { NavButton } from './components/NavButton'
 import { CgProfile } from 'react-icons/cg'
-import { useAuth } from '../../contexts/firebase'
 import { useLocation } from '@reach/router'
 
-export interface DesktopSidebarProps {}
+import { NavButton } from './components/NavButton'
+import { useAuth } from '../../contexts/firebase'
+
+export type DesktopSidebarProps = StackProps
 
 export function DesktopSidebar(props: DesktopSidebarProps) {
   const { logout } = useAuth()
@@ -34,7 +35,7 @@ export function DesktopSidebar(props: DesktopSidebarProps) {
           size="lg"
           navigateUrl="/app"
           leftIcon={<SearchIcon boxSize="6" />}
-          bg={pathname == '/app' ? 'gray.50' : 'whiteAlpha'}
+          bg={pathname === '/app' ? 'gray.50' : 'whiteAlpha'}
         >
           Mapa LGBTI+
         </NavButton>
@@ -56,7 +57,7 @@ export function DesktopSidebar(props: DesktopSidebarProps) {
         </NavButton>
         <NavButton
           size="lg"
-          navigateUrl="/app/about-us"
+          navigateUrl="/app/about"
           leftIcon={<Icon as={AiOutlineInfoCircle} boxSize="6" />}
           bg={pathname.includes('/app/profile') ? 'gray.50' : 'whiteAlpha'}
         >

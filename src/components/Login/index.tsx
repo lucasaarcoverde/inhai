@@ -19,15 +19,14 @@ import {
   createStandaloneToast,
   HStack,
 } from '@chakra-ui/react'
-
 import * as Yup from 'yup'
 import { FcGoogle } from 'react-icons/fc'
 import { CgProfile } from 'react-icons/cg'
 import { navigate } from 'gatsby'
 import { EmailIcon, LockIcon, ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import { Formik, Form, Field } from 'formik'
 
 import { useAuth } from '../../contexts/firebase'
-import { Formik, Form, Field } from 'formik'
 import useFirebase from '../../hooks/useFirebase'
 import { PasswordRecovery } from './components/PasswordRecovery'
 
@@ -72,6 +71,7 @@ export const Login = () => {
 
   const handleEmailLogin = useCallback(async (values: Values) => {
     const { email, password } = values
+
     await firebase
       .auth()
       .setPersistence(firebase.auth.Auth.Persistence.LOCAL)
@@ -110,7 +110,8 @@ export const Login = () => {
           .auth()
           .createUserWithEmailAndPassword(email, password)
           .then((userCredential) => {
-            const user = userCredential.user
+            const { user } = userCredential
+
             if (!user) return
 
             const userDb = {
@@ -173,6 +174,7 @@ export const Login = () => {
         } else {
           handleEmailLogin(values)
         }
+
         setTimeout(() => {
           actions.setSubmitting(false)
         }, 1000)
