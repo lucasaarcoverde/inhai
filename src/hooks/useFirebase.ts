@@ -14,15 +14,15 @@ export default () => {
     (place: RatedPlace, rating: Rating, increment = true) => {
       // eslint-disable-next-line no-console
       console.log('place', place)
-      const newPlace = getPlaceRating(place, rating, increment)
+      const placeRating = handlePlaceRating(place, rating, increment)
 
-      return collectionRef?.(db, 'places').doc(place.id).update(newPlace)
+      return collectionRef?.(db, 'places').doc(place.id).update(placeRating)
     },
     []
   )
 
   const addPlace = useCallback((place: RatedPlace, rating: Rating) => {
-    const placeRating = getPlaceRating(
+    const placeRating = handlePlaceRating(
       {
         ...place,
         totalRatings: 0,
@@ -82,15 +82,12 @@ export default () => {
   }
 }
 
-function max(a: number, b: number) {
-  return Math.max(a, b)
-}
-
-const getPlaceRating = (
+const handlePlaceRating = (
   place: RatedPlace,
   rating: Rating,
   increment: boolean
 ) => {
+  const { max } = Math
   const { horrible, bad, good, neutral, excellent } = place.rateDetails
 
   const unit = increment ? 1 : -1
