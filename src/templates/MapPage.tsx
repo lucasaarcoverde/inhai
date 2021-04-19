@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { RouteComponentProps } from '@reach/router'
+import type { RouteComponentProps } from '@reach/router'
 import {
   Grid,
   Icon,
@@ -7,17 +7,22 @@ import {
   Tooltip,
   useDisclosure,
 } from '@chakra-ui/react'
-
-import { Search, Map, Tutorial, Sidebar } from '../components'
-import { HereItem } from '../hooks/useHere'
 import { useEffect, useState } from 'react'
-import { RatedPlaceDetails } from '../components'
-import { useAuth } from '../contexts/firebase'
-import { RatedPlace } from './RatingsPage'
-import { useMediaQuery } from '../contexts'
-import { useLayout } from '../contexts/layout'
 import { navigate } from 'gatsby'
 import { BiLocationPlus } from 'react-icons/bi'
+
+import {
+  Search,
+  Map,
+  Tutorial,
+  Sidebar,
+  RatedPlaceDetails,
+} from '../components'
+import type { HereItem } from '../hooks/useHere'
+import { useAuth } from '../contexts/firebase'
+import type { RatedPlace } from './RatingsPage'
+import { useMediaQuery } from '../contexts'
+import { useLayout } from '../contexts/layout'
 
 const MapPage = ({
   children,
@@ -29,6 +34,7 @@ const MapPage = ({
   const handleTutorialClose = () => {
     setFirstTime(true)
     const timer = setTimeout(() => setFirstTime(false), 4000)
+
     return () => clearTimeout(timer)
   }
 
@@ -61,7 +67,7 @@ const MapPage = ({
       .where('averageRating', '>=', avgRating)
       .get()
       .then((snap) => {
-        const docs = snap.docs
+        const { docs } = snap
         const mapItems =
           docs.map((doc) => {
             if (!doc.exists) return

@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { FirebaseProvider, useAuth } from '../contexts/firebase'
-
-import { InitialLoading } from '../components/Loading'
 import { navigate } from 'gatsby'
+
+import { FirebaseProvider, useAuth } from '../contexts/firebase'
+import { InitialLoading } from '../components/Loading'
 import { VerifiedContextProvider } from '../contexts/verified'
 
 const LoadingPage = () => {

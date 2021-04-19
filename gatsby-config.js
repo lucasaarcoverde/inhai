@@ -29,6 +29,10 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-plugin-create-client-paths`,
+      options: { prefixes: [`/app/*`] },
+    },
+    {
       resolve: 'gatsby-plugin-offline',
       options: {
         workboxConfig: {
@@ -47,13 +51,3 @@ module.exports = {
     },
   ],
 }
-//   plugins: [
-//     {
-//       resolve: `gatsby-plugin-ts-config`,
-//       options: {
-//         configDir: '/src/gatsby/',
-//         tsNode: true,
-//       },
-//     },
-//   ],
-// }

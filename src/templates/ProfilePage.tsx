@@ -1,9 +1,10 @@
 import * as React from 'react'
-import { RouteComponentProps } from '@reach/router'
+import type { RouteComponentProps } from '@reach/router'
+import type { FlexProps } from '@chakra-ui/react'
+import { Grid } from '@chakra-ui/react'
 
 import { Profile } from '../components/Profile'
 import { Sidebar } from '../components'
-import { FlexProps, Grid } from '@chakra-ui/react'
 import { useMediaQuery } from '../contexts'
 
 const ProfilePage = ({

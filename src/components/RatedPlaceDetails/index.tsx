@@ -1,6 +1,7 @@
-import { Stack, Flex, Slide, CloseButton, Box } from '@chakra-ui/react'
 import React from 'react'
-import { RatedPlace } from '../../templates/RatingsPage'
+import { Stack, Flex, Slide, CloseButton, Box } from '@chakra-ui/react'
+
+import type { RatedPlace } from '../../templates/RatingsPage'
 import { RatingsCard } from './components/RatingsCard'
 import { PlaceCard } from './components/PlaceCard'
 import { RatingsDetails } from './components/RatingsDetails'

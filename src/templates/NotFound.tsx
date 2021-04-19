@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { Center, Heading, Stack, Text, Link, Box } from '@chakra-ui/react'
-
 import { graphql, Link as GatsbyLink, useStaticQuery } from 'gatsby'
 import Img from 'gatsby-image'
-import { RouteComponentProps } from '@reach/router'
+import type { RouteComponentProps } from '@reach/router'
 
 const NotFound = ({
   children,
