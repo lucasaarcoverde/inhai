@@ -62,6 +62,7 @@ const MapPage = ({
     const avgRating = user.id === process.env.GATSBY_FIREBASE_ADMIN_ID ? 1 : 3.5
 
     const db = firebase.firestore()
+    let cancelled = false
 
     db.collection('places')
       .where('averageRating', '>=', avgRating)
@@ -75,8 +76,12 @@ const MapPage = ({
             return doc.data() as HereItem
           }) ?? []
 
-        setItems(mapItems as RatedPlace[])
+        if (!cancelled) setItems(mapItems as RatedPlace[])
       })
+
+    return () => {
+      cancelled = true
+    }
   }, [items, user])
 
   return (

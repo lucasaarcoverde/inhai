@@ -3,10 +3,10 @@ import { useLocation } from '@reach/router'
 import { Grid, Flex, IconButton, Heading, Icon } from '@chakra-ui/react'
 import { ArrowBackIcon, SearchIcon } from '@chakra-ui/icons'
 import { HiLogout } from 'react-icons/hi'
+import { navigate } from 'gatsby'
 
 import { useAuth } from '../../contexts/firebase'
 import { useLayout } from '../../contexts/layout'
-import { navigate } from 'gatsby'
 
 export function MobileTopbar() {
   const { onOpenSearch } = useLayout()

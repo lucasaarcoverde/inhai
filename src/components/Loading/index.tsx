@@ -47,11 +47,7 @@ export const InitialLoading = ({
     firebase.auth().onAuthStateChanged((authUser) => {
       if (!authUser) return
 
-      const navigateTimer = setTimeout(() => navigate('/app'), 1000)
-
-      return () => {
-        clearTimeout(navigateTimer)
-      }
+      navigate('/app')
     })
 
     return () => {

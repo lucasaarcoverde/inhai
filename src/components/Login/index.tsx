@@ -62,11 +62,17 @@ export const Login = () => {
   const { updateInfo } = useFirebase()
 
   useEffect(() => {
+    let cancelled = false
+
     firebase.auth().onAuthStateChanged((authUser) => {
       if (authUser) {
-        navigate('/app')
+        if (!cancelled) navigate('/app')
       }
     })
+
+    return () => {
+      cancelled = true
+    }
   }, [firebase])
 
   const handleEmailLogin = useCallback(async (values: Values) => {
@@ -80,7 +86,7 @@ export const Login = () => {
           .auth()
           .signInWithEmailAndPassword(email, password)
           .then(() => {
-            navigate('/app/loading')
+            navigate('/loading')
           })
           .catch(() => {
             toast({
@@ -139,7 +145,7 @@ export const Login = () => {
             updateInfo({
               users: firebase.firestore.FieldValue.increment(1),
             })
-            navigate('/app/loading')
+            navigate('/loading')
           })
           .catch((err) => {
             if (err.code === 'auth/email-already-in-use') {

@@ -14,13 +14,15 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, path }) => {
   const [loading, setLoading] = React.useState(true)
 
   React.useEffect(() => {
-    firebase.auth().onAuthStateChanged((authUser) => {
+    const unsub = firebase.auth().onAuthStateChanged((authUser) => {
       if (authUser) {
         setLoading(false)
       } else {
         navigate(path)
       }
     })
+
+    return unsub
   }, [])
 
   return <>{!loading && children}</>

@@ -81,7 +81,7 @@ export const Map = ({
 
     map.addEventListener(
       'pointermove',
-      function (event: MouseEvent) {
+      (event: MouseEvent) => {
         const viewPort = map.getViewPort()
         const { element } = viewPort
 
@@ -97,15 +97,15 @@ export const Map = ({
 
     map.addEventListener(
       'tap',
-      function (event: any) {
-        if (event.target instanceof H.map.Marker) {
-          if (!event) return
+      (event: any) => {
+        if (!event) return
 
-          const data = event?.target?.getData()
+        if (!(event.target instanceof H.map.Marker)) return
 
-          setCurrentItem(data as RatedPlace)
-          setTimeout(onOpenDetails, 50)
-        }
+        const data = event?.target?.getData()
+
+        setCurrentItem(data as RatedPlace)
+        setTimeout(onOpenDetails, 50)
       },
       false
     )
@@ -164,7 +164,7 @@ export const Map = ({
       maxHeight="-webkit-fill-available"
       {...boxProps}
     >
-      {!mapOpen && (
+      {(!mapOpen || !user) && (
         <Center
           height={pathname.includes('ratings') ? 'calc(40vh - 56px)' : '100%'}
           width="100%"
