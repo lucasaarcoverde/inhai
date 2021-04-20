@@ -12,10 +12,12 @@ import {
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
+
 import { useMediaQuery } from '../../contexts'
 import { useAuth } from '../../contexts/firebase'
 import useFirebase from '../../hooks/useFirebase'
-import useHere, { HereItem } from '../../hooks/useHere'
+import type { HereItem } from '../../hooks/useHere'
+import useHere from '../../hooks/useHere'
 import { Autocomplete } from './components/Autocomplete'
 
 export function Search(props: SearchProps) {
@@ -39,6 +41,7 @@ export function Search(props: SearchProps) {
     if (!user.currentLocation && (isSearchOpen || desktop)) return onOpen()
 
     if (isOpen) return
+    let cancelled = false
 
     const at = user.currentLocation
       ? `${user.currentLocation.lat},${user.currentLocation.lng}`
@@ -47,12 +50,18 @@ export function Search(props: SearchProps) {
     if (queryValue.length > 0) {
       discoverAddress({
         q: queryValue,
-        at: at,
-      }).then(({ items }) => {
-        setItems(items)
+        at,
+      }).then(({ items: hereItems }) => {
+        if (!cancelled) {
+          setItems(hereItems)
+        }
       })
-    } else {
+    } else if (!cancelled) {
       setItems([])
+    }
+
+    return () => {
+      cancelled = true
     }
   }, [queryValue, user, isSearchOpen, isOpen])
 
@@ -74,6 +83,7 @@ export function Search(props: SearchProps) {
         .finally(() => onClose())
     }
   }
+
   return (
     <>
       {desktop ? (

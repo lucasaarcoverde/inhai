@@ -120,7 +120,9 @@ export function Comment(props: CommentProps) {
   }, [rating?.reportedBy])
 
   useEffect(() => {
-    if (!reportedBy || reportedBy.length <= 50) return
+    if (!reportedBy || reportedBy.length <= 50) {
+      return
+    }
 
     const db = firebase.firestore()
 
@@ -128,7 +130,9 @@ export function Comment(props: CommentProps) {
       .doc(rating.id)
       .get()
       .then((doc) => {
-        if (!doc.exists) return
+        if (!doc.exists) {
+          return
+        }
 
         const ratingData = doc.data() as Rating
 

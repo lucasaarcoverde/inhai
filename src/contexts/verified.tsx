@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
+
 import { useAuth } from './firebase'
 
 interface VerifiedProps {
@@ -24,10 +25,12 @@ export function VerifiedContextProvider(
   const { firebase } = useAuth()
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
+    const unsub = firebase.auth().onAuthStateChanged((user) => {
       if (!user) return
       setVerified(user.emailVerified)
     })
+
+    return unsub
   }, [firebase])
 
   return (

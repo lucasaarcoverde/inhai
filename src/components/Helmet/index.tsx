@@ -1,4 +1,5 @@
 import React from 'react'
+import { useLocation } from '@reach/router'
 import Helmet from 'react-helmet'
 import './seo.css'
 
@@ -10,10 +11,12 @@ export const Seo = (props: SeoProps) => {
   const description =
     'Veja os locais mais bem avaliados como LGBTI+ friendly e deixe sua avaliação!'
 
+  const { pathname } = useLocation()
+
   return (
     <Helmet
       bodyAttributes={{
-        class: 'body',
+        class: pathname === 'loading' ? '' : 'body',
       }}
       htmlAttributes={{
         class: 'html',
