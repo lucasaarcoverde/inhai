@@ -93,39 +93,40 @@ const AboutPage = ({
               </ListItem>
             </OrderedList>
           </FaqSection>
+
+          {!desktop && (
+            <Flex
+              direction="column"
+              align="center"
+              marginTop="8"
+              paddingBottom="6"
+              justifyContent="center"
+            >
+              <Stack direction="row" spacing="3" color="gray.400">
+                <Link
+                  href="mailto: inhaiapp@gmail.com?subject=Contato Inhaí"
+                  fontWeight="bold"
+                  target="_blank"
+                >
+                  <Icon boxSize="6" as={AiFillMail} />
+                </Link>
+                <Link
+                  href="https://github.com/lucasaarcoverde"
+                  fontWeight="bold"
+                  target="_blank"
+                >
+                  <Icon boxSize="6" as={AiFillGithub} />
+                </Link>
+                <Link
+                  href="https://www.linkedin.com/in/lucasaarcoverde/"
+                  target="_blank"
+                >
+                  <Icon boxSize="6" as={AiFillLinkedin} />
+                </Link>
+              </Stack>
+            </Flex>
+          )}
         </Stack>
-        {!desktop && (
-          <Flex
-            direction="column"
-            align="center"
-            marginTop="8"
-            paddingBottom="6"
-            justifyContent="center"
-          >
-            <Stack direction="row" spacing="3" color="gray.400">
-              <Link
-                href="mailto: inhaiapp@gmail.com?subject=Contato Inhaí"
-                fontWeight="bold"
-                target="_blank"
-              >
-                <Icon boxSize="6" as={AiFillMail} />
-              </Link>
-              <Link
-                href="https://github.com/lucasaarcoverde"
-                fontWeight="bold"
-                target="_blank"
-              >
-                <Icon boxSize="6" as={AiFillGithub} />
-              </Link>
-              <Link
-                href="https://www.linkedin.com/in/lucasaarcoverde/"
-                target="_blank"
-              >
-                <Icon boxSize="6" as={AiFillLinkedin} />
-              </Link>
-            </Stack>
-          </Flex>
-        )}
       </Flex>
     </Grid>
   )

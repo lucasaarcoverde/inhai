@@ -20,6 +20,7 @@ export function LayoutProvider(
   props: React.PropsWithChildren<LayoutContextProps>
 ) {
   const { children, ...restProps } = props
+
   return (
     <LayoutContext.Provider value={restProps}>
       {children}

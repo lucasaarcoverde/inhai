@@ -14,6 +14,7 @@ import { Layout, Seo } from '../components'
 import AboutPage from '../templates/AboutPage'
 import AdminPage from '../templates/AdminPage'
 import { VerifiedContextProvider } from '../contexts/verified'
+import HomePage from '../templates/HomePage'
 
 const App = () => {
   const [desktop] = useMediaQuery('(min-width: 1024px)')
@@ -36,7 +37,8 @@ const App = () => {
             <Layout>
               <Seo />
               <Router>
-                <MapPage path="/app" />
+                <HomePage path="/app" />
+                <MapPage path="/app/map" />
                 <AboutPage path="/app/about" />
                 <RatingsPage path="/app/ratings" />
                 <ProfilePage path="/app/profile" />

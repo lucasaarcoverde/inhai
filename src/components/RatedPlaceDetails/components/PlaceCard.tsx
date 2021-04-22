@@ -16,9 +16,9 @@ import {
 } from '@chakra-ui/react'
 import { SiTwitter, SiFacebook } from 'react-icons/si'
 import { FiMapPin } from 'react-icons/fi'
-
-import { RatedPlace } from '../../../templates/RatingsPage'
 import { PhoneIcon } from '@chakra-ui/icons'
+
+import type { RatedPlace } from '../../../templates/RatingsPage'
 
 export function PlaceCard(props: RatedPlace) {
   const { address, categories, contacts, title = '' } = props
@@ -49,6 +49,7 @@ export function PlaceCard(props: RatedPlace) {
     () => getUrls(contacts?.[0]?.www),
     [contacts]
   )
+
   return (
     <Stack
       spacing="4"
@@ -158,20 +159,25 @@ function getPalettes(category: string) {
   switch (category.toLowerCase()) {
     case 'bar ou pub':
       return 'purple'
+
     case 'restaurante':
       return 'pink'
+
     case 'ginásio ou health club':
       return 'yellow'
+
     case 'padaria':
       return 'orange'
+
     case 'comida rápida':
       return 'red'
+
     default:
       return 'blue'
   }
 }
 
-function getUrls(contacts: { value: string }[] = []) {
+function getUrls(contacts: Array<{ value: string }> = []) {
   const site =
     contacts.filter(
       ({ value }) =>

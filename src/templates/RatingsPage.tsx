@@ -88,6 +88,7 @@ const RatingsPage = ({
     addCity,
     updatePlaceRating,
     updateInfo,
+    updateRatingInfo,
     db,
   } = useFirebase()
 
@@ -205,9 +206,7 @@ const RatingsPage = ({
           setSearchedItem({} as RatedPlace)
           setCurrentItem({} as RatedPlace)
           toastSuccess()
-          updateInfo({
-            ratings: firebase.firestore.FieldValue.increment(1),
-          })
+          updateRatingInfo(rating)
         })
         .catch(() => {
           toastError()

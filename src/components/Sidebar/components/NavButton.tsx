@@ -1,4 +1,5 @@
-import { Button, ButtonProps } from '@chakra-ui/react'
+import type { ButtonProps } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { navigate } from 'gatsby'
 import React from 'react'
 

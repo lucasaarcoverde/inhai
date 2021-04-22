@@ -51,6 +51,26 @@ export default () => {
       })
   }, [])
 
+  const updateRatingInfo = useCallback((rating: Rating) => {
+    const ratingDetail = {
+      ratings: firebase.firestore.FieldValue.increment(1),
+      positiveRatings: firebase.firestore.FieldValue.increment(
+        rating.rate > 3 ? 1 : 0
+      ),
+      negativeRatings: firebase.firestore.FieldValue.increment(
+        rating.rate <= 3 ? 1 : 0
+      ),
+      ratingsWithComment: firebase.firestore.FieldValue.increment(
+        rating.comment ? 1 : 0
+      ),
+      anonymousRatings: firebase.firestore.FieldValue.increment(
+        rating.anonymous ? 1 : 0
+      ),
+    }
+
+    collectionRef?.(db, 'info').doc('app-information').update(ratingDetail)
+  }, [])
+
   const addRating = useCallback((rating: Rating) => {
     return collectionRef?.(db, 'ratings')
       .doc(rating.id)
@@ -77,6 +97,7 @@ export default () => {
     addCity,
     updateInfo,
     updatePlaceRating,
+    updateRatingInfo,
   }
 }
 

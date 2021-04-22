@@ -1,16 +1,12 @@
 import React from 'react'
 import type { FlexProps } from '@chakra-ui/react'
+import { Flex, Grid, Icon, IconButton, Link, Stack } from '@chakra-ui/react'
 import {
-  Avatar,
-  Button,
-  Flex,
-  Grid,
-  Icon,
-  IconButton,
-  Link,
-  Stack,
-} from '@chakra-ui/react'
-import { AiFillGithub, AiFillLinkedin, AiFillMail } from 'react-icons/ai'
+  AiFillGithub,
+  AiFillLinkedin,
+  AiFillMail,
+  AiOutlineHome,
+} from 'react-icons/ai'
 import { BiHelpCircle } from 'react-icons/bi'
 import { navigate } from 'gatsby'
 import { useLocation } from '@reach/router'
@@ -67,13 +63,11 @@ export function DefaultFooter(props: FlexProps) {
   )
 }
 
-export const MobileFooter = (props: { photo?: string }) => {
-  const { photo } = props
-
+export const MobileFooter = () => {
   const { pathname } = useLocation()
 
-  const map = pathname === '/app'
-  const profile = pathname === '/app/profile'
+  const map = pathname === '/app/map'
+  const home = pathname === '/app'
   const about = pathname === '/app/about'
 
   return (
@@ -91,12 +85,12 @@ export const MobileFooter = (props: { photo?: string }) => {
       borderTopColor="gray.200"
     >
       <IconButton
-        aria-label="Página de informações"
+        aria-label="Página principal"
         variant="ghost"
-        icon={<Icon as={BiHelpCircle} boxSize={about ? '7' : '6'} />}
+        icon={<Icon as={AiOutlineHome} boxSize={home ? '7' : '6'} />}
         colorScheme="teal"
         onClick={() => {
-          if (!about) navigate('/app/about')
+          if (!home) navigate('/app')
         }}
       />
       <IconButton
@@ -105,19 +99,18 @@ export const MobileFooter = (props: { photo?: string }) => {
         icon={<SearchIcon boxSize={map ? '7' : '6'} />}
         colorScheme="teal"
         onClick={() => {
-          if (!map) navigate('/app')
+          if (!map) navigate('/app/map')
         }}
       />
-      <Button
+      <IconButton
+        aria-label="Página de informações"
         variant="ghost"
-        aria-label="Página do perfil"
+        icon={<Icon as={BiHelpCircle} boxSize={about ? '7' : '6'} />}
         colorScheme="teal"
         onClick={() => {
-          if (!profile) navigate('/app/profile')
+          if (!about) navigate('/app/about')
         }}
-      >
-        <Avatar size={profile ? 'sm' : 'xs'} src={photo} />
-      </Button>
+      />
     </Grid>
   )
 }
