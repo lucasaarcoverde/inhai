@@ -126,6 +126,7 @@ export const Login = () => {
               displayName: name,
               id: user.uid,
               newUser: true,
+              lgbtphobia: false,
               createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
             }
 

@@ -24,7 +24,7 @@ export function Layout({ children }: LayoutProps) {
         <InitialLoading />
       ) : (
         <>
-          <Topbar />
+          <Topbar photo={photo} />
           {desktop ? (
             <Box
               width="100vw"
@@ -50,7 +50,7 @@ export function Layout({ children }: LayoutProps) {
             </Box>
           )}
 
-          {desktop ? <DefaultFooter /> : <MobileFooter photo={photo} />}
+          {desktop ? <DefaultFooter /> : <MobileFooter />}
         </>
       )}
     </PrivateRoute>

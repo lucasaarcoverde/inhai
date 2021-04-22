@@ -2,7 +2,11 @@ import { SearchIcon } from '@chakra-ui/icons'
 import type { StackProps } from '@chakra-ui/react'
 import { Avatar, Icon, Stack, Box, Flex } from '@chakra-ui/react'
 import React from 'react'
-import { AiOutlineStar, AiOutlineInfoCircle } from 'react-icons/ai'
+import {
+  AiOutlineStar,
+  AiOutlineInfoCircle,
+  AiOutlineHome,
+} from 'react-icons/ai'
 import { RiLogoutBoxLine } from 'react-icons/ri'
 import { CgProfile } from 'react-icons/cg'
 import { useLocation } from '@reach/router'
@@ -34,8 +38,16 @@ export function DesktopSidebar(props: DesktopSidebarProps) {
         <NavButton
           size="lg"
           navigateUrl="/app"
-          leftIcon={<SearchIcon boxSize="6" />}
+          leftIcon={<Icon as={AiOutlineHome} boxSize="6" />}
           bg={pathname === '/app' ? 'gray.50' : 'whiteAlpha'}
+        >
+          Página Principal
+        </NavButton>
+        <NavButton
+          size="lg"
+          navigateUrl="/app/map"
+          leftIcon={<SearchIcon boxSize="6" />}
+          bg={pathname === '/app/map' ? 'gray.50' : 'whiteAlpha'}
         >
           Mapa LGBTI+
         </NavButton>

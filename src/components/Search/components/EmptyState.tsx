@@ -1,6 +1,7 @@
-import React, { forwardRef, Ref } from 'react'
-import { StackProps, Stack, Text, Box } from '@chakra-ui/layout'
-
+import type { Ref } from 'react'
+import React, { forwardRef } from 'react'
+import type { StackProps } from '@chakra-ui/layout'
+import { Stack, Text, Box } from '@chakra-ui/layout'
 import { graphql, useStaticQuery } from 'gatsby'
 import Img from 'gatsby-image'
 
