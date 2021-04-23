@@ -38,6 +38,7 @@ export interface User {
   id: string
   newUser: boolean
   lgbtphobia: boolean
+  afraid: boolean
   currentLocation?: { lat: number; lng: number }
 }
 
@@ -185,6 +186,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
                 newUser: true,
                 createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
                 lgbtphobia: false,
+                afraid: false,
               } as User
 
               usersRef(db)

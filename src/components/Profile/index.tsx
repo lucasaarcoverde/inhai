@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 import type { FlexProps } from '@chakra-ui/react'
 import {
-  Radio,
   Button,
   Spinner,
   Flex,
@@ -24,8 +23,8 @@ import {
 import type { FormikHelpers } from 'formik'
 import { Form, Formik } from 'formik'
 import {
+  CheckboxSingleControl,
   InputControl,
-  RadioGroupControl,
   SelectControl,
 } from 'formik-chakra-ui'
 import * as Yup from 'yup'
@@ -55,9 +54,7 @@ const labelStyle = {
   },
 }
 
-interface FormUser extends Omit<User, 'lgbtphobia'> {
-  lgbtphobia: 'true' | 'false'
-}
+type FormUser = User
 
 export function Profile(props: FlexProps) {
   const { user, logout, setUser, firebase } = useAuth()
@@ -150,7 +147,7 @@ export function Profile(props: FlexProps) {
 
   const handleSubmit = useCallback(
     (values: FormUser, actions: FormikHelpers<FormUser>) => {
-      const { lgbtphobia, ...restUser } = values
+      const { lgbtphobia, afraid, ...restUser } = values
       const { id = 'anon' } = user ?? {}
       const db = firebase.firestore()
 
@@ -159,11 +156,16 @@ export function Profile(props: FlexProps) {
         .update({
           ...restUser,
           age: Number(values.age),
-          lgbtphobia: lgbtphobia === 'true',
+          lgbtphobia,
+          afraid,
         })
         .then(() => {
           successSaving()
-          setUser({ ...restUser, lgbtphobia: lgbtphobia === 'true' })
+          setUser({
+            ...restUser,
+            lgbtphobia,
+            afraid,
+          })
         })
         .catch(() => errorSaving())
         .finally(() => {
@@ -203,14 +205,15 @@ export function Profile(props: FlexProps) {
       initialValues={
         ({
           ...user,
-          lgbtphobia: user?.lgbtphobia ? 'true' : 'false',
+          lgbtphobia: !!user?.lgbtphobia,
+          afraid: !!user?.afraid,
         } as unknown) as FormUser
       }
     >
       {({ isSubmitting }) => {
         return (
           <Flex paddingY="6" justifyContent="center" width="100%" {...props}>
-            <Box maxWidth="600px">
+            <Box maxWidth="600px" paddingX="4">
               <Form>
                 <Stack justifyContent="center" align="center">
                   <ProfileDropzone name="photo" user={user} />
@@ -323,27 +326,25 @@ export function Profile(props: FlexProps) {
                       </option>
                     ))}
                   </SelectControl>
-                  <RadioGroupControl
-                    name="lgbtphobia"
-                    sx={{
-                      paddingY: '4',
-                      '> label': {
-                        fontSize: 'xs',
-                        fontWeight: 'semibold',
-                      },
-                      span: {
-                        fontSize: 'xs',
-                      },
-                    }}
-                    label="Você já sofreu LGBTfobia ou conhece alguém que sofreu?"
-                  >
-                    <Radio value="false" id="do-not-suffered-lgbtfobia">
-                      Não
-                    </Radio>
-                    <Radio value="true" id="suffered-lgbtfobia">
-                      Sim
-                    </Radio>
-                  </RadioGroupControl>
+                  <Stack paddingTop="4" spacing="2">
+                    <CheckboxSingleControl
+                      name="lgbtphobia"
+                      sx={{
+                        '> label > span': { fontSize: '12px' },
+                      }}
+                    >
+                      Já sofri LGBTfobia ou conheço alguém que sofreu.
+                    </CheckboxSingleControl>
+                    <CheckboxSingleControl
+                      name="afraid"
+                      sx={{
+                        '> label > span': { fontSize: '12px' },
+                      }}
+                    >
+                      Já tive receio, ou medo, de sair para algum local apenas
+                      por ser da comunidade.
+                    </CheckboxSingleControl>
+                  </Stack>
                 </Stack>
                 <Stack direction="row" width="100%" paddingTop="6">
                   <Button
