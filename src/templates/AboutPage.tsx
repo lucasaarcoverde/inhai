@@ -42,6 +42,12 @@ const AboutPage = ({
       >
         {children}
         <Stack spacing="3" divider={<StackDivider />}>
+          <Text fontSize="sm">
+            Inhaí é uma expressão pertencente ao dialeto Pajubá e significa "E
+            aí?". Esse dialeto possui termos extraídos dos grupos
+            étnico-linguísticos nagô e iorubá e é bastante utilizado pela
+            comunidade LGBTI+, principalmente por travestis.
+          </Text>
           <FaqSection title="O que são locais LGBTI+ friendly?">
             <Text>
               É qualquer lugar em que as pessoas da comunidade LGBTI+ se sentem
@@ -51,17 +57,13 @@ const AboutPage = ({
               comunidade.
             </Text>
           </FaqSection>
-          <FaqSection title="O que fazemos com as avaliações">
+          <FaqSection title="O local não está aparecendo no mapa?">
             <Text>
-              A ideia desse projeto é que consigamos mapear locais LGBTI+
-              friendly na cidade de forma colaborativa e tornar fácil a
-              visualização desses lugares para as pessoas da comunidade.
-            </Text>
-            <Text>
-              Também pretendemos entrar em contato com locais avaliados
-              negativamente, enviando todas as avaliações de forma anônima e
-              assim podemos incentivá-los a adotarem medidas que melhorem sua
-              avaliação.
+              O objetivo do projeto é mapear locais que são amigáveis e seguros
+              para a comunidade. Sendo assim, nós exibimos no nosso mapa apenas
+              os lugares com uma avaliação média acima de 3,5. Caso o local que
+              você avaliou não esteja aparecendo, isso indica que é um lugar que
+              não possui uma avaliação boa.
             </Text>
           </FaqSection>
           <FaqSection title="Sobre o desenvolvimento">
