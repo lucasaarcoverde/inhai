@@ -19,6 +19,7 @@ import './slider-theme.css'
 
 import type { RatedPlace } from '../../templates/RatingsPage'
 import { GoodRatedPlace } from '../icons/GoodRatedPlace'
+import { BadRatedPlace } from '../icons/BadRatedPlace'
 
 export function PlaceSlider(props: { places: RatedPlace[] }) {
   const { places } = props
@@ -93,7 +94,7 @@ function PlaceDetails(props: RatedPlace) {
         <Stack spacing="1">
           <Flex justifyContent="space-between">
             <HStack spacing="1">
-              <GoodRatedPlace />
+              {averageRating > 3.5 ? <GoodRatedPlace /> : <BadRatedPlace />}
               <Heading fontSize="sm">
                 {title}{' '}
                 {averageRating >= 0 && `- (${averageRating.toFixed(2)})`}
