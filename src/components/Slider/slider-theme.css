@@ -150,14 +150,16 @@
   top: 0;
   left: 0;
 
-  width: 40px;
-  height: 40px;
-
-  content: '•';
+  content: '';
   text-align: center;
-
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  -moz-border-radius: 7.5px;
+  -webkit-border-radius: 7.5px;
+  border-radius: 7.5px;
   opacity: 0.25;
-  color: black;
+  background-color: black;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

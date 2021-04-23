@@ -9,6 +9,7 @@ import {
   WrapItem,
   Badge,
   Flex,
+  Skeleton,
 } from '@chakra-ui/react'
 import React from 'react'
 import Slider from 'react-slick'
@@ -22,14 +23,43 @@ import { GoodRatedPlace } from '../icons/GoodRatedPlace'
 export function PlaceSlider(props: { places: RatedPlace[] }) {
   const { places } = props
 
-  return (
-    <Slider fade dots infinite speed={200} slidesToShow={1} slidesToScroll={1}>
+  return places.length === 0 ? (
+    <SliderSkeleton />
+  ) : (
+    <Slider
+      autoplay
+      autoplaySpeed={3000}
+      fade
+      dots
+      infinite
+      speed={200}
+      slidesToShow={1}
+      slidesToScroll={1}
+    >
       {places.map((place, index) => (
         <Box key={`places-${index}`}>
           <PlaceDetails {...place} />
         </Box>
       ))}
     </Slider>
+  )
+}
+
+function SliderSkeleton() {
+  return (
+    <Stack paddingY="4">
+      <Flex height="18px" justifyContent="space-between">
+        <Skeleton width="140px" />
+        <Skeleton width="80px" />
+      </Flex>
+
+      <Skeleton width="100%" height="60px" />
+
+      <HStack spacing="3">
+        <Skeleton height="25px" width="80px" />
+        <Skeleton height="25px" width="80px" />
+      </HStack>
+    </Stack>
   )
 }
 
