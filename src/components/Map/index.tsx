@@ -1,8 +1,9 @@
-import type { BoxProps } from '@chakra-ui/react'
 import { Box, Center, Fade, Spinner } from '@chakra-ui/react'
+import type { BoxProps } from '@chakra-ui/react'
 import { useLocation } from '@reach/router'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 
+import { useMediaQuery } from '../../contexts'
 import { useAuth } from '../../contexts/firebase'
 import type { HereItem } from '../../hooks/useHere'
 import type { RatedPlace } from '../../templates/RatingsPage'
@@ -36,6 +37,7 @@ export const Map = ({
 
   const [mapOpen, setMapOpen] = useState(false)
   const [initialLocation, setInitialLocation] = useState(defaultLocation)
+  const { desktop } = useMediaQuery()
 
   const { pathname } = useLocation()
   const { user } = useAuth()
@@ -160,7 +162,7 @@ export const Map = ({
     <Box
       position="relative"
       width="100%"
-      height="calc(100vh - 112px)"
+      height={desktop ? 'calc(100vh - 56px)' : 'calc(100vh - 112px)'}
       maxHeight="-webkit-fill-available"
       {...boxProps}
     >

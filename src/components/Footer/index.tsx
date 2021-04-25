@@ -1,16 +1,29 @@
 import React from 'react'
 import type { FlexProps } from '@chakra-ui/react'
-import { Flex, Grid, Icon, IconButton, Link, Stack } from '@chakra-ui/react'
+import {
+  Heading,
+  HStack,
+  Text,
+  Flex,
+  Grid,
+  Icon,
+  IconButton,
+  Link,
+  Stack,
+} from '@chakra-ui/react'
 import {
   AiFillGithub,
   AiFillLinkedin,
   AiFillMail,
   AiOutlineHome,
+  AiOutlineInstagram,
 } from 'react-icons/ai'
 import { BiHelpCircle } from 'react-icons/bi'
 import { navigate } from 'gatsby'
 import { useLocation } from '@reach/router'
 import { SearchIcon } from '@chakra-ui/icons'
+import { FaMapMarkerAlt } from 'react-icons/fa'
+import { IoIosPhonePortrait } from 'react-icons/io'
 
 export function Footer(props: FlexProps) {
   const { children, ...restProps } = props
@@ -60,6 +73,51 @@ export function DefaultFooter(props: FlexProps) {
         </Link>
       </Stack>
     </Footer>
+  )
+}
+
+export const DesktopFooter = () => {
+  return (
+    <Flex
+      justifyContent="center"
+      width="100vw"
+      height="40vh"
+      bg="gray.50"
+      color="teal.500"
+    >
+      <Flex justifyContent="space-between" paddingY="8" minWidth="800px">
+        <Heading fontSize="xx-large">Inhaí</Heading>
+
+        <Stack spacing="8">
+          <Heading fontSize="xx-large">Contato</Heading>
+          <Stack fontWeight="semibold">
+            <HStack>
+              <Icon as={IoIosPhonePortrait} boxSize="5" />
+              <Text fontSize="md">- inhai.app</Text>
+            </HStack>
+            <HStack>
+              <Icon as={AiFillMail} boxSize="5" />
+              <Text fontSize="md">- inhaiapp@gmail.com</Text>
+            </HStack>
+            <HStack>
+              <Icon as={FaMapMarkerAlt} boxSize="5" />
+              <Text fontSize="md">- Campina Grande, PB</Text>
+            </HStack>
+          </Stack>
+          <HStack spacing="3">
+            <Link href="https://www.instagram.com/inhai.app/" target="_blank">
+              <Icon boxSize="7" as={AiOutlineInstagram} />
+            </Link>
+            <Link
+              href="https://www.linkedin.com/in/lucasaarcoverde/"
+              target="_blank"
+            >
+              <Icon boxSize="7" as={AiFillLinkedin} />
+            </Link>
+          </HStack>
+        </Stack>
+      </Flex>
+    </Flex>
   )
 }
 

@@ -7,7 +7,7 @@ import { MobileTopbar } from './MobileTopbar'
 export function Topbar(props: TopbarProps) {
   const { desktop } = useMediaQuery()
 
-  return desktop ? <DesktopTopbar /> : <MobileTopbar {...props} />
+  return desktop ? <DesktopTopbar {...props} /> : <MobileTopbar {...props} />
 }
 
 export interface TopbarProps {

@@ -11,6 +11,7 @@ import {
   Divider,
 } from '@chakra-ui/react'
 import { useCombobox } from 'downshift'
+import { useLocation } from '@reach/router'
 
 import type { HereItem } from '../../../hooks/useHere'
 import type { SearchProps } from '../index'
@@ -37,6 +38,7 @@ export function Autocomplete(
   } = props
 
   const { desktop } = useMediaQuery()
+  const { pathname } = useLocation()
 
   const {
     getLabelProps,
@@ -77,21 +79,21 @@ export function Autocomplete(
         spacing="2"
         position="fixed"
         bg="white"
-        maxWidth={[null, null, null, 350]}
-        minWidth={[null, null, null, 350]}
-        width={['100vw', '100vw', '100vw', '100%']}
+        width={['100vw', '100vw', '100vw', '25vw']}
       >
         {!desktop && <CloseButton onClick={onCloseSearch} />}
         <Box {...getComboboxProps()}>
           <VisuallyHidden>
             <label htmlFor="search" {...getLabelProps()}>
-              Search Input
+              Buscar local
             </label>
           </VisuallyHidden>
           <Input
             {...getInputProps()}
             value={searchValue}
-            placeholder="Buscar local"
+            placeholder={
+              pathname.includes('ratings') ? 'Escolha um local' : 'Buscar local'
+            }
           />
         </Box>
         <Stack spacing="0">
@@ -112,10 +114,9 @@ export function Autocomplete(
         paddingX="4"
         paddingBottom="2"
         marginTop="149px"
-        backgroundColor="white"
+        backgroundColor={desktop && !queryValue ? 'transparent' : 'white'}
         overflowY="scroll"
-        maxWidth={[null, null, null, 350]}
-        minWidth={[null, null, null, 350]}
+        width={['100vw', '100vw', '100vw', '25vw']}
         {...containerProps}
       >
         {!!queryValue && searchItems.length === 0 ? (
@@ -123,13 +124,14 @@ export function Autocomplete(
         ) : (
           <Stack
             divider={<StackDivider borderColor="gray.200" />}
+            width="100%"
             {...getMenuProps()}
           >
             {searchItems.map((item, index) => (
               <Stack
                 key={`search-place-${index}`}
                 width="100%"
-                bg={highlightedIndex === index ? 'gray.50' : 'whiteAlpha'}
+                bg={highlightedIndex === index ? 'gray.50' : 'white'}
                 {...getItemProps({ item, index })}
                 padding="4"
                 cursor="pointer"

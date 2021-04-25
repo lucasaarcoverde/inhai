@@ -29,7 +29,7 @@ export function Layout({ children }: LayoutProps) {
             <Box
               width="100vw"
               maxHeight="-webkit-fill-available"
-              height="calc(100vh - 112px)"
+              height="calc(100vh - 56px)"
               bg="white"
               overflow="hidden"
               as="main"
@@ -50,7 +50,7 @@ export function Layout({ children }: LayoutProps) {
             </Box>
           )}
 
-          {desktop ? <DefaultFooter /> : <MobileFooter />}
+          {!desktop && <MobileFooter />}
         </>
       )}
     </PrivateRoute>

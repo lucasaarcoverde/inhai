@@ -6,6 +6,12 @@
   padding-bottom: 56px;
 }
 
+@media screen and (min-width: 1024px) {
+  .body {
+    padding-bottom: 0px;
+  }
+}
+
 .html {
   height: -webkit-fill-available;
 }
