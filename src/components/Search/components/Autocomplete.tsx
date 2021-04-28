@@ -114,7 +114,7 @@ export function Autocomplete(
         paddingX="4"
         paddingBottom="2"
         marginTop="149px"
-        backgroundColor={desktop && !queryValue ? 'transparent' : 'white'}
+        backgroundColor="white"
         overflowY="scroll"
         width={['100vw', '100vw', '100vw', '25vw']}
         {...containerProps}
