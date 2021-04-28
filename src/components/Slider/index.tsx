@@ -27,16 +27,7 @@ export function PlaceSlider(props: { places: RatedPlace[] }) {
   return places.length === 0 ? (
     <SliderSkeleton />
   ) : (
-    <Slider
-      autoplay
-      autoplaySpeed={3000}
-      fade
-      dots
-      infinite
-      speed={200}
-      slidesToShow={1}
-      slidesToScroll={1}
-    >
+    <Slider fade dots infinite slidesToShow={1} slidesToScroll={1}>
       {places.map((place, index) => (
         <Box key={`places-${index}`}>
           <PlaceDetails {...place} />
