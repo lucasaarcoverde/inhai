@@ -2540,6 +2540,11 @@
   dependencies:
     tslib "^2.0.0"
 
+"@rooks/use-geolocation@^4.11.0":
+  version "4.11.0"
+  resolved "https://registry.yarnpkg.com/@rooks/use-geolocation/-/use-geolocation-4.11.0.tgz#71fc7a7ac3e9c8195a2f44be676347b9418619c5"
+  integrity sha512-q0chEW8ImrAr9KXGLA+7T1nsOmigiF5lWiWgqT5ATFe/EdGx2JPyew9BNQMmZGSZiVWAwWvE2dI+uyuhAkWFsQ==
+
 "@sideway/address@^4.1.0":
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/@sideway/address/-/address-4.1.1.tgz#9e321e74310963fdf8eebfbee09c7bd69972de4d"

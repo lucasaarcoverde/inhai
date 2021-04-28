@@ -1,21 +1,10 @@
-import {
-  Box,
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Slide,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Box, Slide, useDisclosure } from '@chakra-ui/react'
+import useGeolocation from '@rooks/use-geolocation'
 import React, { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 
 import { useMediaQuery } from '../../contexts'
 import { useAuth } from '../../contexts/firebase'
-import useFirebase from '../../hooks/useFirebase'
 import type { HereItem } from '../../hooks/useHere'
 import useHere from '../../hooks/useHere'
 import { Autocomplete } from './components/Autocomplete'
@@ -23,12 +12,11 @@ import { Autocomplete } from './components/Autocomplete'
 export function Search(props: SearchProps) {
   const [query, setQuery] = useState('')
   const [items, setItems] = useState<HereItem[]>([])
+  const geoObj = useGeolocation()
 
-  const [loading, setLoading] = useState(false)
-  const { onClose, isOpen, onOpen } = useDisclosure()
+  const { isOpen } = useDisclosure()
   const { desktop } = useMediaQuery()
-  const { user, setUser } = useAuth()
-  const { db } = useFirebase()
+  const { user } = useAuth()
 
   const { setSearchedItem, isSearchOpen, onCloseSearch } = props
   const [queryValue] = useDebounce(query, 400)
@@ -38,15 +26,17 @@ export function Search(props: SearchProps) {
   useEffect(() => {
     if (!user) return
 
-    if (!user.currentLocation && (isSearchOpen || desktop)) return onOpen()
+    const defaultLocation = { lat: -7.23072, lng: -35.8817 }
 
     if (isOpen) return
     let cancelled = false
+    const at =
+      geoObj?.lat && geoObj?.lng
+        ? `${geoObj.lat},${geoObj.lng}`
+        : `${defaultLocation.lat},${defaultLocation.lng}`
 
-    const at = user.currentLocation
-      ? `${user.currentLocation.lat},${user.currentLocation.lng}`
-      : undefined
-
+    // eslint-disable-next-line no-console
+    console.log(geoObj)
     if (queryValue.length > 0) {
       discoverAddress({
         q: queryValue,
@@ -63,26 +53,7 @@ export function Search(props: SearchProps) {
     return () => {
       cancelled = true
     }
-  }, [queryValue, user, isSearchOpen, isOpen])
-
-  const handleClose = () => {
-    if (user) {
-      db.collection('users')
-        .doc(user.id)
-        .update({
-          currentLocation: { lat: -7.23072, lng: -35.8817 },
-        })
-        .then(() => {
-          setUser({
-            ...user,
-            currentLocation: { lat: -7.23072, lng: -35.8817 },
-          })
-          onClose()
-          setLoading(false)
-        })
-        .finally(() => onClose())
-    }
-  }
+  }, [queryValue, user, isSearchOpen, isOpen, geoObj])
 
   return (
     <>
@@ -122,61 +93,6 @@ export function Search(props: SearchProps) {
           />
         </Slide>
       )}
-      <Modal isOpen={isOpen} onClose={handleClose} isCentered size="xs">
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Localização</ModalHeader>
-          <ModalBody>
-            Ter sua localização nos ajudará a realizar uma busca mais precisa.
-            Gostaria de compartilhá-la?
-          </ModalBody>
-
-          <ModalFooter>
-            <Button
-              colorScheme="teal"
-              mr={3}
-              variant="outline"
-              onClick={handleClose}
-            >
-              Não
-            </Button>
-            <Button
-              colorScheme="teal"
-              isLoading={loading}
-              onClick={() => {
-                setLoading(true)
-                try {
-                  navigator.geolocation.getCurrentPosition(
-                    ({ coords: { latitude: lat, longitude: lng } }) => {
-                      if (user) {
-                        db.collection('users')
-                          .doc(user.id)
-                          .update({
-                            currentLocation: { lat, lng },
-                          })
-                          .then(() => {
-                            setUser({
-                              ...user,
-                              currentLocation: { lat, lng },
-                            })
-                            onClose()
-                            setLoading(false)
-                          })
-                      }
-                    },
-                    () => onClose()
-                  )
-                } catch (e) {
-                  onClose()
-                  setLoading(false)
-                }
-              }}
-            >
-              Compartilhar
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </>
   )
 }

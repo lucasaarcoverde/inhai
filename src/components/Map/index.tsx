@@ -2,6 +2,7 @@ import { Box, Center, Fade, Spinner } from '@chakra-ui/react'
 import type { BoxProps } from '@chakra-ui/react'
 import { useLocation } from '@reach/router'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
+import useGeolocation from '@rooks/use-geolocation'
 
 import { useMediaQuery } from '../../contexts'
 import { useAuth } from '../../contexts/firebase'
@@ -35,6 +36,8 @@ export const Map = ({
     lng: -35.8825037,
   }
 
+  const geoObj = useGeolocation()
+
   const [mapOpen, setMapOpen] = useState(false)
   const [initialLocation, setInitialLocation] = useState(defaultLocation)
   const { desktop } = useMediaQuery()
@@ -43,10 +46,11 @@ export const Map = ({
   const { user } = useAuth()
 
   useEffect(() => {
-    if (!user) return
+    if (!geoObj?.lat || !geoObj?.lng) return
+    const { lat, lng } = geoObj
 
-    if (user?.currentLocation) setInitialLocation(user.currentLocation)
-  }, [user])
+    setInitialLocation({ lat, lng })
+  }, [geoObj])
 
   useLayoutEffect(() => {
     if (!mapRef.current) return
