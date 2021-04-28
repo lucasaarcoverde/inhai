@@ -4,7 +4,6 @@ import type { FlexProps } from '@chakra-ui/react'
 import { Grid } from '@chakra-ui/react'
 
 import { Profile } from '../components/Profile'
-import { Sidebar } from '../components'
 import { useMediaQuery } from '../contexts'
 
 const ProfilePage = ({
@@ -13,12 +12,11 @@ const ProfilePage = ({
   const { desktop } = useMediaQuery()
 
   const layoutProps: FlexProps = desktop
-    ? { height: 'calc(100vh - 112px)', overflowY: 'scroll' }
+    ? { height: 'calc(100vh - 56px)', overflowY: 'scroll' }
     : {}
 
   return (
-    <Grid templateColumns={desktop ? '1fr 2fr 1fr' : '1fr'}>
-      {desktop && <Sidebar />}
+    <Grid templateColumns={'1fr'}>
       <Profile justifyContent="center" {...layoutProps} />
       {children}
     </Grid>

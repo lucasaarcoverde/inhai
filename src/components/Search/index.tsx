@@ -1,6 +1,6 @@
 import {
+  Box,
   Button,
-  Flex,
   Modal,
   ModalBody,
   ModalContent,
@@ -87,22 +87,19 @@ export function Search(props: SearchProps) {
   return (
     <>
       {desktop ? (
-        <Flex
-          minWidth="350px"
-          justifyContent="flex-start"
-          shadow="-3px 4px 6px -4px rgba(0, 0, 0, 0.1), 0 2px 0px -1px rgba(0, 0, 0, 0.06)"
-        >
+        <Box shadow="xl" zIndex={15}>
           <Autocomplete
             setSearchedItem={setSearchedItem}
-            height="calc(100vh - 120px)"
-            paddingBottom="48px"
-            marginTop="120px"
+            height="calc(100vh - 168px)"
+            width="100%"
+            maxW="25vw"
+            marginTop="112px"
             setSearch={setQuery}
             searchValue={query}
             searchItems={items}
             queryValue={queryValue}
           />
-        </Flex>
+        </Box>
       ) : (
         <Slide
           direction="bottom"
