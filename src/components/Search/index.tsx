@@ -35,8 +35,6 @@ export function Search(props: SearchProps) {
         ? `${geoObj.lat},${geoObj.lng}`
         : `${defaultLocation.lat},${defaultLocation.lng}`
 
-    // eslint-disable-next-line no-console
-    console.log(geoObj)
     if (queryValue.length > 0) {
       discoverAddress({
         q: queryValue,

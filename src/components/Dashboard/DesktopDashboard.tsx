@@ -33,9 +33,6 @@ export function DesktopDashboard(props: DashboardProps) {
     }
   `)
 
-  // eslint-disable-next-line no-console
-  console.log(data)
-
   return (
     <Stack spacing="32" align="center">
       <Stack spacing="10" maxWidth="800px">
