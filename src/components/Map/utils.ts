@@ -9,6 +9,7 @@ interface Position {
 
 export function getPosition() {
   let currentPosition
+
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position: Position) => {
       currentPosition = {

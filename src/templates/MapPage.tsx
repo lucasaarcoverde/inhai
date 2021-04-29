@@ -11,13 +11,7 @@ import { useEffect, useState } from 'react'
 import { navigate } from 'gatsby'
 import { BiLocationPlus } from 'react-icons/bi'
 
-import {
-  Search,
-  Map,
-  Tutorial,
-  Sidebar,
-  RatedPlaceDetails,
-} from '../components'
+import { Search, Map, Tutorial, RatedPlaceDetails } from '../components'
 import type { HereItem } from '../hooks/useHere'
 import { useAuth } from '../contexts/firebase'
 import type { RatedPlace } from './RatingsPage'
@@ -62,6 +56,7 @@ const MapPage = ({
     const avgRating = user.id === process.env.GATSBY_FIREBASE_ADMIN_ID ? 1 : 3.5
 
     const db = firebase.firestore()
+    let cancelled = false
 
     db.collection('places')
       .where('averageRating', '>=', avgRating)
@@ -75,24 +70,27 @@ const MapPage = ({
             return doc.data() as HereItem
           }) ?? []
 
-        setItems(mapItems as RatedPlace[])
+        if (!cancelled) setItems(mapItems as RatedPlace[])
       })
+
+    return () => {
+      cancelled = true
+    }
   }, [items, user])
 
   return (
-    <Grid templateColumns={desktop ? '1fr 2fr 1fr' : '1fr'}>
-      {desktop && <Sidebar />}
+    <Grid templateColumns={desktop ? '1fr 3fr' : '1fr'}>
+      <Search
+        isSearchOpen={searchOpen}
+        onCloseSearch={onCloseSearch}
+        setSearchedItem={setSearchedItem}
+      />
       <Map
         items={items}
         width={desktop ? '100%' : '100vw'}
         onOpenDetails={onOpenDetails}
         searchedItem={searchedItem}
         setCurrentItem={setCurrentItem}
-      />
-      <Search
-        isSearchOpen={searchOpen}
-        onCloseSearch={onCloseSearch}
-        setSearchedItem={setSearchedItem}
       />
       <RatedPlaceDetails
         isDetailsOpen={isDetailsOpen}

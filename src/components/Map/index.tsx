@@ -1,8 +1,10 @@
-import type { BoxProps } from '@chakra-ui/react'
 import { Box, Center, Fade, Spinner } from '@chakra-ui/react'
+import type { BoxProps } from '@chakra-ui/react'
 import { useLocation } from '@reach/router'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
+import useGeolocation from '@rooks/use-geolocation'
 
+import { useMediaQuery } from '../../contexts'
 import { useAuth } from '../../contexts/firebase'
 import type { HereItem } from '../../hooks/useHere'
 import type { RatedPlace } from '../../templates/RatingsPage'
@@ -34,17 +36,21 @@ export const Map = ({
     lng: -35.8825037,
   }
 
+  const geoObj = useGeolocation()
+
   const [mapOpen, setMapOpen] = useState(false)
   const [initialLocation, setInitialLocation] = useState(defaultLocation)
+  const { desktop } = useMediaQuery()
 
   const { pathname } = useLocation()
   const { user } = useAuth()
 
   useEffect(() => {
-    if (!user) return
+    if (!geoObj?.lat || !geoObj?.lng) return
+    const { lat, lng } = geoObj
 
-    if (user?.currentLocation) setInitialLocation(user.currentLocation)
-  }, [user])
+    setInitialLocation({ lat, lng })
+  }, [geoObj])
 
   useLayoutEffect(() => {
     if (!mapRef.current) return
@@ -81,7 +87,7 @@ export const Map = ({
 
     map.addEventListener(
       'pointermove',
-      function (event: MouseEvent) {
+      (event: MouseEvent) => {
         const viewPort = map.getViewPort()
         const { element } = viewPort
 
@@ -97,15 +103,15 @@ export const Map = ({
 
     map.addEventListener(
       'tap',
-      function (event: any) {
-        if (event.target instanceof H.map.Marker) {
-          if (!event) return
+      (event: any) => {
+        if (!event) return
 
-          const data = event?.target?.getData()
+        if (!(event.target instanceof H.map.Marker)) return
 
-          setCurrentItem(data as RatedPlace)
-          setTimeout(onOpenDetails, 50)
-        }
+        const data = event?.target?.getData()
+
+        setCurrentItem(data as RatedPlace)
+        setTimeout(onOpenDetails, 50)
       },
       false
     )
@@ -160,11 +166,11 @@ export const Map = ({
     <Box
       position="relative"
       width="100%"
-      height="calc(100vh - 112px)"
+      height={desktop ? 'calc(100vh - 56px)' : 'calc(100vh - 112px)'}
       maxHeight="-webkit-fill-available"
       {...boxProps}
     >
-      {!mapOpen && (
+      {(!mapOpen || !user) && (
         <Center
           height={pathname.includes('ratings') ? 'calc(40vh - 56px)' : '100%'}
           width="100%"

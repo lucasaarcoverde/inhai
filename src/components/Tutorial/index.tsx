@@ -13,6 +13,7 @@ import {
   Flex,
 } from '@chakra-ui/react'
 import React, { useCallback, useEffect, useState } from 'react'
+
 import { useAuth } from '../../contexts/firebase'
 import useFirebase from '../../hooks/useFirebase'
 import {
@@ -31,6 +32,7 @@ export function Tutorial(props: { handleClose: () => void }) {
   const { db } = useFirebase()
 
   const [step, setStep] = useState(0)
+
   useEffect(() => {
     if (!user) return
 

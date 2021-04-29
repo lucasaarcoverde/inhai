@@ -37,6 +37,8 @@ export interface User {
   pronoun?: string
   id: string
   newUser: boolean
+  lgbtphobia: boolean
+  afraid: boolean
   currentLocation?: { lat: number; lng: number }
 }
 
@@ -156,9 +158,10 @@ export const FirebaseProvider: React.FC = ({ children }) => {
   useEffect(() => {
     if (state.user) return
 
+    let cancelled = false
     const db = firebase.firestore()
 
-    const unsub = firebase.auth().onAuthStateChanged((authUser) => {
+    firebase.auth().onAuthStateChanged((authUser) => {
       if (authUser) {
         usersRef(db)
           .where('id', '==', authUser.uid)
@@ -171,7 +174,7 @@ export const FirebaseProvider: React.FC = ({ children }) => {
               if (doc.exists) {
                 const userDb = doc.data() as User
 
-                onSetUser(userDb)
+                if (!cancelled) onSetUser(userDb)
               }
             } else {
               const userDb = {
@@ -182,6 +185,8 @@ export const FirebaseProvider: React.FC = ({ children }) => {
                 id: authUser.uid,
                 newUser: true,
                 createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+                lgbtphobia: false,
+                afraid: false,
               } as User
 
               usersRef(db)
@@ -194,14 +199,15 @@ export const FirebaseProvider: React.FC = ({ children }) => {
                       users: firebase.firestore.FieldValue.increment(1),
                     })
                 })
-
-              onSetUser(userDb)
+              if (!cancelled) onSetUser(userDb)
             }
           })
       }
     })
 
-    return unsub
+    return () => {
+      cancelled = true
+    }
   }, [state.user, usersRef, firebase])
 
   return (

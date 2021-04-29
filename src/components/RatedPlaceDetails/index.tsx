@@ -8,13 +8,31 @@ import { RatingsDetails } from './components/RatingsDetails'
 import { useMediaQuery } from '../../contexts'
 
 export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
-  const { isDetailsOpen, onCloseDetails, item } = props
+  const { isDetailsOpen } = props
 
   const { desktop } = useMediaQuery()
 
-  return (
+  return desktop ? (
     <Slide
-      direction={desktop ? 'right' : 'bottom'}
+      direction="left"
+      in={isDetailsOpen}
+      style={{
+        zIndex: 16,
+        margin: 0,
+        top: 56,
+        bottom: 56,
+        left: 0,
+        width: '25vw',
+        maxWidth: '25vw',
+        maxHeight: '-webkit-fill-available',
+        height: 'calc(100vh - 120px)',
+      }}
+    >
+      <Details {...props} />
+    </Slide>
+  ) : (
+    <Slide
+      direction={'bottom'}
       in={isDetailsOpen}
       style={{
         zIndex: 13,
@@ -27,8 +45,19 @@ export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
         height: '100vh',
       }}
     >
+      <Details {...props} />
+    </Slide>
+  )
+}
+
+function Details(props: RatedPlaceDetailsProps) {
+  const { onCloseDetails, item } = props
+  const { desktop } = useMediaQuery()
+
+  return (
+    <>
       <Flex
-        maxWidth="500px"
+        maxWidth={desktop ? '25vw' : '500px'}
         position="fixed"
         bg="gray.50"
         width="100vw"
@@ -50,7 +79,7 @@ export function RatedPlaceDetails(props: RatedPlaceDetailsProps) {
           <RatingsDetails {...item} />
         </Stack>
       </Box>
-    </Slide>
+    </>
   )
 }
 

@@ -1,25 +1,36 @@
 import React from 'react'
 import { useLocation } from '@reach/router'
-import { Grid, Flex, IconButton, Heading, Icon } from '@chakra-ui/react'
+import {
+  Grid,
+  Flex,
+  IconButton,
+  Heading,
+  Icon,
+  Avatar,
+  Button,
+} from '@chakra-ui/react'
 import { ArrowBackIcon, SearchIcon } from '@chakra-ui/icons'
 import { HiLogout } from 'react-icons/hi'
+import { navigate } from 'gatsby'
 
 import { useAuth } from '../../contexts/firebase'
 import { useLayout } from '../../contexts/layout'
-import { navigate } from 'gatsby'
+import type { TopbarProps } from '.'
 
-export function MobileTopbar() {
+export function MobileTopbar(props: TopbarProps) {
   const { onOpenSearch } = useLayout()
+  const { photo } = props
   const { pathname } = useLocation()
   const { logout } = useAuth()
 
   const profile = pathname.includes('profile')
+  const ratings = pathname.includes('ratings')
 
   return (
     <Grid
       position="fixed"
       zIndex="docked"
-      templateColumns="repeat(2, 1fr)"
+      templateColumns="repeat(3, 1fr)"
       paddingLeft="1"
       paddingRight="1"
       top="0"
@@ -32,23 +43,33 @@ export function MobileTopbar() {
       borderBottomColor="gray.200"
     >
       <Flex h="100%" align="center" justifyContent="flex-start">
-        {pathname === '/app/ratings' ? (
+        {ratings || profile ? (
           <IconButton
             size="lg"
             aria-label="Voltar para página anterior"
             icon={<ArrowBackIcon boxSize="6" />}
             variant="ghost"
             colorScheme="teal"
-            onClick={() => navigate('/app')}
+            onClick={() => navigate(-1)}
           />
         ) : (
-          <Heading paddingLeft="3" color="teal.500">
-            Inhaí
-          </Heading>
+          <Button
+            variant="ghost"
+            aria-label="Página do perfil"
+            colorScheme="teal"
+            onClick={() => {
+              if (!profile) navigate('/app/profile')
+            }}
+          >
+            <Avatar size="sm" src={photo} />
+          </Button>
         )}
       </Flex>
+      <Flex justifyContent="center" align="center">
+        <Heading color="teal.500">Inhaí</Heading>
+      </Flex>
       <Flex h="100%" align="center" justifyContent="flex-end">
-        {pathname === '/app' ? (
+        {pathname === '/app/map' ? (
           <IconButton
             size="lg"
             aria-label="Search button"

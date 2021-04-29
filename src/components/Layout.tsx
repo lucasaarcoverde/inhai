@@ -24,12 +24,12 @@ export function Layout({ children }: LayoutProps) {
         <InitialLoading />
       ) : (
         <>
-          <Topbar />
+          <Topbar photo={photo} />
           {desktop ? (
             <Box
               width="100vw"
               maxHeight="-webkit-fill-available"
-              height="calc(100vh - 112px)"
+              height="calc(100vh - 56px)"
               bg="white"
               overflow="hidden"
               as="main"
@@ -50,7 +50,7 @@ export function Layout({ children }: LayoutProps) {
             </Box>
           )}
 
-          {desktop ? <DefaultFooter /> : <MobileFooter photo={photo} />}
+          {!desktop && <MobileFooter />}
         </>
       )}
     </PrivateRoute>

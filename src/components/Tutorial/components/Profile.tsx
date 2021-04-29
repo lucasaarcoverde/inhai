@@ -1,8 +1,6 @@
 import React from 'react'
-
 import { graphql, useStaticQuery } from 'gatsby'
 import Img from 'gatsby-image'
-
 import { Box, Text, Stack, ModalBody, ModalHeader } from '@chakra-ui/react'
 
 export function Profile() {
@@ -29,8 +27,8 @@ export function Profile() {
             <Img fluid={data.file.childImageSharp.fluid} alt="Search image" />
           </Box>
           <Text fontSize="sm" fontWeight="semibold">
-            Edite o seu perfil e caso não se sinta representade entre em
-            contato.
+            Edite o seu perfil, isso também nos ajuda a obter informações sobre
+            a comunidade.
           </Text>
         </Stack>
       </ModalBody>

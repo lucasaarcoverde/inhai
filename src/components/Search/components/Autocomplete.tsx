@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useCallback } from 'react'
+import type { StackProps } from '@chakra-ui/react'
 import {
   Box,
   CloseButton,
@@ -7,16 +8,16 @@ import {
   VisuallyHidden,
   Text,
   StackDivider,
-  Badge,
   Divider,
-  StackProps,
 } from '@chakra-ui/react'
 import { useCombobox } from 'downshift'
+import { useLocation } from '@reach/router'
 
-import { HereItem } from '../../../hooks/useHere'
-import { SearchProps } from '../index'
+import type { HereItem } from '../../../hooks/useHere'
+import type { SearchProps } from '../index'
 import { EmptyState } from './EmptyState'
 import { useMediaQuery } from '../../../contexts'
+import { PlaceSuggestions } from './Suggestions'
 
 export function Autocomplete(
   props: SearchProps & {
@@ -37,6 +38,7 @@ export function Autocomplete(
   } = props
 
   const { desktop } = useMediaQuery()
+  const { pathname } = useLocation()
 
   const {
     getLabelProps,
@@ -45,6 +47,7 @@ export function Autocomplete(
     getComboboxProps,
     highlightedIndex,
     getItemProps,
+    setInputValue,
   } = useCombobox({
     items: searchItems,
     onSelectedItemChange: ({ selectedItem }) => {
@@ -63,6 +66,11 @@ export function Autocomplete(
     },
   })
 
+  const handleInputChange = useCallback(
+    (value: string) => setInputValue(value),
+    []
+  )
+
   return (
     <>
       <Stack
@@ -71,21 +79,21 @@ export function Autocomplete(
         spacing="2"
         position="fixed"
         bg="white"
-        maxWidth={[null, null, null, 350]}
-        minWidth={[null, null, null, 350]}
-        width={['100vw', '100vw', '100vw', '100%']}
+        width={['100vw', '100vw', '100vw', '25vw']}
       >
         {!desktop && <CloseButton onClick={onCloseSearch} />}
         <Box {...getComboboxProps()}>
           <VisuallyHidden>
             <label htmlFor="search" {...getLabelProps()}>
-              Search Input
+              Buscar local
             </label>
           </VisuallyHidden>
           <Input
             {...getInputProps()}
             value={searchValue}
-            placeholder="Buscar local"
+            placeholder={
+              pathname.includes('ratings') ? 'Escolha um local' : 'Buscar local'
+            }
           />
         </Box>
         <Stack spacing="0">
@@ -97,15 +105,7 @@ export function Autocomplete(
           >
             Sugestões
           </Text>
-          <Stack direction="row" overflowX="scroll" paddingY={2}>
-            <Badge colorScheme="cyan">Restaurante</Badge>
-            <Badge colorScheme="purple">Bar ou Pub</Badge>
-            <Badge colorScheme="yellow">Academia</Badge>
-            <Badge colorScheme="blue">Salão de Beleza</Badge>
-            <Badge colorScheme="red">Consultório médico</Badge>
-            <Badge colorScheme="green">Padaria</Badge>
-            <Badge colorScheme="purple">Comércio</Badge>
-          </Stack>
+          <PlaceSuggestions handleInputChange={handleInputChange} />
           <Divider />
         </Stack>
       </Stack>
@@ -116,8 +116,7 @@ export function Autocomplete(
         marginTop="149px"
         backgroundColor="white"
         overflowY="scroll"
-        maxWidth={[null, null, null, 350]}
-        minWidth={[null, null, null, 350]}
+        width={['100vw', '100vw', '100vw', '25vw']}
         {...containerProps}
       >
         {!!queryValue && searchItems.length === 0 ? (
@@ -125,13 +124,14 @@ export function Autocomplete(
         ) : (
           <Stack
             divider={<StackDivider borderColor="gray.200" />}
+            width="100%"
             {...getMenuProps()}
           >
             {searchItems.map((item, index) => (
               <Stack
                 key={`search-place-${index}`}
                 width="100%"
-                bg={highlightedIndex === index ? 'gray.50' : 'whiteAlpha'}
+                bg={highlightedIndex === index ? 'gray.50' : 'white'}
                 {...getItemProps({ item, index })}
                 padding="4"
                 cursor="pointer"

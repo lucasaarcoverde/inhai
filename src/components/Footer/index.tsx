@@ -1,8 +1,9 @@
 import React from 'react'
 import type { FlexProps } from '@chakra-ui/react'
 import {
-  Avatar,
-  Button,
+  Heading,
+  HStack,
+  Text,
   Flex,
   Grid,
   Icon,
@@ -10,11 +11,19 @@ import {
   Link,
   Stack,
 } from '@chakra-ui/react'
-import { AiFillGithub, AiFillLinkedin, AiFillMail } from 'react-icons/ai'
+import {
+  AiFillGithub,
+  AiFillLinkedin,
+  AiFillMail,
+  AiOutlineHome,
+  AiOutlineInstagram,
+} from 'react-icons/ai'
 import { BiHelpCircle } from 'react-icons/bi'
 import { navigate } from 'gatsby'
 import { useLocation } from '@reach/router'
 import { SearchIcon } from '@chakra-ui/icons'
+import { FaMapMarkerAlt } from 'react-icons/fa'
+import { IoIosPhonePortrait } from 'react-icons/io'
 
 export function Footer(props: FlexProps) {
   const { children, ...restProps } = props
@@ -67,13 +76,56 @@ export function DefaultFooter(props: FlexProps) {
   )
 }
 
-export const MobileFooter = (props: { photo?: string }) => {
-  const { photo } = props
+export const DesktopFooter = () => {
+  return (
+    <Flex
+      justifyContent="center"
+      width="100vw"
+      height="40vh"
+      bg="gray.50"
+      color="teal.500"
+    >
+      <Flex justifyContent="space-between" paddingY="8" minWidth="800px">
+        <Heading fontSize="xx-large">Inhaí</Heading>
 
+        <Stack spacing="8">
+          <Heading fontSize="xx-large">Contato</Heading>
+          <Stack fontWeight="semibold">
+            <HStack>
+              <Icon as={IoIosPhonePortrait} boxSize="5" />
+              <Text fontSize="md">- inhai.app</Text>
+            </HStack>
+            <HStack>
+              <Icon as={AiFillMail} boxSize="5" />
+              <Text fontSize="md">- inhaiapp@gmail.com</Text>
+            </HStack>
+            <HStack>
+              <Icon as={FaMapMarkerAlt} boxSize="5" />
+              <Text fontSize="md">- Campina Grande, PB</Text>
+            </HStack>
+          </Stack>
+          <HStack spacing="3">
+            <Link href="https://www.instagram.com/inhai.app/" target="_blank">
+              <Icon boxSize="7" as={AiOutlineInstagram} />
+            </Link>
+            <Link
+              href="https://www.linkedin.com/in/lucasaarcoverde/"
+              target="_blank"
+            >
+              <Icon boxSize="7" as={AiFillLinkedin} />
+            </Link>
+          </HStack>
+        </Stack>
+      </Flex>
+    </Flex>
+  )
+}
+
+export const MobileFooter = () => {
   const { pathname } = useLocation()
 
-  const map = pathname === '/app'
-  const profile = pathname === '/app/profile'
+  const map = pathname === '/app/map'
+  const home = pathname === '/app'
   const about = pathname === '/app/about'
 
   return (
@@ -91,12 +143,12 @@ export const MobileFooter = (props: { photo?: string }) => {
       borderTopColor="gray.200"
     >
       <IconButton
-        aria-label="Página de informações"
+        aria-label="Página principal"
         variant="ghost"
-        icon={<Icon as={BiHelpCircle} boxSize={about ? '7' : '6'} />}
+        icon={<Icon as={AiOutlineHome} boxSize={home ? '7' : '6'} />}
         colorScheme="teal"
         onClick={() => {
-          if (!about) navigate('/app/about')
+          if (!home) navigate('/app')
         }}
       />
       <IconButton
@@ -105,19 +157,18 @@ export const MobileFooter = (props: { photo?: string }) => {
         icon={<SearchIcon boxSize={map ? '7' : '6'} />}
         colorScheme="teal"
         onClick={() => {
-          if (!map) navigate('/app')
+          if (!map) navigate('/app/map')
         }}
       />
-      <Button
+      <IconButton
+        aria-label="Página de informações"
         variant="ghost"
-        aria-label="Página do perfil"
+        icon={<Icon as={BiHelpCircle} boxSize={about ? '7' : '6'} />}
         colorScheme="teal"
         onClick={() => {
-          if (!profile) navigate('/app/profile')
+          if (!about) navigate('/app/about')
         }}
-      >
-        <Avatar size={profile ? 'sm' : 'xs'} src={photo} />
-      </Button>
+      />
     </Grid>
   )
 }

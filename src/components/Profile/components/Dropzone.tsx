@@ -1,10 +1,9 @@
-import React, { useMemo, useState } from 'react'
-
+import React, { useMemo, useState, useEffect } from 'react'
 import { useField } from 'formik'
 import { useDropzone } from 'react-dropzone'
 import { Avatar, Box, Flex, Text } from '@chakra-ui/react'
-import { User } from '../../../contexts/firebase'
-import { useEffect } from 'react'
+
+import type { User } from '../../../contexts/firebase'
 
 interface Props {
   name: string
@@ -29,8 +28,9 @@ export function ProfileDropzone(props: Props) {
 
   useEffect(() => {
     if (!file) return
-    var reader = new FileReader()
-    reader.onloadend = function () {
+    const reader = new FileReader()
+
+    reader.onloadend = () => {
       setImageFile(reader.result)
     }
 

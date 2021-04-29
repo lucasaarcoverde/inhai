@@ -14,7 +14,7 @@ import type { FormikHelpers } from 'formik'
 
 import { Search } from '../components/Search'
 import type { HereItem } from '../hooks/useHere'
-import { Map, PlaceDetails, Sidebar } from '../components'
+import { Map, PlaceDetails } from '../components'
 import type { User, Timestamp } from '../contexts/firebase'
 import { useAuth } from '../contexts/firebase'
 import { useMediaQuery } from '../contexts'
@@ -88,6 +88,7 @@ const RatingsPage = ({
     addCity,
     updatePlaceRating,
     updateInfo,
+    updateRatingInfo,
     db,
   } = useFirebase()
 
@@ -205,9 +206,7 @@ const RatingsPage = ({
           setSearchedItem({} as RatedPlace)
           setCurrentItem({} as RatedPlace)
           toastSuccess()
-          updateInfo({
-            ratings: firebase.firestore.FieldValue.increment(1),
-          })
+          updateRatingInfo(rating)
         })
         .catch(() => {
           toastError()
@@ -220,13 +219,22 @@ const RatingsPage = ({
   )
 
   const layoutProps: FlexProps = desktop
-    ? { height: 'calc(100vh - 112px)', overflowY: 'scroll' }
+    ? { height: 'calc(100vh - 56px)', overflowY: 'scroll' }
     : {}
 
   return (
-    <Grid templateColumns={desktop ? '1fr 2fr 1fr' : '1fr'}>
-      {desktop && <Sidebar />}
-      <Flex direction="column" {...layoutProps}>
+    <Grid templateColumns={desktop ? '1fr 3fr' : '1fr'}>
+      <Search
+        isSearchOpen={isSearchOpen}
+        onCloseSearch={onCloseSearch}
+        setSearchedItem={setSearchedItem}
+      />
+      <Flex
+        maxWidth="800px"
+        paddingX={desktop ? '6' : '0'}
+        direction="column"
+        {...layoutProps}
+      >
         <Box>
           <Map
             height="calc(40vh - 56px)"
@@ -242,11 +250,6 @@ const RatingsPage = ({
           searchedItem={searchedItem}
         />
       </Flex>
-      <Search
-        isSearchOpen={isSearchOpen}
-        onCloseSearch={onCloseSearch}
-        setSearchedItem={setSearchedItem}
-      />
       <PlaceDetails
         isDetailsOpen={isDetailsOpen}
         onCloseDetails={onCloseDetails}
