@@ -1,4 +1,5 @@
 import { EmailIcon } from '@chakra-ui/icons'
+import * as Sentry from '@sentry/gatsby'
 import {
   Button,
   createStandaloneToast,
@@ -16,9 +17,11 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/react'
-import { Field, Form, Formik, FormikHelpers } from 'formik'
+import type { FormikHelpers } from 'formik'
+import { Field, Form, Formik } from 'formik'
 import React, { useCallback } from 'react'
 import * as Yup from 'yup'
+
 import { useAuth } from '../../../contexts/firebase'
 
 const recoveryPasswordSchema = Yup.object({
@@ -49,8 +52,8 @@ export function PasswordRecovery(props: PasswordRecoveryProps) {
           })
           handleClose()
         })
-        .catch((error) => {
-          if (error.code === 'auth/user-not-found') {
+        .catch((err) => {
+          if (err.code === 'auth/user-not-found') {
             toast({
               title: 'Recuperação de Senha',
               description: 'Email inválido, tente novamente.',
@@ -69,6 +72,8 @@ export function PasswordRecovery(props: PasswordRecoveryProps) {
               position: 'top',
             })
           }
+
+          Sentry.captureException(err)
         })
         .finally(() => {
           actions.setSubmitting(false)

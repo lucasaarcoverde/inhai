@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import * as Sentry from '@sentry/gatsby'
 import {
   Heading,
   Divider,
@@ -125,8 +126,9 @@ export function RatingsDetails(props: RatedPlace) {
             setLoading(false)
           })
         })
-        .catch(() => {
+        .catch((err) => {
           setLoading(false)
+          Sentry.captureException(err)
         })
     },
     [firebase, lastKey]

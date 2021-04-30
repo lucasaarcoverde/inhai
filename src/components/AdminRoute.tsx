@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { navigate } from 'gatsby'
+import * as Sentry from '@sentry/gatsby'
 
 import { useAuth } from '../contexts/firebase'
 
@@ -32,7 +33,8 @@ const AdminRoute: React.FC<PrivateRouteProps> = ({ children, path }) => {
 
         return navigate(path)
       })
-      .catch(() => {
+      .catch((err) => {
+        Sentry.captureException(err)
         navigate(path)
       })
   }, [user])

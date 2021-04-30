@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import * as Sentry from '@sentry/gatsby'
 import type { FlexProps } from '@chakra-ui/react'
 import {
   Button,
@@ -83,7 +84,7 @@ export function Profile(props: FlexProps) {
           position: 'top',
         })
       })
-      .catch(() => {
+      .catch((err) => {
         toast({
           title: 'Verificação de email',
           description: 'Falha ao enviar email de verificação, tente novamente.',
@@ -92,6 +93,7 @@ export function Profile(props: FlexProps) {
           isClosable: true,
           position: 'top',
         })
+        Sentry.captureException(err)
       })
   }, [firebase])
 
@@ -167,7 +169,10 @@ export function Profile(props: FlexProps) {
             afraid,
           })
         })
-        .catch(() => errorSaving())
+        .catch((err) => {
+          errorSaving()
+          Sentry.captureException(err)
+        })
         .finally(() => {
           actions.setSubmitting(false)
         })
@@ -189,8 +194,9 @@ export function Profile(props: FlexProps) {
         })
         logout()
       })
-      .catch(() => {
+      .catch((err) => {
         errorDeleting()
+        Sentry.captureException(err)
       })
   }, [])
 
