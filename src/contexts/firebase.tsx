@@ -9,6 +9,7 @@ import React, {
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/firestore'
+import * as Sentry from '@sentry/gatsby'
 import { navigate } from 'gatsby'
 
 const firebaseConfig = {
@@ -174,7 +175,10 @@ export const FirebaseProvider: React.FC = ({ children }) => {
               if (doc.exists) {
                 const userDb = doc.data() as User
 
-                if (!cancelled) onSetUser(userDb)
+                if (!cancelled) {
+                  Sentry.setUser({ email: userDb.email })
+                  onSetUser(userDb)
+                }
               }
             } else {
               const userDb = {

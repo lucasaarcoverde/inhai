@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import * as Sentry from '@sentry/gatsby'
 import {
   Avatar,
   Button,
@@ -98,7 +99,7 @@ export function Comment(props: CommentProps) {
           actions.resetForm()
           onClose()
         })
-        .catch(() => {
+        .catch((err) => {
           toast({
             title: 'Falha ao realizar denúncia',
             description: 'Tente novamente.',
@@ -108,6 +109,7 @@ export function Comment(props: CommentProps) {
             position: 'top',
           })
           actions.setSubmitting(false)
+          Sentry.captureException(err)
           onClose()
         })
     },

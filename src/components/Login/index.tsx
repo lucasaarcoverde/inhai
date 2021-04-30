@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import * as Sentry from '@sentry/gatsby'
 import {
   Button,
   Flex,
@@ -88,7 +89,7 @@ export const Login = () => {
           .then(() => {
             navigate('/loading')
           })
-          .catch(() => {
+          .catch((err) => {
             toast({
               title: 'Erro ao entrar.',
               description: 'Email ou senha inválidos.',
@@ -97,6 +98,7 @@ export const Login = () => {
               isClosable: true,
               position: 'top',
             })
+            Sentry.captureException(err)
           })
       })
   }, [])
@@ -150,6 +152,7 @@ export const Login = () => {
             navigate('/loading')
           })
           .catch((err) => {
+            Sentry.captureException(err)
             if (err.code === 'auth/email-already-in-use') {
               toast({
                 title: 'Erro ao criar conta.',

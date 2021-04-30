@@ -1,4 +1,5 @@
 import * as React from 'react'
+import * as Sentry from '@sentry/gatsby'
 import type { RouteComponentProps } from '@reach/router'
 import type { FlexProps } from '@chakra-ui/react'
 import {
@@ -208,7 +209,8 @@ const RatingsPage = ({
           toastSuccess()
           updateRatingInfo(rating)
         })
-        .catch(() => {
+        .catch((err) => {
+          Sentry.captureException(err)
           toastError()
         })
         .finally(() => {
