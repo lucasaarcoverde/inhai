@@ -43,22 +43,36 @@ export function RatingsDetails(props: RatedPlace) {
       .then((snap) => {
         const { docs } = snap
         let currentLastKey = ''
-        const currentRatings =
-          docs
-            .map((doc) => {
-              if (!doc.exists) return
-              currentLastKey = doc.data().createdAt
-              const rating = doc.data() as Rating
-              const { anonymous } = rating
 
-              const rateReturn = !anonymous ? rating : { ...rating, user: {} }
+        const promises = docs.map(async (doc) => {
+          if (!doc.exists) return
+          currentLastKey = doc.data().createdAt
+          const rating = doc.data() as Rating
+          const { anonymous } = rating
 
-              return rateReturn
+          const fetchedUser = await db
+            .collection('users')
+            .doc(rating?.user?.id)
+            .get()
+            .then((userDoc) => {
+              return userDoc.exists ? userDoc.data() : rating.user
             })
-            .filter((rating) => rating?.visible !== false) ?? []
 
-        setLastKey(currentLastKey)
-        setRatings(currentRatings as Rating[])
+          const rateReturn = !anonymous
+            ? { ...rating, user: fetchedUser }
+            : { ...rating, user: {} }
+
+          return rateReturn
+        })
+
+        Promise.all(promises).then((currentRatings) => {
+          setLastKey(currentLastKey)
+          const filteredRatings = currentRatings.filter(
+            (rating) => rating?.visible !== false
+          )
+
+          setRatings(filteredRatings as Rating[])
+        })
       })
       .finally(() => {
         setTimeout(() => setLoading(false), 100)
@@ -79,18 +93,37 @@ export function RatingsDetails(props: RatedPlace) {
         .then((snap) => {
           const { docs } = snap
           let currentLastKey = ''
-          const currentRatings =
-            docs.map((doc) => {
-              if (!doc.exists) return
 
-              currentLastKey = doc.data().createdAt
+          const promises = docs.map(async (doc) => {
+            if (!doc.exists) return
+            currentLastKey = doc.data().createdAt
+            const rating = doc.data() as Rating
+            const { anonymous } = rating
 
-              return doc.data() as Rating
-            }) ?? []
+            const fetchedUser = await db
+              .collection('users')
+              .doc(rating?.user?.id)
+              .get()
+              .then((userDoc) => {
+                return userDoc.exists ? userDoc.data() : rating.user
+              })
 
-          setLastKey(currentLastKey)
-          setRatings((prev) => [...prev, ...currentRatings] as Rating[])
-          setLoading(false)
+            const rateReturn = !anonymous
+              ? { ...rating, user: fetchedUser }
+              : { ...rating, user: {} }
+
+            return rateReturn
+          })
+
+          Promise.all(promises).then((currentRatings) => {
+            const filteredRatings = currentRatings.filter(
+              (rating) => rating?.visible !== false
+            )
+
+            setLastKey(currentLastKey)
+            setRatings((prev) => [...prev, ...filteredRatings] as Rating[])
+            setLoading(false)
+          })
         })
         .catch(() => {
           setLoading(false)
