@@ -70,18 +70,18 @@ export function LGBTFlag(props: LGBTFlagProps) {
     <Grid templateColumns="1fr" templateRows="repeat(6, 80px)">
       <FlagItem color="red">{ratings} avaliações</FlagItem>
       <FlagItem color="orange">{places} locais</FlagItem>
-      <FlagItem color="yellow">{users} usuários ativos</FlagItem>
+      <FlagItem color="yellow">{users} usuários registrados</FlagItem>
       <FlagItem color="green">
         {((lgbtphobia * 100) / users).toFixed(2)}% já sofreram LGBTfobia ou
         conhecem alguém que sofreu
       </FlagItem>
       <FlagItem color="blue">
-        {((genderIdentity * 100) / users).toFixed(2)}% não sabem identificar seu
-        gênero.
+        {((genderIdentity * 100) / users).toFixed(2)}% não sabem sua identidade
+        de gênero
       </FlagItem>
       <FlagItem color="purple">
         {((sexualOrientation * 100) / users).toFixed(2)}% não sabem sua
-        orientação sexual.
+        orientação sexual
       </FlagItem>
     </Grid>
   )
