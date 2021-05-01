@@ -20,6 +20,7 @@ interface MapProps extends BoxProps {
 declare global {
   interface Window {
     H: any
+    gtag: any
   }
 }
 
@@ -108,9 +109,14 @@ export const Map = ({
 
         if (!(event.target instanceof H.map.Marker)) return
 
-        const data = event?.target?.getData()
+        const data = event?.target?.getData() as RatedPlace
 
-        setCurrentItem(data as RatedPlace)
+        window.gtag('event', 'place_visited', {
+          address: data.address.label,
+          id: data.id,
+        })
+
+        setCurrentItem(data)
         setTimeout(onOpenDetails, 50)
       },
       false

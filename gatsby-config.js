@@ -63,5 +63,16 @@ module.exports = {
         sampleRate: 0.7,
       },
     },
+    {
+      resolve: `gatsby-plugin-gtag`,
+      options: {
+        // your google analytics tracking id
+        trackingId: process.env.GOOGLE_ANALYTICS,
+        // Puts tracking script in the head instead of the body
+        head: true,
+        // enable ip anonymization
+        anonymize: true,
+      },
+    },
   ],
 }
