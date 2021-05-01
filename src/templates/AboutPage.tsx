@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import type { ReactNode } from 'react'
 import { AiFillLinkedin, AiFillMail, AiOutlineInstagram } from 'react-icons/ai'
+import { OutboundLink } from 'gatsby-plugin-gtag'
 
 import { useMediaQuery } from '../contexts'
 import { DesktopFooter } from '../components'
@@ -105,16 +106,22 @@ const AboutPage = ({
           >
             <Stack direction="row" spacing="3" color="gray.400">
               <Link
+                as={OutboundLink}
                 href="mailto: inhaiapp@gmail.com?subject=Contato Inhaí"
                 fontWeight="bold"
                 target="_blank"
               >
                 <Icon boxSize="6" as={AiFillMail} />
               </Link>
-              <Link href="https://www.instagram.com/inhai.app/" target="_blank">
+              <Link
+                as={OutboundLink}
+                href="https://www.instagram.com/inhai.app/"
+                target="_blank"
+              >
                 <Icon boxSize="6" as={AiOutlineInstagram} />
               </Link>
               <Link
+                as={OutboundLink}
                 href="https://www.linkedin.com/in/lucasaarcoverde/"
                 target="_blank"
               >

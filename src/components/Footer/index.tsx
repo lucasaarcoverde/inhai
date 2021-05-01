@@ -24,6 +24,7 @@ import { useLocation } from '@reach/router'
 import { SearchIcon } from '@chakra-ui/icons'
 import { FaMapMarkerAlt } from 'react-icons/fa'
 import { IoIosPhonePortrait } from 'react-icons/io'
+import { OutboundLink } from 'gatsby-plugin-gtag'
 
 export function Footer(props: FlexProps) {
   const { children, ...restProps } = props
@@ -105,10 +106,15 @@ export const DesktopFooter = () => {
             </HStack>
           </Stack>
           <HStack spacing="3">
-            <Link href="https://www.instagram.com/inhai.app/" target="_blank">
+            <Link
+              as={OutboundLink}
+              href="https://www.instagram.com/inhai.app/"
+              target="_blank"
+            >
               <Icon boxSize="7" as={AiOutlineInstagram} />
             </Link>
             <Link
+              as={OutboundLink}
               href="https://www.linkedin.com/in/lucasaarcoverde/"
               target="_blank"
             >
