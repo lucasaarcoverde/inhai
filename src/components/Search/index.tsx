@@ -2,6 +2,7 @@ import { Box, Slide, useDisclosure } from '@chakra-ui/react'
 import useGeolocation from '@rooks/use-geolocation'
 import React, { useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
+import * as Sentry from '@sentry/gatsby'
 
 import { useMediaQuery } from '../../contexts'
 import { useAuth } from '../../contexts/firebase'
@@ -12,6 +13,8 @@ import { Autocomplete } from './components/Autocomplete'
 export function Search(props: SearchProps) {
   const [query, setQuery] = useState('')
   const [items, setItems] = useState<HereItem[]>([])
+  const [countryCode, setCountryCode] = useState('BRA')
+
   const geoObj = useGeolocation()
 
   const { isOpen } = useDisclosure()
@@ -21,7 +24,38 @@ export function Search(props: SearchProps) {
   const { setSearchedItem, isSearchOpen, onCloseSearch } = props
   const [queryValue] = useDebounce(query, 400)
 
-  const { discoverAddress } = useHere()
+  const { discoverAddress, discoverCountry } = useHere()
+
+  useEffect(() => {
+    if (!user || !isSearchOpen) return
+
+    const defaultLocation = { lat: -7.23072, lng: -35.8817 }
+    const q =
+      geoObj?.lat && geoObj?.lng
+        ? `${geoObj.lat},${geoObj.lng}`
+        : `${defaultLocation.lat},${defaultLocation.lng}`
+
+    let cancelled = false
+
+    discoverCountry({
+      q,
+      at: q,
+    })
+      .then(({ items: hereItems }) => {
+        const [item] = hereItems
+
+        if (!cancelled) {
+          setCountryCode(item.address.countryCode)
+        }
+      })
+      .catch((err) => {
+        Sentry.captureException(err)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [geoObj, user, isSearchOpen])
 
   useEffect(() => {
     if (!user) return
@@ -39,11 +73,16 @@ export function Search(props: SearchProps) {
       discoverAddress({
         q: queryValue,
         at,
-      }).then(({ items: hereItems }) => {
-        if (!cancelled) {
-          setItems(hereItems)
-        }
+        inParam: `countryCode:${countryCode}`,
       })
+        .then(({ items: hereItems }) => {
+          if (!cancelled) {
+            setItems(hereItems)
+          }
+        })
+        .catch((err) => {
+          Sentry.captureException(err)
+        })
     } else if (!cancelled) {
       setItems([])
     }
@@ -51,7 +90,7 @@ export function Search(props: SearchProps) {
     return () => {
       cancelled = true
     }
-  }, [queryValue, user, isSearchOpen, isOpen, geoObj])
+  }, [queryValue, user, isSearchOpen, isOpen, geoObj, countryCode])
 
   return (
     <>

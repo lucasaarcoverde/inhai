@@ -69,6 +69,37 @@ export default () => {
     }
   }, [])
 
+  const discoverCountry = useCallback(
+    async ({
+      q,
+      limit = 1,
+      at = CAMPINAGRANDE_GEOLOCATION,
+    }: {
+      q: string
+      at?: string
+      limit?: number
+    }) => {
+      if (!hereClient.current) return Promise.reject('Here client not defined')
+
+      const client = hereClient.current as any
+
+      return new Promise<HereDiscoverReturn>((resolve, reject) => {
+        client.getSearchService().reverseGeocode(
+          {
+            q,
+            at,
+            limit,
+          },
+          (data: HereDiscoverReturn) => resolve(data),
+          (error: any) => {
+            reject(error)
+          }
+        )
+      })
+    },
+    []
+  )
+
   const discoverAddress = useCallback(
     async ({
       q,
@@ -104,6 +135,7 @@ export default () => {
   )
 
   return {
+    discoverCountry,
     discoverAddress,
     client: hereClient.current as any,
   }
