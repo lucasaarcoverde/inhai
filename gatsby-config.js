@@ -8,7 +8,7 @@ require('dotenv').config({
 module.exports = {
   siteMetadata: {
     title: 'Inhaí',
-    siteUrl: 'https://inhai.vercel.app',
+    siteUrl: 'https://inhai.app',
   },
   plugins: [
     'gatsby-plugin-styled-components',
@@ -28,9 +28,10 @@ module.exports = {
         icon: 'src/images/icon.png',
         name: `Inhaí`,
         short_name: `Inhaí`,
+        description: `App para mapear locais LGBTI+ friendly de forma colaborativa`,
         start_url: `/`,
         background_color: `#FFFFFF`,
-        theme_color: `#319795`,
+        theme_color: `#FFFFFF`,
         orientation: 'portrait',
         display: 'standalone',
       },

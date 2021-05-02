@@ -1,0 +1,5 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target" : { "namespace": "android_app", "package_name": "app.inhai.twa",
+                   "sha256_cert_fingerprints": ["E7:EE:F0:39:E4:E9:2F:F2:A9:BE:BF:C3:4A:41:BB:BB:F0:77:80:BD:11:53:9C:85:1C:34:B9:DE:45:C0:5C:26"] }
+    }]
