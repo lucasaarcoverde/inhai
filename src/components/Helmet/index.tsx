@@ -9,7 +9,7 @@ export const Seo = (props: SeoProps) => {
   const url = 'https://inhai.vercel.app'
 
   const description =
-    'Veja os locais mais bem avaliados como LGBTI+ friendly e deixe sua avaliação!'
+    'Aplicativo para mapear locais amigáveis e seguros para a comunidade LGBTI+ de forma colaborativa. #MapaLGBTI'
 
   const { pathname } = useLocation()
 
@@ -24,10 +24,6 @@ export const Seo = (props: SeoProps) => {
       }}
       title={title}
       meta={[
-        {
-          name: `description`,
-          content: description,
-        },
         {
           charSet: 'utf-8',
         },
@@ -66,6 +62,7 @@ export const Seo = (props: SeoProps) => {
       ]}
     >
       <link rel="preconnect" href="https://js.api.here.com/" />
+      <meta name="description" content={description} />
       <meta name="apple-mobile-web-app-capable" content="yes" />
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <meta name="apple-mobile-web-app-status-bar-style" content="black" />
