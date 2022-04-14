@@ -1,0 +1,15 @@
+.btn {
+  @apply h-10 px-4 py-1 capitalize;
+}
+
+.filled {
+  @apply text-white bg-teal-600 hover:bg-teal-700 active:bg-teal-800;
+}
+
+.outline {
+  @apply text-teal-600 border hover:bg-gray-100 active:bg-gray-200;
+}
+
+.ghost {
+  @apply text-teal-600 hover:text-teal-700 active:text-teal-800 hover:bg-gray-100 active:bg-gray-200;
+}
