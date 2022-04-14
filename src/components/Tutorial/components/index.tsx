@@ -1,6 +1,0 @@
-export * from './Map'
-export * from './Profile'
-export * from './PlaceDetail'
-export * from './Search'
-export * from './Welcome'
-export * from './Rating'
