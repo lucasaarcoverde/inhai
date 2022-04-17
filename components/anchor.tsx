@@ -6,7 +6,7 @@ export function Anchor(props: AnchorProps) {
   return (
     <Link href={href}>
       <a
-        className="text-teal-600 hover:text-teal-700 active:text-teal-800"
+        className="font-semibold text-teal-600 hover:text-teal-700 active:text-teal-800"
         {...restProps}
       >
         {children}

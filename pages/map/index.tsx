@@ -1,13 +1,10 @@
 import type { NextPage } from 'next'
-import Link from 'next/link'
-import Layout from '../../components/layout'
+import { Layout, Anchor } from '../../components'
 
 const Home: NextPage = () => {
   return (
     <Layout title="Map | Inhaí">
-      <Link href="/">
-        <a>Go to home</a>
-      </Link>
+      <Anchor href="/">Go to home</Anchor>
     </Layout>
   )
 }
