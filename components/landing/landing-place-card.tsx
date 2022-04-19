@@ -4,7 +4,7 @@ import cn from 'classnames'
 
 import { Stack } from '../layout'
 
-export function LandingPlace(props: LandingPlaceProps) {
+export function LandingPlaceCard(props: LandingPlaceProps) {
   const { position = 'start', className, place, rate } = props
 
   const classNames = cn(
