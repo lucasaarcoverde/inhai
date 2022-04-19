@@ -111,7 +111,7 @@ const Home: NextPage = () => {
         </IconCard>
       </Stack>
 
-      <Flex className="child:w-1/2">
+      <Flex className="px-20 child:w-1/2">
         <Flex className="justify-center">
           <Image
             src="/images/landing-search.png"
@@ -125,7 +125,7 @@ const Home: NextPage = () => {
           <p className="text-5xl">
             Lets start it now just search by a known place!
           </p>
-          <Button className="p-20">Get Started</Button>
+          <Button className="p-20 w-fit">Get Started</Button>
         </Stack>
       </Flex>
     </Layout>
