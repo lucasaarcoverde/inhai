@@ -1,3 +1,8 @@
-node_modules/
-coverage/
-*.snap.ts
+# Keep in sync with .gitignore + .prettierignore
+**/node_modules
+**/dist
+packages/icons/native
+**/.cache
+**/coverage
+**/build
+storybook-static
