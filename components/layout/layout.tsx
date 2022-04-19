@@ -6,7 +6,7 @@ export function Layout(props: LayoutProps) {
   const { children, title, className } = props
 
   return (
-    <div className={`w-screen h-screen ${className}`}>
+    <div className={`w-screen h-screen py-6 ${className}`}>
       <Head>
         <title>{title}</title>
         <link

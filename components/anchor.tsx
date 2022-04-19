@@ -1,12 +1,12 @@
 import Link from 'next/link'
 
 export function Anchor(props: AnchorProps) {
-  const { children, href = '/', ...restProps } = props
+  const { children, href = '/', className, ...restProps } = props
 
   return (
     <Link href={href}>
       <a
-        className="font-semibold text-teal-600 hover:text-teal-700 active:text-teal-800"
+        className={`font-semibold text-teal-600 hover:text-teal-700 active:text-teal-800 ${className}`}
         {...restProps}
       >
         {children}
@@ -15,4 +15,4 @@ export function Anchor(props: AnchorProps) {
   )
 }
 
-type AnchorProps = React.ComponentPropsWithRef<'a'>
+export type AnchorProps = React.ComponentPropsWithRef<'a'>
