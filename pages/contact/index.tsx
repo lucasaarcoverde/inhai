@@ -2,12 +2,12 @@ import type { NextPage } from 'next'
 
 import { Layout, Anchor } from '../../components'
 
-const Home: NextPage = () => {
+const Contact: NextPage = () => {
   return (
-    <Layout title="About | Inhaí">
+    <Layout title="Contato">
       <Anchor href="/">Go to home</Anchor>
     </Layout>
   )
 }
 
-export default Home
+export default Contact

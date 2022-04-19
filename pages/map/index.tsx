@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 import { Layout, Anchor } from '../../components'
 
-const Home: NextPage = () => {
+const Map: NextPage = () => {
   return (
     <Layout title="Map | Inhaí">
       <Anchor href="/">Go to home</Anchor>
@@ -9,4 +9,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Map
