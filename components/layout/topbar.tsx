@@ -54,6 +54,3 @@ export function TopbarNavigation(props: AnchorProps) {
 
   return <Anchor {...props} className={className} />
 }
-function formatMessage(appTitle: { id: string }): import('react').ReactNode {
-  throw new Error('Function not implemented.')
-}
