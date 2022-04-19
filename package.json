@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "commit": "cz"
+    "commit": "cz",
+    "i18n": "formatjs compile-folder --ast --format simple content/locales content/compiled-locales"
   },
   "dependencies": {
     "classnames": "^2.3.1",
@@ -15,11 +16,13 @@
     "next": "12.1.4",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "react-feather": "^2.0.9"
+    "react-feather": "^2.0.9",
+    "react-intl": "^5.25.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
+    "@formatjs/cli": "^4.8.3",
     "@tailwindcss/typography": "^0.5.2",
     "@types/node": "17.0.23",
     "@types/react": "18.0.1",
@@ -28,6 +31,7 @@
     "@vtex/prettier-config": "1.0.0",
     "@vtex/tsconfig": "0.6.0",
     "autoprefixer": "^10.4.4",
+    "babel-plugin-formatjs": "^10.3.19",
     "commitizen": "^4.2.4",
     "eslint": "8.13.0",
     "eslint-config-next": "12.1.4",

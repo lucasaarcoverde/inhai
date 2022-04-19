@@ -1,0 +1,164 @@
+{
+  "inhai.landing-page.about": [
+    {
+      "type": 0,
+      "value": "About the Project"
+    }
+  ],
+  "inhai.landing-page.aboutFirst": [
+    {
+      "type": 0,
+      "value": "An LGBTQIA+ place is any place where people from the community feel safe, accepted and relaxed. It can be a bakery, restaurant, gym, or a bar, all of them are places free of prejudice and with diversity among the people who frequent those places."
+    }
+  ],
+  "inhai.landing-page.aboutSecond": [
+    {
+      "type": 0,
+      "value": "Our mission is to map several places in a colaborativelly way, along with the community and help to build a more secure, diverse, and inclusive world."
+    }
+  ],
+  "inhai.landing-page.best": [
+    {
+      "type": 0,
+      "value": "the Best"
+    }
+  ],
+  "inhai.landing-page.cardPlaces": [
+    {
+      "type": 1,
+      "value": "number"
+    },
+    {
+      "type": 0,
+      "value": "+ Places"
+    }
+  ],
+  "inhai.landing-page.cardPlaces.description": [
+    {
+      "type": 0,
+      "value": "More than "
+    },
+    {
+      "type": 1,
+      "value": "cities"
+    },
+    {
+      "type": 0,
+      "value": " cities with rated places all over the world!"
+    }
+  ],
+  "inhai.landing-page.cardUsers": [
+    {
+      "type": 1,
+      "value": "number"
+    },
+    {
+      "type": 0,
+      "value": "+ Users"
+    }
+  ],
+  "inhai.landing-page.cardUsers.description": [
+    {
+      "type": 0,
+      "value": "Moren than "
+    },
+    {
+      "type": 1,
+      "value": "users"
+    },
+    {
+      "type": 0,
+      "value": " users contributing with the community!"
+    }
+  ],
+  "inhai.landing-page.discover": [
+    {
+      "type": 0,
+      "value": "Discover"
+    }
+  ],
+  "inhai.landing-page.explore": [
+    {
+      "type": 0,
+      "value": "Explore Now"
+    }
+  ],
+  "inhai.landing-page.friendly": [
+    {
+      "type": 0,
+      "value": "LGBTQIA+ Friendly"
+    }
+  ],
+  "inhai.landing-page.getStarted": [
+    {
+      "type": 0,
+      "value": "Get Started"
+    }
+  ],
+  "inhai.landing-page.places": [
+    {
+      "type": 0,
+      "value": "Places"
+    }
+  ],
+  "inhai.landing-page.rate": [
+    {
+      "type": 0,
+      "value": "Join Inhaí community and start rating places"
+    }
+  ],
+  "inhai.landing-page.search": [
+    {
+      "type": 0,
+      "value": "Get to know the places better before visiting them"
+    }
+  ],
+  "inhai.landing-page.share": [
+    {
+      "type": 0,
+      "value": "Share your experiences with the community"
+    }
+  ],
+  "inhai.landing-page.start": [
+    {
+      "type": 0,
+      "value": "Let's start it now just search by a known place!"
+    }
+  ],
+  "inhai.login": [
+    {
+      "type": 0,
+      "value": "Login"
+    }
+  ],
+  "inhai.pages.contact": [
+    {
+      "type": 0,
+      "value": "Contact"
+    }
+  ],
+  "inhai.pages.home": [
+    {
+      "type": 0,
+      "value": "Home"
+    }
+  ],
+  "inhai.pages.map": [
+    {
+      "type": 0,
+      "value": "Map"
+    }
+  ],
+  "inhai.signUp": [
+    {
+      "type": 0,
+      "value": "Sign Up"
+    }
+  ],
+  "inhai.title": [
+    {
+      "type": 0,
+      "value": "Inhaí"
+    }
+  ]
+}
