@@ -1,0 +1,160 @@
+{
+  "inhai.landing-page.about": [
+    {
+      "type": 0,
+      "value": "Sobre o Projeto"
+    }
+  ],
+  "inhai.landing-page.aboutFirst": [
+    {
+      "type": 0,
+      "value": "Um lugar LGBTQIA+ friendly é qualquer lugar em que as pessoas da comunidade se sentem seguras, aceitas e descontraídas. Seja uma padaria, academia, restaurante ou barzinho, são todos lugares livres de preconceito e que não obrigatoriamente são só frequentados por pessoas da comunidade."
+    }
+  ],
+  "inhai.landing-page.aboutSecond": [
+    {
+      "type": 0,
+      "value": "Nossa missão é mapear vários lugares de maneira colaborativa com a comunidade e ajudar a construir um mundo mais seguro, diverso e inclusivo."
+    }
+  ],
+  "inhai.landing-page.best": [
+    {
+      "type": 0,
+      "value": "os Melhores Lugares"
+    }
+  ],
+  "inhai.landing-page.cardPlaces": [
+    {
+      "type": 1,
+      "value": "number"
+    },
+    {
+      "type": 0,
+      "value": "+ Lugares"
+    }
+  ],
+  "inhai.landing-page.cardPlaces.description": [
+    {
+      "type": 0,
+      "value": "Mais de "
+    },
+    {
+      "type": 1,
+      "value": "cities"
+    },
+    {
+      "type": 0,
+      "value": " cidades ao redor do mundo com lugares avaliados!"
+    }
+  ],
+  "inhai.landing-page.cardUsers": [
+    {
+      "type": 1,
+      "value": "number"
+    },
+    {
+      "type": 0,
+      "value": "+ Usuários"
+    }
+  ],
+  "inhai.landing-page.cardUsers.description": [
+    {
+      "type": 0,
+      "value": "Mais de "
+    },
+    {
+      "type": 1,
+      "value": "users"
+    },
+    {
+      "type": 0,
+      "value": " usuários contribuindo com a comunidade!"
+    }
+  ],
+  "inhai.landing-page.discover": [
+    {
+      "type": 0,
+      "value": "Descubra"
+    }
+  ],
+  "inhai.landing-page.explore": [
+    {
+      "type": 0,
+      "value": "Explore Agora"
+    }
+  ],
+  "inhai.landing-page.friendly": [
+    {
+      "type": 0,
+      "value": "LGBTQIA+ Friendly"
+    }
+  ],
+  "inhai.landing-page.getStarted": [
+    {
+      "type": 0,
+      "value": "Comece Agora"
+    }
+  ],
+  "inhai.landing-page.places": [
+  ],
+  "inhai.landing-page.rate": [
+    {
+      "type": 0,
+      "value": "Junte-se ao Inhaí e comece a avaliar lugares"
+    }
+  ],
+  "inhai.landing-page.search": [
+    {
+      "type": 0,
+      "value": "Conheça melhor os lugares antes de visitá-los"
+    }
+  ],
+  "inhai.landing-page.share": [
+    {
+      "type": 0,
+      "value": "Compartilhe suas experiências com a comunidade"
+    }
+  ],
+  "inhai.landing-page.start": [
+    {
+      "type": 0,
+      "value": "vamos começar buscando por um lugar?"
+    }
+  ],
+  "inhai.login": [
+    {
+      "type": 0,
+      "value": "Entrar"
+    }
+  ],
+  "inhai.pages.contact": [
+    {
+      "type": 0,
+      "value": "Contato"
+    }
+  ],
+  "inhai.pages.home": [
+    {
+      "type": 0,
+      "value": "Home"
+    }
+  ],
+  "inhai.pages.map": [
+    {
+      "type": 0,
+      "value": "Mapa"
+    }
+  ],
+  "inhai.signUp": [
+    {
+      "type": 0,
+      "value": "Registre-se"
+    }
+  ],
+  "inhai.title": [
+    {
+      "type": 0,
+      "value": "Inhaí"
+    }
+  ]
+}

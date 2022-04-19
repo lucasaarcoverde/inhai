@@ -7,7 +7,7 @@ export function IconCard(props: IconCardProps) {
   return (
     <Stack
       direction="column"
-      className={`prose items-center p-2 w-52 rounded-2xl child:mb-6 ${className}`}
+      className={`prose items-center p-2 w-60 rounded-2xl child:mb-5 ${className}`}
       {...restProps}
     >
       {icon}

@@ -12,25 +12,49 @@ import {
 } from '../components'
 import Image from 'next/image'
 import { MapPin, Star, Share2 } from 'react-feather'
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl'
 
+const messages = defineMessages({
+  appTitle: { id: 'inhai.title' },
+  explore: { id: 'inhai.landing-page.explore' },
+  about: { id: 'inhai.landing-page.about' },
+  aboutFirst: { id: 'inhai.landing-page.aboutFirst' },
+  aboutSecond: { id: 'inhai.landing-page.aboutSecond' },
+  rate: { id: 'inhai.landing-page.rate' },
+  search: { id: 'inhai.landing-page.search' },
+  share: { id: 'inhai.landing-page.share' },
+  start: { id: 'inhai.landing-page.start' },
+  getStarted: { id: 'inhai.landing-page.getStarted' },
+  discover: { id: 'inhai.landing-page.discover' },
+  best: { id: 'inhai.landing-page.best' },
+  friendly: { id: 'inhai.landing-page.friendly' },
+  places: { id: 'inhai.landing-page.places' },
+  cardPlaces: { id: 'inhai.landing-page.cardPlaces' },
+  cardPlacesDescription: { id: 'inhai.landing-page.cardPlaces.description' },
+  cardUsers: { id: 'inhai.landing-page.cardUsers' },
+  cardUsersDescription: { id: 'inhai.landing-page.cardUsers.description' },
+  pageTitle: { id: 'inhai.pages.home' },
+})
 const Home: NextPage = () => {
+  const { formatMessage } = useIntl()
+
   return (
-    <Layout title="Home | Inhaí" className="overflow-auto">
+    <Layout title={formatMessage(messages.pageTitle)} className="overflow-auto">
       <Stack direction="column" className="w-full h-[calc(100vh-112px)] px-20">
         <Stack className="child:w-1/2">
           <Stack direction="column" className="child:mb-6">
             <p className="text-6xl">
-              Discover{' '}
+              {formatMessage(messages.discover)}{' '}
               <strong>
-                the Best{' '}
+                {formatMessage(messages.best)}{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-500 via-yellow-500 to-red-500">
-                  LGBTQIA+ friendly
+                  {formatMessage(messages.friendly)}
                 </span>{' '}
-                Places!
+                {formatMessage(messages.places)}!
               </strong>
             </p>
             <Button variant="outline" className="w-fit">
-              Explore Now
+              <FormattedMessage {...messages.explore} />
             </Button>
           </Stack>
           <Flex className="justify-center">
@@ -44,17 +68,21 @@ const Home: NextPage = () => {
           </Flex>
         </Stack>
 
-        <Stack className="w-1/2 child:mr-4">
+        <Stack className="child:w-1/4 child:mr-4">
           <LandingCard
             icon={<PlacesPhoneIcon />}
-            title="60+ Places"
-            description="More than 14 cities all over the world!"
+            title={formatMessage(messages.cardPlaces, { number: 60 })}
+            description={formatMessage(messages.cardPlacesDescription, {
+              cities: 14,
+            })}
           />
 
           <LandingCard
             icon={<UsersPhoneIcon />}
-            title="400+ Users"
-            description="More than 14 cities all over the world!"
+            title={formatMessage(messages.cardUsers, { number: 400 })}
+            description={formatMessage(messages.cardUsersDescription, {
+              users: 400,
+            })}
           />
         </Stack>
       </Stack>
@@ -62,18 +90,13 @@ const Home: NextPage = () => {
       <Flex className="justify-between px-20 my-4 bg-gradient-to-b from-white via-gray-50 to-gray-100">
         <div className="prose prose-lg">
           <h2 className="text-transparent bg-clip-text bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 ">
-            About The Project
+            <FormattedMessage {...messages.about} />
           </h2>
           <p className="max-w-xl mt-2">
-            An LGBTQIA+ place is any place where people from the community feel
-            safe, accepted and relaxed. It can be a bakery, restaurant, gym, or
-            a bar, all of them are places free of prejudice and with diversity
-            among the people who frequent those places.
+            {formatMessage(messages['aboutFirst'])}
           </p>
           <p className="max-w-xl mt-2">
-            Our mission is to map several places, in a colaborativelly way,
-            along with the community and help to build a more secure, diverse,
-            and inclusive world.
+            {formatMessage(messages['aboutSecond'])}
           </p>
         </div>
 
@@ -92,22 +115,22 @@ const Home: NextPage = () => {
           <LandingPlaceCard
             place="Bar do Nilson"
             rate={4.8}
-            className="-mt-8"
+            className="-mb-4"
           />
         </Flex>
       </Flex>
 
       <Stack className="justify-center p-6 my-12 rounded child:mr-16">
-        <IconCard icon={<Star className="w-16 h-16 text-yellow-400" />}>
-          Join Inhaí community and start rating places
+        <IconCard icon={<MapPin className="w-16 h-16 text-teal-600" />}>
+          {formatMessage(messages.search)}
         </IconCard>
 
-        <IconCard icon={<MapPin className="w-16 h-16 text-teal-600" />}>
-          Get to know the places better before visiting them
+        <IconCard icon={<Star className="w-16 h-16 text-yellow-400" />}>
+          {formatMessage(messages.rate)}
         </IconCard>
 
         <IconCard icon={<Share2 className="w-16 h-16 text-red-400" />}>
-          Share your experiences with the community
+          {formatMessage(messages.share)}
         </IconCard>
       </Stack>
 
@@ -121,11 +144,16 @@ const Home: NextPage = () => {
             alt=""
           />
         </Flex>
-        <Stack direction="column" className="child:mb-6">
+        <Stack direction="column" className="justify-center child:mb-5">
           <p className="text-5xl">
-            Lets start it now just search by a known place!
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-500 via-yellow-500 to-red-500">
+              {formatMessage(messages.appTitle)}
+            </span>
+            , {formatMessage(messages.start)}
           </p>
-          <Button className="p-20 w-fit">Get Started</Button>
+          <Button className="p-20 w-fit">
+            {formatMessage(messages.getStarted)}
+          </Button>
         </Stack>
       </Flex>
     </Layout>
